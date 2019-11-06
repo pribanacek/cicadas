@@ -1,0 +1,14 @@
+A -[f]-> B
+B -[g]-> C
+C -[h]-> D
+
+a = g . f
+label a : g . f
+
+b = h . g
+label b : h . g
+
+c = h . g . f
+d = h . g . f
+label c : (h . g) . f
+label d : h . (g . f)

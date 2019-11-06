@@ -1,0 +1,9 @@
+T -[x]-> X
+T -[y]-> Y
+T -[(x,y)]-> a
+a -[p]-> X
+a -[q]-> Y
+Y -[g]-> Z
+X -[f]-> Z
+
+label a : X \times_Z Y

@@ -1,0 +1,25 @@
+c1 -[a1]-> c2
+c2 -[a2]-> c3
+
+d1 -[b1]-> d2
+d2 -[b2]-> d3
+
+c1 -[f1]-> d1
+c2 -[f2]-> d2
+c3 -[f3]-> d3
+
+label c1 : \ldots C_{i-1}
+label c2 : C_i
+label c3 : C_{i+1} \ldots
+label d1 : \ldots D_{i-1}
+label d2 : D_i
+label d3 : D_{i+1} \ldots
+
+label f1 : \alpha_{i-1}
+label f2 : \alpha_i
+label f3 : \alpha_{i+1}
+
+label a1 : \delta_{C_{i-1}}
+label a2 : \delta_{C_i}
+label b1 : \delta_{D_{i-1}}
+label b2 : \delta_{D_i}
