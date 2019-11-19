@@ -1,19 +1,4 @@
-A -[id_A]-> A
-A -[f]-> B
-B -[g]-> A
-B -[id_B]-> B
-----------------------------
-id A [id_A]
-id B [id_B]
-A -[f]-> B
-g = f^{-1}
-----------------------------
-A -[f]-> B
-B -[g]-> A
-id_A = g . f
-id_B = f . g
----------------------------
-A -[f]-> B
-B -[g]-> A
-id_A = g . f
-id_B = f . g . f . id_A . id_A . id_A . g
+f: A -> B
+g: B -> A
+id_A: A -> A
+id_A: B -> B

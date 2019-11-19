@@ -1,12 +1,15 @@
-c1 -[a1]-> c2
-c2 -[a2]-> c3
+a1: c1 -> c2
+a2: c2 -> c3
 
-d1 -[b1]-> d2
-d2 -[b2]-> d3
+b1: d1 -> d2
+b2: d2 -> d3
 
-c1 -[f1]-> d1
-c2 -[f2]-> d2
-c3 -[f3]-> d3
+f1: c1 -> d1
+f2: c2 -> f2
+f3: c3 -> f3
+
+f2 . a1 = b1 . f1
+f3 . a2 = b2 . f2
 
 label c1 : \ldots C_{i-1}
 label c2 : C_i

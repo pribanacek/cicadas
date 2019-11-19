@@ -1,17 +1,11 @@
-A -[f]-> B
-B -[g]-> C
-A -[h]-> D
-D -[k]-> C
+f: A -> B
+h: A -> D
+k: D -> C
+g: B -> C
+l: A -> E
+m: B -> E
+n: C -> E
 
-A -[l]-> E
-B -[m]-> E
-C -[n]-> E
----------------------------
-A -[f]-> B
-B -[g]-> C
-A -[h]-> D
-D -[k]-> C
-
-A -[l]-> E
-C -[n]-> E
+g . f = k . h
+l = m . f
 m = n . g

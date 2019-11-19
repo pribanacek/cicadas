@@ -1,4 +1,6 @@
-A -[f]-> B
-A -[h]-> D
-D -[k]-> C
-B -[g]-> C
+f: A -> B
+h: A -> D
+k: D -> C
+g: B -> C
+
+g . f = k . h

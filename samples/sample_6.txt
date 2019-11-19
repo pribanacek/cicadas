@@ -1,9 +1,14 @@
-T -[x]-> X
-T -[y]-> Y
-T -[(x,y)]-> a
-a -[p]-> X
-a -[q]-> Y
-Y -[g]-> Z
-X -[f]-> Z
+a: T -> B
+x: T -> X
+y: T -> Y
+p: B -> X
+q: B -> Y
+g: Y -> Z
+f: X -> Z
 
-label a : X \times_Z Y
+x = p . a
+y = q . a
+g . q = f . p
+
+label A : (x, y)
+label B : X \times_Z Y

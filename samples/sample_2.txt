@@ -1,7 +1,6 @@
-A -[f]-> B
-B -[g]-> A
-A -[id_A]-> A
--------------------
-A -[f]-> B
-B -[g]-> A
-id_A = g . f
+f: A -> B
+g: B -> A
+
+id_A: A -> A
+
+// should we have a special identity thing?
