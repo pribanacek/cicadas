@@ -33,7 +33,7 @@ def TestTikzC():
     C = PositionedVertex('C', 1, -1)
     D = PositionedVertex('D', -1, -1)
     E = PositionedVertex('E', 2.5, 2.5)
-    f = Edge('f', A, B)
+    f = Edge('f', A, B, styles = ['dashed', 'hook'])
     g = Edge('g', B, C)
     h = Edge('h', A, D)
     k = Edge('k', D, C)

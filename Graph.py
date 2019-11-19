@@ -8,13 +8,14 @@ class Vertex:
             self.label = self.identifier
 
 class Edge:
-    def __init__(self, identifier, start, end, label = None):
+    def __init__(self, identifier, start, end, label = None, styles = []):
         self.identifier = identifier
         self.start = start
         self.end = end
         self.label = label
         if self.label == None:
             self.label = self.identifier
+        self.styles = styles
 
 
 class Graph:

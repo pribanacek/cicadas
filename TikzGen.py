@@ -9,7 +9,7 @@ END_TIKZ_PICTURE = '\\end{tikzpicture}'
 PATH_START = '\\path[commutative diagrams/.cd, every arrow, every label]'
 
 NODE_TEMPLATE = Template('\\node ($id) at ($theta : $distance) {$$$label$$};')
-EDGE_TEMPLATE = Template('($start) edge node {$$$label$$} ($end)')
+EDGE_TEMPLATE = Template('($start) edge$styles node {$$$label$$} ($end)')
 
 
 def getPolarAngle(x, y):
@@ -26,11 +26,22 @@ def getNodeString(node):
         label = node.label
     )
 
+def getStylesString(styles):
+    if styles == None or len(styles) < 1:
+        return ''
+    else:
+        styleString = '['
+        for style in styles:
+            styleString += 'commutative diagrams/' + style + ','
+        styleString = styleString[:-1] + ']'
+        return styleString
+
 def getEdgeString(edge):  
     return EDGE_TEMPLATE.substitute(
         start = edge.start.identifier,
         end = edge.end.identifier,
-        label = edge.label
+        label = edge.label,
+        styles = getStylesString(edge.styles)
     )
 
 def getTikzLines(graph):
