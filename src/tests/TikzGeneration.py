@@ -1,10 +1,10 @@
 import sys
 
-from PlannedGraph import PlannedGraph, PositionedVertex
-from Graph import Edge
-from TikzGen import generateTikz
+from src.layout.PlannedGraph import PlannedGraph, PositionedVertex
+from src.plan.Graph import Edge
+from src.output.TikzGen import generateTikz
 
-def TestTikzA():
+def TestA():
     A = PositionedVertex('A', -1, 1)
     B = PositionedVertex('B', 1, 1)
     C = PositionedVertex('C', -1, -1)
@@ -12,9 +12,10 @@ def TestTikzA():
     g = Edge('g', B, C)
     h = Edge('h', A, C)
     graph = PlannedGraph([A, B, C], [f, g, h])
+    print('energy:', graph.energy((4, 4)))
     return generateTikz(graph)
 
-def TestTikzB():
+def TestB():
     A = PositionedVertex('A', -1, 1)
     B = PositionedVertex('B', 1, 1)
     C = PositionedVertex('C', 1, -1)
@@ -24,16 +25,17 @@ def TestTikzB():
     h = Edge('h', A, D)
     k = Edge('k', D, C)
     graph = PlannedGraph([A, B, C, D], [f, g, h, k])
+    print('energy:', graph.energy((4, 4)))
     return generateTikz(graph)
 
 
-def TestTikzC():
+def TestC():
     A = PositionedVertex('A', -1, 1)
     B = PositionedVertex('B', 1, 1)
     C = PositionedVertex('C', 1, -1)
     D = PositionedVertex('D', -1, -1)
     E = PositionedVertex('E', 2.5, 2.5)
-    f = Edge('f', A, B, styles = ['dashed', 'hook'])
+    f = Edge('f', A, B)
     g = Edge('g', B, C)
     h = Edge('h', A, D)
     k = Edge('k', D, C)
@@ -41,21 +43,5 @@ def TestTikzC():
     m = Edge('m', B, E)
     n = Edge('n', C, E)
     graph = PlannedGraph([A, B, C, D, E], [f, g, h, k, l, m, n])
+    print('energy:', graph.energy((8, 8)))
     return generateTikz(graph)
-
-
-TESTS = {
-    'A': TestTikzA,
-    'B': TestTikzB,
-    'C': TestTikzC,
-}
-
-if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print('Please specify a test')
-    
-    test = sys.argv[1]
-    if test in TESTS:
-        print(TESTS[test]())
-    else:
-        print('Unknown test ' + test)
