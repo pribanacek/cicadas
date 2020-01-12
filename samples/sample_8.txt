@@ -4,15 +4,15 @@ h: C -> D
 
 a: A -> C
 a = g . f
-label a : g . f
+label a : ($g \circ f$)
 
 b: B -> D
 b = h . g
-label b : h . g
+label b : ($h \circ g$)
 
 c: A -> D
 d: A -> D
 c = h . g . f
 d = h . g . f
-label c : (h . g) . f
-label d : h . (g . f)
+label c : ($(h \circ g\) \circ f$)
+label d : ($h \circ (g \circ f\)$)

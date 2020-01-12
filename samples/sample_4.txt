@@ -1,4 +1,4 @@
 f: A -> B
 g: B -> A
 id_A: A -> A
-id_A: B -> B
+id_B: B -> B
