@@ -5,24 +5,24 @@ b1: d1 -> d2
 b2: d2 -> d3
 
 f1: c1 -> d1
-f2: c2 -> f2
-f3: c3 -> f3
+f2: c2 -> d2
+f3: c3 -> d3
 
 f2 . a1 = b1 . f1
 f3 . a2 = b2 . f2
 
-label c1 : \ldots C_{i-1}
-label c2 : C_i
-label c3 : C_{i+1} \ldots
-label d1 : \ldots D_{i-1}
-label d2 : D_i
-label d3 : D_{i+1} \ldots
+label c1 : ($\cdots C_{i-1}$)
+label c2 : ($C_i$)
+label c3 : ($C_{i+1} \cdots$)
+label d1 : ($\cdots D_{i-1}$)
+label d2 : ($D_i$)
+label d3 : ($D_{i+1} \cdots$)
 
-label f1 : \alpha_{i-1}
-label f2 : \alpha_i
-label f3 : \alpha_{i+1}
+label f1 : ($\alpha_{i-1}$)
+label f2 : ($\alpha_i$)
+label f3 : ($\alpha_{i+1}$)
 
-label a1 : \delta_{C_{i-1}}
-label a2 : \delta_{C_i}
-label b1 : \delta_{D_{i-1}}
-label b2 : \delta_{D_i}
+label a1 : ($\delta_{C_{i-1}}$)
+label a2 : ($\delta_{C_i}$)
+label b1 : ($\delta_{D_{i-1}}$)
+label b2 : ($\delta_{D_i}$)

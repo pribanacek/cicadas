@@ -1,4 +1,15 @@
+
+// f: A -> B
+// g: B -> A
+// id_A: A -> A
+
 f: A -> B
 g: B -> A
+
 id_A: A -> A
 id_B: B -> B
+
+style id_A : (loop left)
+style id_B : (loop right)
+style f : (bend left)
+style g : (bend left)
