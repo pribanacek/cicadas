@@ -2,7 +2,7 @@ grammar CDLang;
 
 // Parser Rules
 start          : statement+;
-statement      : (arrow | composition | label | style | impose) (SEPARATOR | EOF);
+statement      : (arrow | composition | label | style | impose)? SEPARATOR;
 arrow          : ID ':' ID '->' ID;
 composition    : path '=' path;
 label          : 'label' ID ':' text;
@@ -13,9 +13,10 @@ text           : '(' TEXT ')' | '()';
 
 
 // Lexer Rules
-TEXT            : {self._input.LA(-1) == ord('(')}? (~')' | '\\)')+;
-DIRECTION       : ('vertical' | 'horizontal');
-ID              : [_a-zA-Z][_a-zA-Z0-9]*;
-SEPARATOR       : (NEWLINE | ';')+;
-WHITESPACE      : (' ' | '\t') -> skip;
-NEWLINE         : ('\r'? '\n' | '\r')+;
+TEXT           : {self._input.LA(-1) == ord('(')}? (~')' | '\\)')+;
+COMMENT        : '//' ~('\n' | '\r')* NEWLINE -> skip;
+DIRECTION      : ('vertical' | 'horizontal');
+ID             : [_a-zA-Z][_a-zA-Z0-9]*;
+SEPARATOR      : (NEWLINE | ';' | EOF);
+WHITESPACE     : (' ' | '\t') -> skip;
+NEWLINE        : ('\r'? '\n' | '\r')+;
