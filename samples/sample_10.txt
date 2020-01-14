@@ -1,0 +1,17 @@
+a: A -> B
+b: B -> C
+c: A -> E
+d: E -> D
+e: D -> C
+
+label a : [$\phi$]
+label b : [$\phi$]
+label c : [$1 \otimes \phi$]
+label d : [$\phi$]
+label e : [$\phi \otimes 1$]
+
+label A : [$X \otimes (Y \otimes (Z \otimes T))$]
+label B : [$(X \otimes Y) \otimes (Z \otimes T)$]
+label C : [$((X \otimes Y) \otimes Z) \otimes T$]
+label D : [$(X \otimes (Y \otimes Z)) \otimes T$]
+label E : [$X \otimes ((Y \otimes Z) \otimes T)$]

@@ -1,0 +1,13 @@
+h: K -> W
+g: K -> K2
+h2: K2 -> W
+c: K2 -> K
+f: B -> W
+_: B -> K2
+
+// K = K
+// B subset K
+// B = B
+
+label K2 : [$K_{\langle B, I \rangle}$]
+label h2 : [$h'$]

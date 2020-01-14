@@ -6,5 +6,5 @@ f: a1 -> B
 g: B -> a2
 id_A: a1 -> a2
 
-label a1 : ($A$)
-label a2 : ($A$)
+label a1 : [$A$]
+label a2 : [$A$]

@@ -10,5 +10,5 @@ x = p . a
 y = q . a
 g . q = f . p
 
-label a : ($(x, y\)$)
-label B : ($X \times_Z Y$)
+label a : [$(x, y\)$]
+label B : [$X \times_Z Y$]

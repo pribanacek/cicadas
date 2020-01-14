@@ -1,0 +1,18 @@
+i_1: A -> B
+i_2: A -> C
+c: B -> D
+d: C -> D
+j_1: B -> E
+j_2: C -> E
+g: D -> E
+
+label c : []
+label d : []
+label g : [$\simeq$]
+style g : [dashed]
+
+label A : [$\pi_1 (U_1 \cap U_2)$]
+label B : [$\pi_1 (U_1)$]
+label C : [$\pi_1 (U_2)$]
+label D : [$\pi_1 (U_1) \star_{\pi_1 (U_1 \cap U_2)} \pi_1 (U_2)$]
+label E : [$\pi_1 (X)$]
