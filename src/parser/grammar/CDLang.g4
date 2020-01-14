@@ -14,7 +14,7 @@ text           : '[' TEXT ']' | '[]';
 
 // Lexer Rules
 TEXT           : {self._input.LA(-1) == ord('[')}? (~']' | '\\]')+;
-COMMENT        : '//' ~('\n' | '\r')* NEWLINE -> skip;
+COMMENT        : '//' ~('\n' | '\r')* NEWLINE? -> skip;
 DIRECTION      : ('vertical' | 'horizontal');
 ID             : [_a-zA-Z][_a-zA-Z0-9]*;
 SEPARATOR      : (NEWLINE | ';' | EOF);
