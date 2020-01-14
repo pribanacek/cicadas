@@ -8,7 +8,7 @@ Install these with `pip3` or something beforehand
 
 - `numpy`
 - `networkx`
-- `antlr`
+- `antlr4-python3-runtime`
 
 ## Running it
 
