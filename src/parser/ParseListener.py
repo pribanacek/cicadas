@@ -1,4 +1,4 @@
-from .CDLangListener import CDLangListener
+from .grammar.CDLangListener import CDLangListener
 from .Path import Path
 
 EDGE = 'edge'
@@ -46,7 +46,7 @@ class ParseListener(CDLangListener):
     def enterLabel(self, ctx):
         objectId = ctx.ID().getText()
         label = ctx.text().TEXT()
-        labelText = '' if label == None else label.getText().replace('\\)', ')')
+        labelText = '' if label == None else label.getText().replace('\\]', ']')
 
         if objectId in self.types:
             self.assembler.setLabel(objectId, labelText)

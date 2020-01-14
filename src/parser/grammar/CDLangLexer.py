@@ -21,7 +21,7 @@ def serializedATN():
         buf.write("\5\20{\n\20\3\21\3\21\3\21\3\21\3\22\5\22\u0082\n\22\3")
         buf.write("\22\3\22\6\22\u0086\n\22\r\22\16\22\u0087\2\2\23\3\3\5")
         buf.write("\4\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31\16\33")
-        buf.write("\17\35\20\37\21!\22#\23\3\2\b\3\2++\4\2\f\f\17\17\5\2")
+        buf.write("\17\35\20\37\21!\22#\23\3\2\b\3\2__\4\2\f\f\17\17\5\2")
         buf.write("C\\aac|\6\2\62;C\\aac|\3\3==\4\2\13\13\"\"\2\u0091\2\3")
         buf.write("\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2")
         buf.write("\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2")
@@ -36,9 +36,9 @@ def serializedATN():
         buf.write("\n\3\2\2\2\62\63\7u\2\2\63\64\7v\2\2\64\65\7{\2\2\65\66")
         buf.write("\7n\2\2\66\67\7g\2\2\67\f\3\2\2\289\7k\2\29:\7o\2\2:;")
         buf.write("\7r\2\2;<\7q\2\2<=\7u\2\2=>\7g\2\2>\16\3\2\2\2?@\7\60")
-        buf.write("\2\2@\20\3\2\2\2AB\7*\2\2B\22\3\2\2\2CD\7+\2\2D\24\3\2")
-        buf.write("\2\2EF\7*\2\2FG\7+\2\2G\26\3\2\2\2HL\6\f\2\2IM\n\2\2\2")
-        buf.write("JK\7^\2\2KM\7+\2\2LI\3\2\2\2LJ\3\2\2\2MN\3\2\2\2NL\3\2")
+        buf.write("\2\2@\20\3\2\2\2AB\7]\2\2B\22\3\2\2\2CD\7_\2\2D\24\3\2")
+        buf.write("\2\2EF\7]\2\2FG\7_\2\2G\26\3\2\2\2HL\6\f\2\2IM\n\2\2\2")
+        buf.write("JK\7^\2\2KM\7_\2\2LI\3\2\2\2LJ\3\2\2\2MN\3\2\2\2NL\3\2")
         buf.write("\2\2NO\3\2\2\2O\30\3\2\2\2PQ\7\61\2\2QR\7\61\2\2RV\3\2")
         buf.write("\2\2SU\n\3\2\2TS\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2")
         buf.write("WY\3\2\2\2XV\3\2\2\2YZ\5#\22\2Z[\3\2\2\2[\\\b\r\2\2\\")
@@ -88,7 +88,7 @@ class CDLangLexer(Lexer):
 
     literalNames = [ "<INVALID>",
             "':'", "'->'", "'='", "'label'", "'style'", "'impose'", "'.'", 
-            "'('", "')'", "'()'" ]
+            "'['", "']'", "'[]'" ]
 
     symbolicNames = [ "<INVALID>",
             "TEXT", "COMMENT", "DIRECTION", "ID", "SEPARATOR", "WHITESPACE", 
@@ -121,7 +121,7 @@ class CDLangLexer(Lexer):
 
     def TEXT_sempred(self, localctx:RuleContext, predIndex:int):
             if predIndex == 0:
-                return self._input.LA(-1) == ord('(')
+                return self._input.LA(-1) == ord('[')
          
 
 

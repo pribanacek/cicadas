@@ -1,7 +1,7 @@
 import sys
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
-from .CDLangLexer import CDLangLexer
-from .CDLangParser import CDLangParser
+from .grammar.CDLangLexer import CDLangLexer
+from .grammar.CDLangParser import CDLangParser
 from .ParseListener import ParseListener
 from .GraphAssembler import GraphAssembler
 
