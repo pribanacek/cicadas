@@ -1,0 +1,7 @@
+f: A -> B
+g: A -> B
+h: B -> C
+i: B -> C
+
+h . f = h . g
+i . f = i . g

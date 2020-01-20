@@ -1,0 +1,11 @@
+e: T -> T
+nT: T -> T2
+Tn: T -> T2
+mu: T2 -> T
+
+mu . Tn = mu . nT
+
+label T2 : [$T^2$]
+label Tn : [$T\eta$]
+label nT : [$\eta T$]
+label mu : [$\mu$]
