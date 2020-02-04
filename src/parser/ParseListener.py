@@ -1,13 +1,14 @@
 from .grammar.CDLangListener import CDLangListener
 from .Path import Path
+from .ParseValidator import ParseValidator
 
 EDGE = 'edge'
 NODE = 'node'
 
 class ParseListener(CDLangListener):
-    def __init__(self, assembler):
+    def __init__(self):
         self.types = {}
-        self.assembler = assembler
+        self.validator = ParseValidator()
     
     def addEdge(self, edgeId): # move to validator?
         if edgeId in self.types:
@@ -17,8 +18,7 @@ class ParseListener(CDLangListener):
     
     def addNode(self, nodeId):
         if nodeId in self.types:
-            idType = self.types[nodeId]
-            if idType == EDGE:
+            if self.types[nodeId] == EDGE:
                 raise Exception(nodeId + " has already been declared as an arrow")
         else:
             self.types[nodeId] = NODE
@@ -30,7 +30,7 @@ class ParseListener(CDLangListener):
         self.addEdge(edgeId)
         self.addNode(nodeAId)
         self.addNode(nodeBId)
-        self.assembler.addEdge(edgeId, nodeAId, nodeBId)
+        self.validator.addEdge(edgeId, nodeAId, nodeBId)
 
     def enterComposition(self, ctx):
         pathA = Path(ctx.path(0).getText())
@@ -41,7 +41,7 @@ class ParseListener(CDLangListener):
                 raise Exception("Unknown identifier " + edgeId)
             elif self.types[edgeId] == NODE:
                 raise Exception("Edge identifier expected, but got a node identifier " + edgeId)
-        self.assembler.addCompositions(pathA, pathB)
+        self.validator.addCompositions(pathA, pathB)
 
     def enterLabel(self, ctx):
         objectId = ctx.ID().getText()
@@ -49,17 +49,21 @@ class ParseListener(CDLangListener):
         labelText = '' if label == None else label.getText().replace('\\]', ']')
 
         if objectId in self.types:
-            self.assembler.setLabel(objectId, labelText)
+            self.validator.setLabel(objectId, labelText)
         else:
             raise Exception("Unknown identifier " + objectId)
 
     def enterStyle(self, ctx):
         edgeId = ctx.ID().getText()
-        style = ctx.text().TEXT().getText()
+        styleList = ctx.STYLE_LIST().getText()[1:-1]
+        styles = styleList.split(',')
 
         if not edgeId in self.types:
             raise Exception("Unknown identifier " + edgeId)
         elif self.types[edgeId] == NODE:
             raise Exception("Edge identifier expected, but got a node identifier " + edgeId)
         else:
-            self.assembler.addStyle(edgeId, style)
+            self.validator.addStyles(edgeId, styles)
+    
+    def getGraphAssembler(self):
+        return self.validator.getGraphAssembler()
