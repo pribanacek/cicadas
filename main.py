@@ -5,6 +5,11 @@ import src.parser.Parser as Parser
 from src.output.TikzGen import generateTikz
 from src.output.AutoRender import generatePDF
 from src.layout.LayoutOptimizer import optimizeLayout
+import src.layout.GraphMeasure as GraphMeasure
+
+import networkx as nx
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 import src.tests.LayoutOptimisation
 import src.tests.TikzGeneration
@@ -34,13 +39,32 @@ import src.tests.TikzGeneration
 #     else:
 #         print('Unknown test ' + test)
 
+def plotGraph(fig, graphs, i):
+    graph = graphs[i]
+    fig.clear()
+    pos = graph.getPositions()
+    nx.draw(graph.graph, pos)
+
 if __name__ == "__main__":
     filename = sys.argv[1]
-    graph = Parser.parse(filename)
-    result = generateTikz(optimizeLayout(graph))
+    graphAssembler = Parser.parse(filename)
+    GraphMeasure.measureNodes(graphAssembler.nodes)
+    graph = graphAssembler.getGraph()
+    (minGraph, graphs) = optimizeLayout(graph)
+    result = generateTikz(minGraph)
+
     outputPath = './thing'
     generatePDF(result, outputPath)
     fullPath = os.path.abspath(outputPath)
     webbrowser.open_new('file://' + fullPath + '.pdf')
+
     print(result)
+
+    animate = False
+    if animate:
+        fig = plt.figure()
+        update = lambda i : plotGraph(fig, graphs, i)
+        ani = animation.FuncAnimation(fig, update, frames=len(graphs), interval=100, repeat=False)
+        plt.show()
+
     # os.system("echo '%s' | xclip -selection clipboard" % result.replace('\\', '\\\\'))
