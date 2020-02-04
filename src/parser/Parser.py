@@ -3,7 +3,6 @@ from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 from .grammar.CDLangLexer import CDLangLexer
 from .grammar.CDLangParser import CDLangParser
 from .ParseListener import ParseListener
-from .GraphAssembler import GraphAssembler
 
 def parse(filename):
     inputFile = FileStream(filename)
@@ -12,8 +11,10 @@ def parse(filename):
     parser = CDLangParser(stream)
     tree = parser.start()
     
-    assembler = GraphAssembler()
-    listener = ParseListener(assembler)
+    listener = ParseListener()
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
-    return assembler.getGraph()
+
+    assembler = listener.getGraphAssembler()
+    # plan graph layout properly
+    return assembler
