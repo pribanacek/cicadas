@@ -12,11 +12,12 @@ NODE_TEMPLATE = Template('\\node ($id) at ($x, $y) {$label};')
 EDGE_TEMPLATE = Template('($start) edge$styles node {$label} ($end)')
 
 
-def getNodeString(node):  
+def getNodeString(nodeId, node, position):
+    (x, y) = position
     return NODE_TEMPLATE.substitute(
-        id = node.nodeId,
-        x = node.x,
-        y = node.y,
+        id = nodeId,
+        x = x,
+        y = y,
         label = node.label
     )
 
@@ -29,21 +30,22 @@ def getStylesString(styles):
     styleString = styleString[:-1] + ']'
     return styleString
 
-def getEdgeString(edge):
+def getEdgeString(start, end, edge):
     return EDGE_TEMPLATE.substitute(
-        start = edge.start.nodeId,
-        end = edge.end.nodeId,
+        start = start,
+        end = end,
         label = edge.label,
         styles = getStylesString(edge.styles)
     )
 
 def getTikzLines(graph):
     lines = [BEGIN_TIKZ_PICTURE]
-    for node in graph.nodeData:
-        lines.append(getNodeString(node))
+    for nodeId, node in graph.nodeData:
+        position = graph.nodePositions[nodeId]
+        lines.append(getNodeString(nodeId, node, position))
     lines.append(PATH_START)
-    for edge in graph.edgeData:
-        lines.append(getEdgeString(edge))
+    for start, end, _, edge in graph.edgeData:
+        lines.append(getEdgeString(start, end, edge))
     lines[-1] += ';'
     lines.append(END_TIKZ_PICTURE)
     return lines
