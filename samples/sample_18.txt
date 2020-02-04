@@ -12,6 +12,11 @@ k: G -> C
 l: H -> D
 m: E -> I
 
+i . f . a = m . d
+h . g = j . i
+b = k . g . f
+l . h = c . k
+e = l . j . m
 
 label A : [$\Gamma \times T^2 A$]
 label B : [$T(\Gamma \times TA)$]

@@ -9,7 +9,7 @@ g: D -> E
 label c : []
 label d : []
 label g : [$\simeq$]
-style g : [dashed]
+style g : (dashed)
 
 label A : [$\pi_1 (U_1 \cap U_2)$]
 label B : [$\pi_1 (U_1)$]

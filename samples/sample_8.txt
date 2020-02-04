@@ -14,5 +14,5 @@ c: A -> D
 d: A -> D
 c = h . g . f
 d = h . g . f
-label c : [$(h \circ g\) \circ f$]
-label d : [$h \circ (g \circ f\)$]
+label c : [$(h \circ g) \circ f$]
+label d : [$h \circ (g \circ f)$]
