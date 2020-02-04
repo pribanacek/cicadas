@@ -7,7 +7,7 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\23")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\24")
         buf.write("L\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
         buf.write("\t\b\4\t\t\t\4\n\t\n\3\2\6\2\26\n\2\r\2\16\2\27\3\2\3")
         buf.write("\2\3\3\3\3\3\3\3\3\3\3\5\3!\n\3\3\3\3\3\3\4\3\4\3\4\3")
@@ -21,11 +21,11 @@ def serializedATN():
         buf.write("\2\31\32\7\2\2\3\32\3\3\2\2\2\33!\5\6\4\2\34!\5\b\5\2")
         buf.write("\35!\5\n\6\2\36!\5\f\7\2\37!\5\16\b\2 \33\3\2\2\2 \34")
         buf.write("\3\2\2\2 \35\3\2\2\2 \36\3\2\2\2 \37\3\2\2\2 !\3\2\2\2")
-        buf.write("!\"\3\2\2\2\"#\7\21\2\2#\5\3\2\2\2$%\7\20\2\2%&\7\3\2")
+        buf.write("!\"\3\2\2\2\"#\7\22\2\2#\5\3\2\2\2$%\7\20\2\2%&\7\3\2")
         buf.write("\2&\'\7\20\2\2\'(\7\4\2\2()\7\20\2\2)\7\3\2\2\2*+\5\20")
         buf.write("\t\2+,\7\5\2\2,-\5\20\t\2-\t\3\2\2\2./\7\6\2\2/\60\7\20")
         buf.write("\2\2\60\61\7\3\2\2\61\62\5\22\n\2\62\13\3\2\2\2\63\64")
-        buf.write("\7\7\2\2\64\65\7\20\2\2\65\66\7\3\2\2\66\67\5\22\n\2\67")
+        buf.write("\7\7\2\2\64\65\7\20\2\2\65\66\7\3\2\2\66\67\7\21\2\2\67")
         buf.write("\r\3\2\2\289\7\b\2\29:\7\20\2\2:;\7\3\2\2;<\7\17\2\2<")
         buf.write("\17\3\2\2\2=B\7\20\2\2>?\7\t\2\2?A\7\20\2\2@>\3\2\2\2")
         buf.write("AD\3\2\2\2B@\3\2\2\2BC\3\2\2\2C\21\3\2\2\2DB\3\2\2\2E")
@@ -50,7 +50,8 @@ class CDLangParser ( Parser ):
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "TEXT", "COMMENT", 
-                      "DIRECTION", "ID", "SEPARATOR", "WHITESPACE", "NEWLINE" ]
+                      "DIRECTION", "ID", "STYLE_LIST", "SEPARATOR", "WHITESPACE", 
+                      "NEWLINE" ]
 
     RULE_start = 0
     RULE_statement = 1
@@ -80,9 +81,10 @@ class CDLangParser ( Parser ):
     COMMENT=12
     DIRECTION=13
     ID=14
-    SEPARATOR=15
-    WHITESPACE=16
-    NEWLINE=17
+    STYLE_LIST=15
+    SEPARATOR=16
+    WHITESPACE=17
+    NEWLINE=18
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -389,9 +391,8 @@ class CDLangParser ( Parser ):
         def ID(self):
             return self.getToken(CDLangParser.ID, 0)
 
-        def text(self):
-            return self.getTypedRuleContext(CDLangParser.TextContext,0)
-
+        def STYLE_LIST(self):
+            return self.getToken(CDLangParser.STYLE_LIST, 0)
 
         def getRuleIndex(self):
             return CDLangParser.RULE_style
@@ -420,7 +421,7 @@ class CDLangParser ( Parser ):
             self.state = 51
             self.match(CDLangParser.T__0)
             self.state = 52
-            self.text()
+            self.match(CDLangParser.STYLE_LIST)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
