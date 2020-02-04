@@ -1,4 +1,6 @@
-import random, math, numpy as np
+import math, random, time
+import numpy as np
+
 from .Cooling import LinearCooling, ExpCooling
 
 lower = 0
@@ -17,12 +19,14 @@ def shouldTransition(energy1, energy2, temp):
     return False
 
 def getRadius(temp):
-    return temp * random.random() / 1000
+    return temp / 1000
 
-def optimizeLayout(plannedGraph):
+def optimizeLayout(graph):
     dimensions = (4, 4)
-    cooling = ExpCooling(10000, 1, 0.98)
-    graph = plannedGraph.randomPlan(dimensions)
+    # cooling = LinearCooling(10000, 1, 100)
+    cooling = ExpCooling(3000, 1, 0.98)
+    graph.randomPlan(dimensions)
+    graphs = [graph]
     minGraph = graph
     minEnergy = graph.energy(dimensions)
     while not cooling.done():
@@ -34,6 +38,7 @@ def optimizeLayout(plannedGraph):
             minEnergy = E2
         if shouldTransition(E1, E2, cooling.temp):
             graph = newGraph
+        graphs.append(graph)
         cooling.cool()
     minGraph.recentreNodes()
-    return minGraph
+    return (minGraph, graphs)
