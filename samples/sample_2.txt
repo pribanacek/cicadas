@@ -1,10 +1,5 @@
-// f: A -> B
-// g: B -> A
-// id_A: A -> A
+f: A -> B
+g: B -> A
+id_A: A -> A
 
-f: a1 -> B
-g: B -> a2
-id_A: a1 -> a2
-
-label a1 : [$A$]
-label a2 : [$A$]
+g . f = id_A

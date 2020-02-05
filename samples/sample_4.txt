@@ -1,13 +1,13 @@
 
-// f: A -> B
-// g: B -> A
-// id_A: A -> A
-
 f: A -> B
 g: B -> A
 
 id_A: A -> A
 id_B: B -> B
+
+// id_A = id
+// id_B = id
+// g . f = id
 
 style id_A : (loop left)
 style id_B : (loop right)
