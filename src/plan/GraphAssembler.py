@@ -24,36 +24,36 @@ def get_node_id_mapping(sourceIds, targetIds, match):
 class GraphAssembler:
     def __init__(self, nodes, edges, pathFacts):
         self.nodes = nodes
-        self.nodeCounts = {nodeId: 0 for nodeId in self.nodes}
+        self.nodeCounts = {node_name: 0 for node_name in self.nodes}
         self.edges = edges
         self.edgeCounts = {edgeId: 0 for edgeId in self.edges}
         self.pathFacts = pathFacts
         self.graphCycles = {}
         self.graph = nx.MultiDiGraph()
     
-    def addNodeCount(self, nodeId):
-        self.nodeCounts[nodeId] += 1
+    def addNodeCount(self, node_name):
+        self.nodeCounts[node_name] += 1
     
     def addEdgeCount(self, edgeId):
         self.edgeCounts[edgeId] += 1
     
-    def newGraphNodeId(self, nodeId):
-        count = self.nodeCounts[nodeId]
-        self.addNodeCount(nodeId)
-        return nodeId + '-' + str(count)
+    def newGraphNodeId(self, node_name):
+        count = self.nodeCounts[node_name]
+        self.addNodeCount(node_name)
+        return node_name + '-' + str(count)
     
-    def addNodeInstance(self, nodeId, graph = None):
+    def addNodeInstance(self, node_name, graph = None):
         graph = graph if graph != None else self.graph
-        node = self.nodes[nodeId]
-        graphNodeId = self.newGraphNodeId(nodeId)
-        graph.add_node(graphNodeId, data = node, pos = (0, 0))
-        return graphNodeId
+        node_data = self.nodes[node_name]
+        node_id = self.newGraphNodeId(node_name)
+        graph.add_node(node_id, data = node_data, pos = (0, 0))
+        return node_id
     
     def addEdge(self, edgeId, start = None, end = None, graph = None):
         graph = graph if graph != None else self.graph
         edge = self.edges[edgeId]
-        startNode = edge.start.nodeId
-        endNode = edge.end.nodeId
+        startNode = edge.start.node_name
+        endNode = edge.end.node_name
         graphStartId = start if start != None else self.addNodeInstance(startNode, graph = graph)
         graphEndId = end if end != None else self.addNodeInstance(endNode, graph = graph)
         graph.add_edge(graphStartId, graphEndId, edgeId, data = edge)
@@ -62,8 +62,8 @@ class GraphAssembler:
     
     def addPath(self, path, start = None, end = None, graph = None):
         graph = graph if graph != None else self.graph
-        pathStartNode = self.edges[path.edgeIds[0]].start.nodeId
-        pathEndNode = self.edges[path.edgeIds[-1]].end.nodeId
+        pathStartNode = self.edges[path.edgeIds[0]].start.node_name
+        pathEndNode = self.edges[path.edgeIds[-1]].end.node_name
         pathStartGraphId = start if start != None else self.addNodeInstance(pathStartNode, graph = graph)
         pathEndGraphId = end if end != None else self.addNodeInstance(pathEndNode, graph = graph)
         pathIds = [pathStartGraphId]
@@ -99,21 +99,21 @@ class MergeAssembler(GraphAssembler):
                 subGraphs.append(graph)
         return subGraphs
     
-    def nodeIdsToLCSString(self, nodeIds, graph):
-        node = graph.nodes[nodeIds[0]]['data']
-        idString = [nodeIds[0]]
-        nameString = [node.nodeId]
-        for i in range(len(nodeIds) - 1):
-            nodeAId = nodeIds[i]
-            nodeBId = nodeIds[i + 1]
-            edgeData = graph.get_edge_data(nodeAId, nodeBId)
-            edgeId = list(dict(edgeData).keys())[0]
-            nodeB = graph.nodes[nodeBId]['data']
-            idString.append(edgeId)
-            nameString.append(edgeId)
-            idString.append(nodeBId)
-            nameString.append(nodeB.nodeId)
-        return (idString, nameString) ###
+    def nodeIdsToLCSString(self, node_ids, graph):
+        node = graph.nodes[node_ids[0]]['data']
+        id_string = [node_ids[0]]
+        name_string = [node.node_name]
+        for i in range(len(node_ids) - 1):
+            nodeA_id = node_ids[i]
+            nodeB_id = node_ids[i + 1]
+            edgeData = graph.get_edge_data(nodeA_id, nodeB_id)
+            edge_id = list(dict(edgeData).keys())[0]
+            nodeB_data = graph.nodes[nodeB_id]['data']
+            id_string.append(edge_id)
+            name_string.append(edge_id)
+            id_string.append(nodeB_id)
+            name_string.append(nodeB_data.node_name)
+        return (id_string, name_string) ###
     
     def get_max_subgraph_mapping(self, graph, subGraph, pathAIds, pathBIds):
         cutoff = max(len(pathAIds), len(pathBIds))
@@ -134,7 +134,7 @@ class MergeAssembler(GraphAssembler):
                 if matchB != None:
                     mapping = get_node_id_mapping(stringBIds, pathStringIds, matchB)
                     mappings_B.append(mapping)
-        maximum_mapping = max(*mappings_A, *mappings_B, key = len)
+        maximum_mapping = max({}, *mappings_A, *mappings_B, key = len)
         for mapA in mappings_A:
             for mapB in mappings_B:
                 if self.is_mapping_compatible(mapA, mapB, pathAIds):
@@ -178,22 +178,22 @@ class MergeAssembler(GraphAssembler):
             self.mergeFactSubGraph(graph, subGraph, mapping)
     
     def get_random_node_instance(self, graph, node_name):
-        nodes = [x for x, y in graph.nodes(data = 'data') if y.nodeId == node_name]
+        nodes = [x for x, y in graph.nodes(data = 'data') if y.node_name == node_name]
         return random.choice(nodes)
 
     def addUnusedEdges(self):
         for edgeId, count in self.edgeCounts.items():
             if count == 0:
                 edge = self.edges[edgeId]
-                startNodeName = edge.start.nodeId
-                endNodeName = edge.end.nodeId
-                startNodeId = None
-                endNodeId = None
-                if self.nodeCounts[startNodeName] > 0:
-                    startNodeId = self.get_random_node_instance(self.graph, startNodeName)
-                elif self.nodeCounts[endNodeName] > 0:
-                    endNodeId = self.get_random_node_instance(self.graph, endNodeName)
-                self.addEdge(edgeId, start = startNodeId, end = endNodeId)
+                start_node_name = edge.start.node_name
+                end_node_name = edge.end.node_name
+                start_node_id = None
+                end_node_id = None
+                if self.nodeCounts[start_node_name] > 0:
+                    start_node_id = self.get_random_node_instance(self.graph, start_node_name)
+                elif self.nodeCounts[end_node_name] > 0:
+                    end_node_id = self.get_random_node_instance(self.graph, end_node_name)
+                self.addEdge(edgeId, start = start_node_id, end = end_node_id)
 
     def getGraph(self):
         subGraphs = self.createFactSubGraphs()
