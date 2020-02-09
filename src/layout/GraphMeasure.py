@@ -17,25 +17,25 @@ WIDTH = 'width'
 HEIGHT = 'height'
 
 def getNodeCode(node):
-    nodeId = node.nodeId
+    node_name = node.node_name
     label = node.label
     lines = [
         '\\begin{tikzpicture}',
-        '\\node (' + nodeId + ') at (0, 0) {' + label + '};',
+        '\\node (' + node_name + ') at (0, 0) {' + label + '};',
         '\\end{tikzpicture}'
     ]
     return '\n'.join(lines)
 
 def getNodeMeasurementCode(node):
-    nodeId = node.nodeId
+    node_name = node.node_name
     nodeLatex = getNodeCode(node)
     lines = [
-        '\\newlength{\\height' + nodeId + '}',
-        '\\newlength{\\width' + nodeId + '}',
-        '\\settoheight{\\height' + nodeId + '}{\\hbox{' + nodeLatex + '}}',
-        '\\settowidth{\\width' + nodeId + '}{\\hbox{' + nodeLatex + '}}',
-        '\\wlog{' + WIDTH + ' ' + nodeId + '}\\showthe\\width' + nodeId,
-        '\\wlog{' + HEIGHT + ' ' + nodeId + '}\\showthe\\height' + nodeId
+        '\\newlength{\\height' + node_name + '}',
+        '\\newlength{\\width' + node_name + '}',
+        '\\settoheight{\\height' + node_name + '}{\\hbox{' + nodeLatex + '}}',
+        '\\settowidth{\\width' + node_name + '}{\\hbox{' + nodeLatex + '}}',
+        '\\wlog{' + WIDTH + ' ' + node_name + '}\\showthe\\width' + node_name,
+        '\\wlog{' + HEIGHT + ' ' + node_name + '}\\showthe\\height' + node_name
     ]
     return lines
 
@@ -52,16 +52,16 @@ def measureNodes(nodeData):
     filepath = './temp'
     logs = generateLatexLog(latex, filepath)
     for line in logs:
-        (dim, nodeId, _, value, _unit) = line
-        if not nodeId in measurements:
-            measurements[nodeId] = [0, 0]
+        (dim, node_name, _, value, _unit) = line
+        if not node_name in measurements:
+            measurements[node_name] = [0, 0]
         if dim == WIDTH:
-            measurements[nodeId][0] = float(value)
+            measurements[node_name][0] = float(value)
         elif dim == HEIGHT:
-            measurements[nodeId][1] = float(value)
+            measurements[node_name][1] = float(value)
 
-    for nodeId, dimensions in measurements.items():
-        nodeData[nodeId].dimensions = tuple(dimensions)
+    for node_name, dimensions in measurements.items():
+        nodeData[node_name].dimensions = tuple(dimensions)
 
     return measurements
 

@@ -2,12 +2,12 @@ import random, math, copy, numpy as np
 import networkx as nx
 
 class Vertex:
-    def __init__(self, nodeId, label = None):
-        self.nodeId = nodeId
+    def __init__(self, node_name, label = None):
+        self.node_name = node_name
         self.label = label
         self.dimensions = (0, 0)
-        if self.label == None:
-            self.label = '$' + self.nodeId + '$'
+        if self.label == None and not self.node_name.startswith('_'):
+            self.label = '$' + self.node_name + '$'
 
 class Edge:
     def __init__(self, edgeId, start, end, label = None, styles = None):
@@ -34,28 +34,36 @@ def nodesSortedByAngles(nodes, centre):
     return sorted(angles, key=lambda x : x[1])
 
 class PlannedGraph:
-    def __init__(self, graph):
+    def __init__(self, graph, dimensions = None):
+        self.dimensions = dimensions
         self.graph = graph
         self.nodeData = graph.nodes.data('data')
         self.nodePositions = graph.nodes.data('pos')
         self.edgeData = graph.edges(data = 'data', keys = True)
         self.angleValues = []
+        self._energy = None
         
-    def getPositions(self):
+    def get_positions(self):
         return dict(self.nodePositions)
     
-    def setNodePosition(self, nodeId, position, graph = None):
+    def set_node_position(self, nodeId, position, graph = None):
+        self._energy = None
         graph = graph if graph != None else self.graph
         graph.nodes[nodeId]['pos'] = position
     
-    def randomPlan(self, dimensions):
-        (width, height) = dimensions
+    def random_plan(self):
+        (width, height) = self.dimensions
         for nodeId, _ in self.nodeData:
             x = round(width * (random.random() - 0.5))
             y = round(height * (random.random() - 0.5))
-            self.setNodePosition(nodeId, (x, y))
+            self.set_node_position(nodeId, (x, y))
+    
+    def copy(self):
+        graph = self.graph.copy()
+        dimensions = tuple(self.dimensions)
+        return PlannedGraph(graph, dimensions = dimensions)
         
-    def randomNeighbour(self, radius):
+    def random_neighbour(self, radius):
         graph = self.graph.copy()
         nodeId = random.choice(list(graph.nodes))
         (x, y) = self.nodePositions[nodeId]
@@ -63,10 +71,10 @@ class PlannedGraph:
         dy = radius * (random.random() * 2 - 1)
         newX = x + (dx if radius < 1 else round(dx))
         newY = y + (dy if radius < 1 else round(dy))
-        self.setNodePosition(nodeId, (newX, newY), graph = graph)
-        return PlannedGraph(graph)
+        self.set_node_position(nodeId, (newX, newY), graph = graph)
+        return PlannedGraph(graph, dimensions = self.dimensions)
     
-    def recentreNodes(self):
+    def recentre_nodes(self):
         totalX = 0
         totalY = 0
         for nodeId, (x, y) in self.nodePositions:
@@ -78,52 +86,55 @@ class PlannedGraph:
         for nodeId, (x, y) in self.nodePositions:
             newX = x - offsetX
             newY = y - offsetY
-            self.setNodePosition(nodeId, (newX, newY))
+            self.set_node_position(nodeId, (newX, newY))
     
-    def energy(self, dimensions):
-        A = 100 * self.nodeDistances()
-        B = 10 * self.borderDistance(dimensions)
-        C = 25 * self.edgeLengths()
-        D = 1 * self.bondAngles()
-        E = 50 * self.edgeDifferences()
-        F = 1 * self.horizontalness()
-        G = 30 * self.nodeEdgeDistances()
-        H = 0 * self.angleDifferences()
-        I = 740 * self.edgeIntersections()
-        # print([A, B, C, D, E, F, G, H, I])
-        energy = A + B + C + D + E + F + G + H + I
-        return energy
+    def energy(self):
+        if self._energy != None:
+            return self._energy
+        A = 250 * self.node_distances()
+        B = 10 * self.border_distance()
+        C = 25 * self.edge_lengths()
+        D = 0 * self.bond_angles()
+        E = 50 * self.edge_differences()
+        F = 10 * self.horizontalness()
+        G = 30 * self.node_edge_distances()
+        H = 0 * self.angle_differences()
+        I = 1500 * self.edge_intersections()
+        print([A, B, C, D, E, F, G, H, I])
+        self._energy = A + B + C + D + E + F + G + H + I
+        return self._energy
     
-    def avgNodePosition(self):
-        xTotal = 0
-        yTotal = 0
-        for _, (x, y) in self.nodePositions:
-            xTotal += x
-            yTotal += y
-        return xTotal ** 2 + yTotal ** 2
+    # def avg_node_position(self):
+    #     xTotal = 0
+    #     yTotal = 0
+    #     for _, (x, y) in self.nodePositions:
+    #         xTotal += x
+    #         yTotal += y
+    #     return xTotal ** 2 + yTotal ** 2
     
-    def nodeDistanceSq(self, startId, endId):
+    def node_distance_sq(self, startId, endId):
         (startX, startY) = self.nodePositions[startId]
         (endX, endY) = self.nodePositions[endId]
         d2 = (startX - endX) ** 2 + (startY - endY) ** 2
         return d2
         
-    def nodeDistances(self):
+    def node_distances(self):
         A = 1 # change this for shorter edge lengths like \in labels
+        L = 1
         total = 0
-        nodeValues = list(self.getPositions().values())
+        nodeValues = list(self.get_positions().values())
         for i in range(len(nodeValues)):
             for j in range(i + 1, len(nodeValues)):
                 (x1, y1) = nodeValues[i]
                 (x2, y2) = nodeValues[j]
-                d2 = (x2 - x1) ** 2 + (y2 - y1) ** 2
+                d2 = abs(x2 - x1) ** L + abs(y2 - y1) ** L
                 if d2 > 0:
                     total += A / d2
-        return total
+        return total * 5
     
-    def borderDistance(self, dimensions):
-        (width, height) = dimensions
-        positionValues = self.getPositions().values()
+    def border_distance(self):
+        (width, height) = self.dimensions
+        positionValues = self.get_positions().values()
         (minX, _) = min(positionValues, key = lambda xy: xy[0])
         (maxX, _) = max(positionValues, key = lambda xy: xy[0])
         (_, minY) = min(positionValues, key = lambda xy: xy[1])
@@ -136,25 +147,25 @@ class PlannedGraph:
         dy2 = (height - graphHeight) ** 2
         return 1 / dx2 + 1 / dy2
     
-    def edgeLengths(self):
+    def edge_lengths(self):
         total = 0
         for (startId, endId, _, _) in self.edgeData:
-            total += self.nodeDistanceSq(startId, endId) # some adjustment factor for individual edges
+            total += self.node_distance_sq(startId, endId) # some adjustment factor for individual edges
         return total
 
-    def edgeDifferences(self):
+    def edge_differences(self):
         total = 0
         edges = list(self.edgeData)
         for i in range(len(edges)):
             for j in range(i + 1, len(edges)):
                 (startA, endA, _, _) = edges[i]
                 (startB, endB, _, _) = edges[j]
-                length1 = self.nodeDistanceSq(startA, endA)
-                length2 = self.nodeDistanceSq(startB, endB)
+                length1 = self.node_distance_sq(startA, endA)
+                length2 = self.node_distance_sq(startB, endB)
                 total += abs(length1 - length2) # some adjustment factor for individual edges
         return total
     
-    def nodeEdgeDistances(self):
+    def node_edge_distances(self):
         # if len(self.edgeData) == 0:
         #     return 0
         total = 0
@@ -164,7 +175,7 @@ class PlannedGraph:
                     (p1x, p1y) = self.nodePositions[start]
                     (p2x, p2y) = self.nodePositions[end]
                     (nodeX, nodeY) = self.nodePositions[nodeId]
-                    edgeLengthSq = self.nodeDistanceSq(start, end)
+                    edgeLengthSq = self.node_distance_sq(start, end)
                     numerator = ((p2y - p1y) * nodeX - (p2x - p1x) * nodeY + p2x * p1y - p2y * p1x) ** 2
                     if numerator == 0 or edgeLengthSq == 0:
                         return 100
@@ -172,7 +183,7 @@ class PlannedGraph:
                     total += 1 / d2
         return total
 
-    def bondAngles(self):
+    def bond_angles(self):
         total = 0
         # goodAngles = (0, 30, 45, 60)
         # self.angleValues = []
@@ -188,7 +199,7 @@ class PlannedGraph:
         #         total += min(angleRatings)
         return total
     
-    def angleDifferences(self):
+    def angle_differences(self):
         n = len(self.angleValues)
         total = 0
         for i in range(n):
@@ -210,7 +221,7 @@ class PlannedGraph:
             rating = min(rating, measure)
         return rating
     
-    def edgeIntersections(self):
+    def edge_intersections(self):
         total = 0
         edges = list(self.edgeData)
         for i in range(len(edges)):

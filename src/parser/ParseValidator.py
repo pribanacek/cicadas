@@ -32,15 +32,15 @@ class ParseValidator:
         for i in range(len(path) - 1):
             edge1 = self.edges[path[i]]
             edge2 = self.edges[path[i + 1]]
-            if edge1.end.nodeId != edge2.start.nodeId:
+            if edge1.end.node_name != edge2.start.node_name:
                 return False
         return True
     
     def validatePathEnds(self, pathA, pathB):
-        startNodeA = self.edges[pathA.edgeIds[0]].start.nodeId
-        endNodeA = self.edges[pathA.edgeIds[-1]].end.nodeId
-        startNodeB = self.edges[pathB.edgeIds[0]].start.nodeId
-        endNodeB = self.edges[pathB.edgeIds[-1]].end.nodeId
+        startNodeA = self.edges[pathA.edgeIds[0]].start.node_name
+        endNodeA = self.edges[pathA.edgeIds[-1]].end.node_name
+        startNodeB = self.edges[pathB.edgeIds[0]].start.node_name
+        endNodeB = self.edges[pathB.edgeIds[-1]].end.node_name
         return startNodeA == startNodeB and endNodeA == endNodeB
     
     def validateNoIdsInPaths(self, pathA, pathB):

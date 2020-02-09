@@ -16,12 +16,12 @@ class ParseListener(CDLangListener):
         else:
             self.types[edgeId] = EDGE
     
-    def addNode(self, nodeId):
-        if nodeId in self.types:
-            if self.types[nodeId] == EDGE:
-                raise Exception(nodeId + " has already been declared as an arrow")
+    def addNode(self, node_name):
+        if node_name in self.types:
+            if self.types[node_name] == EDGE:
+                raise Exception(node_name + " has already been declared as an arrow")
         else:
-            self.types[nodeId] = NODE
+            self.types[node_name] = NODE
 
     def enterArrow(self, ctx):
         edgeId = ctx.ID(0).getText()
