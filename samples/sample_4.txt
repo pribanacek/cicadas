@@ -5,9 +5,9 @@ g: B -> A
 id_A: A -> A
 id_B: B -> B
 
-// id_A = id
-// id_B = id
-// g . f = id
+id_A = ID
+id_B = ID
+g . f = ID
 
 style id_A : (loop left)
 style id_B : (loop right)

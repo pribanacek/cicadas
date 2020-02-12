@@ -1,0 +1,10 @@
+f: A -> B
+g: B -> C
+h: C -> A
+x: A -> D
+y: D -> C
+
+h . y . x = ID
+h . g . f = ID
+
+// TODO: infer from h . y . x = h . g . f that the other is an ID
