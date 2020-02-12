@@ -1,4 +1,5 @@
 from src.parser.PathFact import PathFact as PathFact
+from src.parser.Path import Path as Path
 
 class PathFacts:
     def __init__(self):
@@ -6,22 +7,23 @@ class PathFacts:
         self.inferredFacts = set()
         self.inferred = True
 
-    def addFact(self, pathA, pathB):
+    def add_fact(self, pathA, pathB = None):
         self.inferred = False
+        pathB = pathB if pathB != None else Path(None)
         pair = PathFact(pathA, pathB)
         self.pathFacts.add(pair)
     
-    def getFacts(self):
+    def get_facts(self):
         return self.pathFacts
     
-    def getAllFacts(self):
+    def get_all_facts(self):
         if not self.inferred:
-            self.inferPathFacts()
+            self.infer_path_facts()
         return self.pathFacts | self.inferredFacts
     
     # def replaceOccurrences(self, factToReplace, facts):
         
-    def inferPathFacts(self):
+    def infer_path_facts(self):
         self.inferred = True
         self.inferredPairs = set()
         factDict = {}

@@ -1,6 +1,9 @@
 class Path:
     def __init__(self, path):
-        if type(path) == str:
+        if path == None:
+            self._pathText = 'id'
+            self.edgeIds = ()
+        elif type(path) == str:
             self._pathText = path
             self.edgeIds = tuple(reversed(path.split('.')))
         elif type(path) == tuple or type(path) == list:
@@ -8,6 +11,12 @@ class Path:
             self.edgeIds = tuple(path)
         else:
             raise Exception('Invalid path type')
+    
+    def isIdentity(self):
+        return self.edgeIds == ()
+    
+    def __len__(self):
+        return len(self.edgeIds)
     
     def __str__(self):
         return self._pathText

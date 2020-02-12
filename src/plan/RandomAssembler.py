@@ -71,7 +71,7 @@ class RandomAssembler(GraphAssembler):
 
     def isConsistent(self):
         facts = self.getCurrentRepresentedFacts()
-        neededFacts = self.pathFacts.getFacts()
+        neededFacts = self.pathFacts.get_facts()
         extraFacts = facts - neededFacts
         missingFacts = neededFacts - facts
         print('extras', *extraFacts, sep='\n')

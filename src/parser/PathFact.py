@@ -8,7 +8,7 @@ class PathFact:
         
     def __str__(self):
         return 'PathFact(' + str(self._x) + ', ' + str(self._y) + ')'
-    
+        
     def __eq__(self, other):
         if isinstance(other, PathFact):
             if self._x == other._x and self._y == other._y:

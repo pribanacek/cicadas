@@ -5,6 +5,9 @@ from .ParseValidator import ParseValidator
 EDGE = 'edge'
 NODE = 'node'
 
+def raise_unknown_identifier(object_id):
+    raise Exception("Unknown identifier " + object_id)
+
 class ParseListener(CDLangListener):
     def __init__(self):
         self.types = {}
@@ -33,15 +36,22 @@ class ParseListener(CDLangListener):
         self.validator.addEdge(edgeId, nodeAId, nodeBId)
 
     def enterComposition(self, ctx):
-        pathA = Path(ctx.path(0).getText())
-        pathB = Path(ctx.path(1).getText())
+        # TODO clean this up
+        pathA = ctx.path(0)
+        pathB = ctx.path(1)
+        identity = pathB == None
+        pathFactA = Path(pathA.getText())
+        pathFactB = Path(None if identity else pathB.getText())
 
-        for edgeId in pathA.edgeIds + pathB.edgeIds:
+        for edgeId in pathFactA.edgeIds + pathFactB.edgeIds:
             if not edgeId in self.types:
-                raise Exception("Unknown identifier " + edgeId)
+                raise_unknown_identifier(edgeId)
             elif self.types[edgeId] == NODE:
                 raise Exception("Edge identifier expected, but got a node identifier " + edgeId)
-        self.validator.addCompositions(pathA, pathB)
+        if identity:
+            self.validator.add_identity_path(pathFactA)
+        else:
+            self.validator.add_compositions(pathFactA, pathFactB)
 
     def enterLabel(self, ctx):
         objectId = ctx.ID().getText()
@@ -51,7 +61,7 @@ class ParseListener(CDLangListener):
         if objectId in self.types:
             self.validator.setLabel(objectId, labelText)
         else:
-            raise Exception("Unknown identifier " + objectId)
+            raise_unknown_identifier(objectId)
 
     def enterStyle(self, ctx):
         edgeId = ctx.ID().getText()
@@ -59,7 +69,7 @@ class ParseListener(CDLangListener):
         styles = styleList.split(',')
 
         if not edgeId in self.types:
-            raise Exception("Unknown identifier " + edgeId)
+            raise_unknown_identifier(edgeId)
         elif self.types[edgeId] == NODE:
             raise Exception("Edge identifier expected, but got a node identifier " + edgeId)
         else:

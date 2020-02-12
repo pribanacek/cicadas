@@ -8,7 +8,8 @@ class ParseValidator:
         self.nodes = {}
         self.edges = {}
         self.compositions = {}
-        self.pathFacts = PathFacts()
+        self.path_facts = PathFacts()
+        self.path_loops = PathFacts()
 
     def addEdge(self, edgeId, nodeAId, nodeBId):
         nodeA = Vertex(nodeAId)
@@ -28,7 +29,7 @@ class ParseValidator:
         styles = self.edges[edgeId].styles
         self.edges[edgeId].styles = styles + styleList
 
-    def validatePathContinuity(self, path):
+    def validate_path_continuity(self, path):
         for i in range(len(path) - 1):
             edge1 = self.edges[path[i]]
             edge2 = self.edges[path[i + 1]]
@@ -36,29 +37,39 @@ class ParseValidator:
                 return False
         return True
     
-    def validatePathEnds(self, pathA, pathB):
+    def validate_path_ends(self, pathA, pathB):
         startNodeA = self.edges[pathA.edgeIds[0]].start.node_name
         endNodeA = self.edges[pathA.edgeIds[-1]].end.node_name
         startNodeB = self.edges[pathB.edgeIds[0]].start.node_name
         endNodeB = self.edges[pathB.edgeIds[-1]].end.node_name
         return startNodeA == startNodeB and endNodeA == endNodeB
     
-    def validateNoIdsInPaths(self, pathA, pathB):
-        return not str(pathA) in str(pathB) and not str(pathB) in str(pathA)
+    def validate_loop_ends(self, path):
+        start = self.edges[path.edgeIds[0]].start.node_name
+        end = self.edges[path.edgeIds[-1]].end.node_name
+        return start == end
     
-    def validatePaths(self, pathA, pathB):
-        if not self.validatePathContinuity(pathA.edgeIds):
+    def validate_paths(self, pathA, pathB):
+        if not self.validate_path_continuity(pathA.edgeIds):
             raise Exception("The declared path " + str(pathA) + " is not a valid path, as it isn't continuous")
-        if not self.validatePathContinuity(pathB.edgeIds):
+        if not self.validate_path_continuity(pathB.edgeIds):
             raise Exception("The declared path " + str(pathB) + " is not a valid path, as it isn't continuous")
-        if not self.validatePathEnds(pathA, pathB):
+        if not self.validate_path_ends(pathA, pathB):
             raise Exception("The declared paths " + str(pathA) + " and " + str(pathB) + " do not share a start/end node")
-        # if not self.validateNoIdsInPaths(pathA, pathB):
-        #     raise Exception(str(pathA) + " = " + str(pathB) + " : no identities allowed in path equalities")
+    
+    def validate_path_loop(self, path):
+        if not self.validate_path_continuity(path.edgeIds):
+            raise Exception("The declared path " + str(path) + " is not a valid path, as it isn't continuous")
+        if not self.validate_loop_ends(path):
+            raise Exception("The declared path " + str(path) + " does not loop, so cannot be an ID")
 
-    def addCompositions(self, pathA, pathB):
-        self.validatePaths(pathA, pathB)
-        self.pathFacts.addFact(pathA, pathB)
+    def add_compositions(self, pathA, pathB):
+        self.validate_paths(pathA, pathB)
+        self.path_facts.add_fact(pathA, pathB)
+    
+    def add_identity_path(self, path):
+        self.validate_path_loop(path)
+        self.path_loops.add_fact(path)
 
     def getGraphAssembler(self):
-        return MergeAssembler(self.nodes, self.edges, self.pathFacts)
+        return MergeAssembler(self.nodes, self.edges, self.path_facts, self.path_loops)

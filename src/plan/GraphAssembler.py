@@ -22,12 +22,13 @@ def get_node_id_mapping(sourceIds, targetIds, match):
 
 
 class GraphAssembler:
-    def __init__(self, nodes, edges, pathFacts):
+    def __init__(self, nodes, edges, path_facts, path_loops):
         self.nodes = nodes
         self.nodeCounts = {node_name: 0 for node_name in self.nodes}
         self.edges = edges
         self.edgeCounts = {edgeId: 0 for edgeId in self.edges}
-        self.pathFacts = pathFacts
+        self.path_facts = path_facts
+        self.path_loops = path_loops
         self.graphCycles = {}
         self.graph = nx.MultiDiGraph()
     
@@ -60,28 +61,41 @@ class GraphAssembler:
         self.addEdgeCount(edgeId)
         return (graphStartId, graphEndId)
     
-    def addPath(self, path, start = None, end = None, graph = None):
+    def addPath(self, path, start = None, end = None, graph = None, loop = False):
         graph = graph if graph != None else self.graph
-        pathStartNode = self.edges[path.edgeIds[0]].start.node_name
-        pathEndNode = self.edges[path.edgeIds[-1]].end.node_name
-        pathStartGraphId = start if start != None else self.addNodeInstance(pathStartNode, graph = graph)
-        pathEndGraphId = end if end != None else self.addNodeInstance(pathEndNode, graph = graph)
-        pathIds = [pathStartGraphId]
+        path_start_name = self.edges[path.edgeIds[0]].start.node_name
+        path_end_name = self.edges[path.edgeIds[-1]].end.node_name
+        path_start_id = start if start != None else self.addNodeInstance(path_start_name, graph = graph)
+        path_end_id = None
+        if loop:
+            path_end_id = path_start_id
+        elif end != None:
+            path_end_id = end
+        else:
+            path_end_id = self.addNodeInstance(path_end_name, graph = graph)
+
+        pathIds = [path_start_id]
         for i in range(len(path.edgeIds) - 1):
             edgeId = path.edgeIds[i]
-            (_, edgeEndId) = self.addEdge(edgeId, start = pathIds[-1], graph = graph)
-            pathIds.append(edgeEndId)
-        self.addEdge(path.edgeIds[-1], start = pathIds[-1], end = pathEndGraphId, graph = graph)
-        pathIds.append(pathEndGraphId)
+            (_, edge_end_id) = self.addEdge(edgeId, start = pathIds[-1], graph = graph)
+            pathIds.append(edge_end_id)
+        self.addEdge(path.edgeIds[-1], start = pathIds[-1], end = path_end_id, graph = graph)
+        pathIds.append(path_end_id)
         return pathIds
-    
+        
     def getGraph(self):
         return PlannedGraph(self.graph)
 
 class MergeAssembler(GraphAssembler):   
-    def createFactSubGraphs(self):
+    def create_fact_subgraphs(self):
         subGraphs = []
-        for fact in self.pathFacts.getFacts():
+        for fact in self.path_loops.get_facts():
+            (loop, _) = fact.paths()
+            graph = nx.MultiDiGraph()
+            path_ids = self.addPath(loop, graph = graph, loop = True)
+            data = (graph, path_ids, ())
+            subGraphs.append(data)
+        for fact in self.path_facts.get_facts():
             (pathA, pathB) = fact.paths()
             graph = nx.MultiDiGraph()
             pathAIds = self.addPath(pathA, graph = graph)
@@ -99,7 +113,9 @@ class MergeAssembler(GraphAssembler):
                 subGraphs.append(graph)
         return subGraphs
     
-    def nodeIdsToLCSString(self, node_ids, graph):
+    def node_ids_to_lcs_string(self, node_ids, graph):
+        if len(node_ids) < 1:
+            return ([], [])
         node = graph.nodes[node_ids[0]]['data']
         id_string = [node_ids[0]]
         name_string = [node.node_name]
@@ -117,15 +133,15 @@ class MergeAssembler(GraphAssembler):
     
     def get_max_subgraph_mapping(self, graph, subGraph, pathAIds, pathBIds):
         cutoff = max(len(pathAIds), len(pathBIds))
-        (stringAIds, stringANames) = self.nodeIdsToLCSString(pathAIds, subGraph)
-        (stringBIds, stringBNames) = self.nodeIdsToLCSString(pathBIds, subGraph)
+        (stringAIds, stringANames) = self.node_ids_to_lcs_string(pathAIds, subGraph)
+        (stringBIds, stringBNames) = self.node_ids_to_lcs_string(pathBIds, subGraph)
         mappings_A = []
         mappings_B = []
         for node in graph:
             targets = [x for x in graph if x != node]
             allPaths = nx.all_simple_paths(graph, source = node, target = targets, cutoff = cutoff)
             for path in allPaths:
-                (pathStringIds, pathStringNames) = self.nodeIdsToLCSString(path, graph)
+                (pathStringIds, pathStringNames) = self.node_ids_to_lcs_string(path, graph)
                 matchA = LCS(stringANames, pathStringNames)
                 matchB = LCS(stringBNames, pathStringNames)
                 if matchA != None:
@@ -196,7 +212,7 @@ class MergeAssembler(GraphAssembler):
                 self.addEdge(edgeId, start = start_node_id, end = end_node_id)
 
     def getGraph(self):
-        subGraphs = self.createFactSubGraphs()
+        subGraphs = self.create_fact_subgraphs()
         if len(subGraphs) > 0:
             subGraphs = sorted(subGraphs, key = lambda x : len(x[0]))
             (mainGraph, _, _) = subGraphs.pop()
