@@ -1,6 +1,10 @@
 import random, math, copy, numpy as np
 import networkx as nx
 
+def round_dp(x, dp):
+    y = 10 ** dp
+    return round(x * y) / y
+
 class Vertex:
     def __init__(self, node_name, label = None):
         self.node_name = node_name
@@ -77,16 +81,17 @@ class PlannedGraph:
     def recentre_nodes(self):
         totalX = 0
         totalY = 0
-        for nodeId, (x, y) in self.nodePositions:
+        for _, (x, y) in self.nodePositions:
             totalX += x
             totalY += y
         numberOfNodes = len(self.nodeData)
         offsetX = totalX / numberOfNodes
         offsetY = totalY / numberOfNodes
-        for nodeId, (x, y) in self.nodePositions:
-            newX = x - offsetX
-            newY = y - offsetY
-            self.set_node_position(nodeId, (newX, newY))
+        rounding_precision = 5
+        for node_id, (x, y) in self.nodePositions:
+            newX = round_dp(x - offsetX, rounding_precision)
+            newY = round_dp(y - offsetY, rounding_precision)
+            self.set_node_position(node_id, (newX, newY))
     
     def energy(self):
         if self._energy != None:
@@ -103,15 +108,7 @@ class PlannedGraph:
         print([A, B, C, D, E, F, G, H, I])
         self._energy = A + B + C + D + E + F + G + H + I
         return self._energy
-    
-    # def avg_node_position(self):
-    #     xTotal = 0
-    #     yTotal = 0
-    #     for _, (x, y) in self.nodePositions:
-    #         xTotal += x
-    #         yTotal += y
-    #     return xTotal ** 2 + yTotal ** 2
-    
+        
     def node_distance_sq(self, startId, endId):
         (startX, startY) = self.nodePositions[startId]
         (endX, endY) = self.nodePositions[endId]
