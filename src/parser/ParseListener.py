@@ -11,8 +11,32 @@ def raise_unknown_identifier(object_id):
 class ParseListener(CDLangListener):
     def __init__(self):
         self.types = {}
+        self.size = None
         self.validator = ParseValidator()
+
+    def separateUnits(self, text):
+        '''
+        Separates a measurement string into the number and unit components. Eg. 1.2pt -> (1.2, 'pt') 
+        Assumes that units are exactly 2 characters long.
+        '''
+        if len(text) > 1:
+            prefix = text[:-2]
+            suffix = text[-2:]
+            if suffix.isalpha():
+                return (float(prefix), suffix)
+        return (float(text), None)
     
+    def enterSize(self, ctx):
+        if self.size != None:
+            raise Exception("Size has already been declared")
+        width_text = ctx.MEASUREMENT(0).getText()
+        height_text = ctx.MEASUREMENT(1).getText()
+        (width, width_unit) = self.separateUnits(width_text)
+        (height, height_unit) = self.separateUnits(height_text)
+        # TODO deal with units
+        self.size = (width, height)
+        self.validator.set_dimensions(self.size)
+        
     def addEdge(self, edgeId): # move to validator?
         if edgeId in self.types:
             raise Exception(edgeId + " has already been declared")

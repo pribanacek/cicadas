@@ -22,15 +22,16 @@ def get_node_id_mapping(sourceIds, targetIds, match):
 
 
 class GraphAssembler:
-    def __init__(self, nodes, edges, path_facts, path_loops):
+    def __init__(self, nodes, edges, path_facts, path_loops, dimensions):
         self.nodes = nodes
         self.nodeCounts = {node_name: 0 for node_name in self.nodes}
         self.edges = edges
         self.edgeCounts = {edgeId: 0 for edgeId in self.edges}
         self.path_facts = path_facts
         self.path_loops = path_loops
+        self.dimensions = dimensions
         self.graphCycles = {}
-        self.graph = nx.MultiDiGraph()
+        self.graph = nx.OrderedMultiDiGraph()
     
     def addNodeCount(self, node_name):
         self.nodeCounts[node_name] += 1
@@ -84,20 +85,20 @@ class GraphAssembler:
         return pathIds
         
     def getGraph(self):
-        return PlannedGraph(self.graph)
+        return PlannedGraph(self.graph, self.dimensions)
 
 class MergeAssembler(GraphAssembler):   
     def create_fact_subgraphs(self):
         subGraphs = []
         for fact in self.path_loops.get_facts():
             (loop, _) = fact.paths()
-            graph = nx.MultiDiGraph()
+            graph = nx.OrderedMultiDiGraph()
             path_ids = self.addPath(loop, graph = graph, loop = True)
             data = (graph, path_ids, ())
             subGraphs.append(data)
         for fact in self.path_facts.get_facts():
             (pathA, pathB) = fact.paths()
-            graph = nx.MultiDiGraph()
+            graph = nx.OrderedMultiDiGraph()
             pathAIds = self.addPath(pathA, graph = graph)
             pathBIds = self.addPath(pathB, start = pathAIds[0], end = pathAIds[-1], graph = graph)
             data = (graph, pathAIds, pathBIds)
@@ -108,7 +109,7 @@ class MergeAssembler(GraphAssembler):
         subGraphs = []
         for edgeId in self.edges:
             if self.edgeCounts[edgeId] < 1:
-                graph = nx.MultiDiGraph()
+                graph = nx.OrderedMultiDiGraph()
                 self.addEdge(edgeId, graph = graph)
                 subGraphs.append(graph)
         return subGraphs
@@ -122,8 +123,8 @@ class MergeAssembler(GraphAssembler):
         for i in range(len(node_ids) - 1):
             nodeA_id = node_ids[i]
             nodeB_id = node_ids[i + 1]
-            edgeData = graph.get_edge_data(nodeA_id, nodeB_id)
-            edge_id = list(dict(edgeData).keys())[0]
+            edge_data = graph.get_edge_data(nodeA_id, nodeB_id)
+            edge_id = list(dict(edge_data).keys())[0]
             nodeB_data = graph.nodes[nodeB_id]['data']
             id_string.append(edge_id)
             name_string.append(edge_id)
@@ -150,7 +151,10 @@ class MergeAssembler(GraphAssembler):
                 if matchB != None:
                     mapping = get_node_id_mapping(stringBIds, pathStringIds, matchB)
                     mappings_B.append(mapping)
-        maximum_mapping = max({}, *mappings_A, *mappings_B, key = len)
+
+        maximum_mapping = {}
+        if len(mappings_A) + len(mappings_B) > 0:
+            maximum_mapping = max(*mappings_A, *mappings_B, key = len)
         for mapA in mappings_A:
             for mapB in mappings_B:
                 if self.is_mapping_compatible(mapA, mapB, pathAIds):
@@ -180,12 +184,12 @@ class MergeAssembler(GraphAssembler):
         for nodeId in subGraph:
             mappedNodeId = nodeId if not nodeId in mapping else mapping[nodeId]
             if mappedNodeId not in graph:
-                nodeData = subGraph.nodes[nodeId]
-                graph.add_node(mappedNodeId, data = nodeData['data'], pos = nodeData['pos'])
-        for start, end, edgeId, edgeData in subGraph.edges(keys = True, data = 'data'):
+                node_data = subGraph.nodes[nodeId]
+                graph.add_node(mappedNodeId, data = node_data['data'], pos = node_data['pos'])
+        for start, end, edgeId, edge_data in subGraph.edges(keys = True, data = 'data'):
             mappedStart = start if not start in mapping else mapping[start]
             mappedEnd = end if not end in mapping else mapping[end]
-            graph.add_edge(mappedStart, mappedEnd, edgeId, data = edgeData)
+            graph.add_edge(mappedStart, mappedEnd, edgeId, data = edge_data)
         return graph
     
     def mergeFactSubGraphs(self, graph, subGraphs):
@@ -219,4 +223,4 @@ class MergeAssembler(GraphAssembler):
             self.graph = mainGraph
             self.mergeFactSubGraphs(self.graph, subGraphs)
         self.addUnusedEdges()
-        return PlannedGraph(self.graph)
+        return PlannedGraph(self.graph, self.dimensions)

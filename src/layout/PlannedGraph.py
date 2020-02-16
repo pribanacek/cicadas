@@ -38,7 +38,7 @@ def nodesSortedByAngles(nodes, centre):
     return sorted(angles, key=lambda x : x[1])
 
 class PlannedGraph:
-    def __init__(self, graph, dimensions = None):
+    def __init__(self, graph, dimensions):
         self.dimensions = dimensions
         self.graph = graph
         self.nodeData = graph.nodes.data('data')
@@ -64,8 +64,7 @@ class PlannedGraph:
     
     def copy(self):
         graph = self.graph.copy()
-        dimensions = tuple(self.dimensions)
-        return PlannedGraph(graph, dimensions = dimensions)
+        return PlannedGraph(graph, self.dimensions)
         
     def random_neighbour(self, radius):
         graph = self.graph.copy()
@@ -73,10 +72,7 @@ class PlannedGraph:
         (x, y) = self.nodePositions[nodeId]
         dx = radius * (random.random() * 2 - 1)
         dy = radius * (random.random() * 2 - 1)
-        newX = x + (dx if radius < 1 else round(dx))
-        newY = y + (dy if radius < 1 else round(dy))
-        self.set_node_position(nodeId, (newX, newY), graph = graph)
-        return PlannedGraph(graph, dimensions = self.dimensions)
+        return PlannedGraph(graph, self.dimensions)
     
     def recentre_nodes(self):
         totalX = 0

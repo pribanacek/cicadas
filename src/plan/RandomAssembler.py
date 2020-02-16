@@ -49,8 +49,8 @@ class RandomAssembler(GraphAssembler):
         for i in range(len(nodeList) - 1):
             nodeA = nodeList[i]
             nodeB = nodeList[i + 1]
-            edgeData = self.graph.get_edge_data(nodeA, nodeB)
-            edgeIds = list(edgeData.keys())
+            edge_data = self.graph.get_edge_data(nodeA, nodeB)
+            edgeIds = list(edge_data.keys())
             # TODO take care of potential multiple edges properly
             edgeId = edgeIds[0]
             data = (nodeA, nodeB, edgeId)
@@ -85,4 +85,4 @@ class RandomAssembler(GraphAssembler):
             print('consistent')
         else:
             print('not consistent')
-        return PlannedGraph(self.currentGraph)
+        return PlannedGraph(self.currentGraph, self.dimensions)

@@ -7,9 +7,13 @@ class ParseValidator:
     def __init__(self):
         self.nodes = {}
         self.edges = {}
+        self.dimensions = None
         self.compositions = {}
         self.path_facts = PathFacts()
         self.path_loops = PathFacts()
+    
+    def set_dimensions(self, dimensions):
+        self.dimensions = dimensions
 
     def addEdge(self, edgeId, nodeAId, nodeBId):
         nodeA = Vertex(nodeAId)
@@ -72,4 +76,6 @@ class ParseValidator:
         self.path_loops.add_fact(path)
 
     def getGraphAssembler(self):
-        return MergeAssembler(self.nodes, self.edges, self.path_facts, self.path_loops)
+        if self.dimensions == None:
+            raise Exception("Dimensions have not been declared") # TODO use some nice default
+        return MergeAssembler(self.nodes, self.edges, self.path_facts, self.path_loops, self.dimensions)
