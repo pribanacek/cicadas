@@ -1,8 +1,12 @@
+size 8, 8
+
 a: A -> B
 b: B -> C
 c: A -> E
 d: E -> D
 e: D -> C
+
+b . a = e . d . c
 
 label a : [$\phi$]
 label b : [$\phi$]

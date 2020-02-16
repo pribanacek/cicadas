@@ -1,3 +1,5 @@
+size 8, 8
+
 f: A -> B
 g: A -> B
 h: B -> C

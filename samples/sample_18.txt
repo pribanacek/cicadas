@@ -1,3 +1,5 @@
+size 8.0, 8.5pt
+
 a: A -> B
 b: B -> C
 c: C -> D
