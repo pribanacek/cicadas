@@ -10,18 +10,28 @@ class Vertex:
         self.node_name = node_name
         self.label = label
         self.dimensions = (0, 0)
-        if self.label == None and not self.node_name.startswith('_'):
+
+        if label != None:
+            self.label = label
+        elif not node_name.startswith('_'):
             self.label = '$' + self.node_name + '$'
+        else:
+            self.label = ''
+
 
 class Edge:
     def __init__(self, edgeId, start, end, label = None, styles = None):
         self.edgeId = edgeId
         self.start = start
         self.end = end
-        self.label = label
-        if self.label == None:
-            self.label = '$' + self.edgeId + '$'
         self.styles = [] if styles == None else styles
+
+        if label != None:
+        self.label = label
+        elif not edgeId.startswith('_'):
+            self.label = '$' + self.edgeId + '$'
+        else:
+            self.label = ''
 
 def ccw(A, B, C):
     (Ax, Ay) = A
