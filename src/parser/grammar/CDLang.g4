@@ -2,7 +2,8 @@ grammar CDLang;
 
 // Parser Rules
 start          : statement+ EOF;
-statement      : (arrow | composition | label | style | impose)? SEPARATOR; // TODO allow no new line at end of file
+statement      : (size | arrow | composition | label | style | impose)? SEPARATOR; // TODO allow no new line at end of file
+size          : 'size' MEASUREMENT ',' MEASUREMENT;
 arrow          : ID ':' ID '->' ID;
 composition    : path '=' (path | IDENTITY);
 label          : 'label' ID ':' text;
@@ -17,6 +18,8 @@ TEXT           : {self._input.LA(-1) == ord('[')}? (~']' | '\\]')+;
 COMMENT        : '//' ~('\n' | '\r')* NEWLINE? -> skip;
 DIRECTION      : ('vertical' | 'horizontal');
 IDENTITY       : 'ID';
+MEASUREMENT    : NUMBER ('pt' | 'mm' | 'cm' | 'in' | 'ex' | 'em' | 'mu')?;
+NUMBER         : [0-9]*'.'?[0-9]+;
 ID             : [_a-zA-Z0-9]+;
 STYLE_LIST     : '(' [-='_ a-zA-Z0-9]+ (',' [-='_ a-zA-Z0-9]+)* ')';
 SEPARATOR      : (NEWLINE | ';' | EOF);

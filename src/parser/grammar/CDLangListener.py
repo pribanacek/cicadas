@@ -26,6 +26,15 @@ class CDLangListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by CDLangParser#size.
+    def enterSize(self, ctx:CDLangParser.SizeContext):
+        pass
+
+    # Exit a parse tree produced by CDLangParser#size.
+    def exitSize(self, ctx:CDLangParser.SizeContext):
+        pass
+
+
     # Enter a parse tree produced by CDLangParser#arrow.
     def enterArrow(self, ctx:CDLangParser.ArrowContext):
         pass
