@@ -39,16 +39,16 @@ def getNodeMeasurementCode(node):
     ]
     return lines
 
-def getMeasurementLatex(nodeData):
+def getMeasurementLatex(node_data):
     lines = [LATEX_PREFIX]
-    for node in nodeData.values():
+    for node in node_data.values():
         lines = lines + getNodeMeasurementCode(node)
     lines.append(LATEX_SUFFIX)
     return '\n'.join(lines)
 
-def measureNodes(nodeData):
+def measureNodes(node_data):
     measurements = {}
-    latex = getMeasurementLatex(nodeData)
+    latex = getMeasurementLatex(node_data)
     filepath = './temp'
     logs = generateLatexLog(latex, filepath)
     for line in logs:
@@ -61,7 +61,7 @@ def measureNodes(nodeData):
             measurements[node_name][1] = float(value)
 
     for node_name, dimensions in measurements.items():
-        nodeData[node_name].dimensions = tuple(dimensions)
+        node_data[node_name].dimensions = tuple(dimensions)
 
     return measurements
 

@@ -40,11 +40,11 @@ def getEdgeString(start, end, edge):
 
 def getTikzLines(graph):
     lines = [BEGIN_TIKZ_PICTURE]
-    for nodeId, node in graph.nodeData:
-        position = graph.nodePositions[nodeId]
+    for nodeId, node in graph.node_data:
+        position = graph.node_positions[nodeId]
         lines.append(getNodeString(nodeId, node, position))
     lines.append(PATH_START)
-    for start, end, _, edge in graph.edgeData:
+    for start, end, _, edge in graph.edge_data:
         lines.append(getEdgeString(start, end, edge))
     lines[-1] += ';'
     lines.append(END_TIKZ_PICTURE)
