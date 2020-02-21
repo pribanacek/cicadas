@@ -4,15 +4,15 @@ import src.parser.Parser as Parser
 
 from src.output.TikzGen import generateTikz
 from src.output.AutoRender import generatePDF
-from src.layout.LayoutOptimizer import optimizeLayout
+from src.layout.LayoutOptimizer import optimize_layout
 import src.layout.GraphMeasure as GraphMeasure
 
 import networkx as nx
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 
 import src.tests.LayoutOptimisation
 import src.tests.TikzGeneration
+
+import src.visualisation.animate as animate_graphs
 
 # def runTest(test):   
 #     testName = sys.argv[1]
@@ -39,18 +39,16 @@ import src.tests.TikzGeneration
 #     else:
 #         print('Unknown test ' + test)
 
-def plotGraph(fig, graphs, i):
-    graph = graphs[i]
-    fig.clear()
-    pos = graph.getPositions()
-    nx.draw(graph.graph, pos)
+import cProfile
 
-if __name__ == "__main__":
-    filename = sys.argv[1]
+def main(filename):
     graphAssembler = Parser.parse(filename)
-    GraphMeasure.measureNodes(graphAssembler.nodes)
+    GraphMeasure.measure_nodes(graphAssembler.nodes)
     graph = graphAssembler.getGraph()
-    (minGraph, graphs) = optimizeLayout(graph)
+    (minGraph, graphs) = optimize_layout(graph)
+
+    animate_graphs.start_animation_thread(graphs)
+
     result = generateTikz(minGraph)
 
     outputPath = './thing'
@@ -60,11 +58,8 @@ if __name__ == "__main__":
 
     print(result)
 
-    animate = False
-    if animate:
-        fig = plt.figure()
-        update = lambda i : plotGraph(fig, graphs, i)
-        ani = animation.FuncAnimation(fig, update, frames=len(graphs), interval=100, repeat=False)
-        plt.show()
 
-    # os.system("echo '%s' | xclip -selection clipboard" % result.replace('\\', '\\\\'))
+if __name__ == "__main__":
+    filename = sys.argv[1]
+    # cProfile.run('main(filename)')
+    main(filename)
