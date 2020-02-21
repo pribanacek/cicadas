@@ -1,7 +1,7 @@
 import os, subprocess, errno
+from subprocess import CalledProcessError
 
-LATEX_PREFIX = '''
-\\documentclass{article}
+LATEX_PREFIX = '''\\documentclass{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage{tikz-cd, amsmath}
 \\usetikzlibrary{decorations.pathmorphing}
@@ -32,6 +32,11 @@ def generatePDF(tex, filepath, compiler_args = []):
     texFile = LATEX_PREFIX + tex + LATEX_SUFFIX
     generateTex(texFile, filepath)
     command = ['pdflatex', '--interaction=nonstopmode', basename + '.tex']
-    subprocess.check_output(command) # check output here
-    os.remove(basename + '.tex')  # Remove generated tex file
+    try:
+        subprocess.check_output(command)
+    except CalledProcessError as e:
+        print(e.output) # TODO throw a useful exception
+    os.remove(basename + '.tex')
+    os.remove(basename + '.aux')
+    os.remove(basename + '.log')
     os.chdir(cur_dir)
