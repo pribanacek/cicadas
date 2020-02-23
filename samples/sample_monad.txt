@@ -1,17 +1,10 @@
 size 4, 4
 
-_eq: T -> T
-nT: T -> T2
-Tn: T -> T2
-mu: T2 -> T
+_eq          : T -> T (equal)
+nT[$\eta T$] : T -> T2[$T^2$]
+Tn[$T\eta$]  : T -> T2
+mu[$\mu$]    : T2 -> T
 
 mu . Tn = mu . nT
 mu . Tn = _eq
 mu . nT = _eq
-
-label T2 : [$T^2$]
-label Tn : [$T\eta$]
-label nT : [$\eta T$]
-label mu : [$\mu$]
-
-style _eq : (equal)

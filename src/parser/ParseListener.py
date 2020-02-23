@@ -51,13 +51,26 @@ class ParseListener(CDLangListener):
             self.types[node_name] = NODE
 
     def enterArrow(self, ctx):
-        edgeId = ctx.ID(0).getText()
-        nodeAId = ctx.ID(1).getText()
-        nodeBId = ctx.ID(2).getText()
+        edge = ctx.labelledID(0)
+        nodeA = ctx.labelledID(1)
+        nodeB = ctx.labelledID(2)
+        styles = ctx.STYLE_LIST()
+        edgeId = edge.ID().getText()
+        nodeAId = nodeA.ID().getText()
+        nodeBId = nodeB.ID().getText()
         self.addEdge(edgeId)
         self.addNode(nodeAId)
         self.addNode(nodeBId)
         self.validator.addEdge(edgeId, nodeAId, nodeBId)
+
+        if edge.labelText() != None:
+            self.validator.set_label(edgeId, self.get_label_text(edge.labelText()))
+        if nodeA.labelText() != None:
+            self.validator.set_label(nodeAId, self.get_label_text(nodeA.labelText()))
+        if nodeB.labelText() != None:
+            self.validator.set_label(nodeBId, self.get_label_text(nodeB.labelText()))
+        if styles != None:
+            self.set_styles(edgeId, styles.getText())
 
     def enterComposition(self, ctx):
         # TODO clean this up
@@ -77,27 +90,32 @@ class ParseListener(CDLangListener):
         else:
             self.validator.add_compositions(pathFactA, pathFactB)
 
+    def get_label_text(self, text_ctx):
+        text = text_ctx.TEXT()
+        label_text = '' if text == None else text.getText().replace('\\]', ']')
+        return label_text
+
     def enterLabel(self, ctx):
         objectId = ctx.ID().getText()
-        label = ctx.text().TEXT()
-        labelText = '' if label == None else label.getText().replace('\\]', ']')
+        label_text = self.get_label_text(ctx.text())
 
         if objectId in self.types:
-            self.validator.setLabel(objectId, labelText)
+            self.validator.set_label(objectId, label_text)
         else:
             raise_unknown_identifier(objectId)
+    
+    def set_styles(self, object_id, style_text):
+        styles = style_text[1:-1].split(',')
+        self.validator.add_styles(object_id, styles)
 
     def enterStyle(self, ctx):
         edgeId = ctx.ID().getText()
-        styleList = ctx.STYLE_LIST().getText()[1:-1]
-        styles = styleList.split(',')
-
         if not edgeId in self.types:
             raise_unknown_identifier(edgeId)
         elif self.types[edgeId] == NODE:
             raise Exception("Edge identifier expected, but got a node identifier " + edgeId)
         else:
-            self.validator.addStyles(edgeId, styles)
+            self.set_styles(edgeId, ctx.STYLE_LIST().getText())
     
-    def getGraphAssembler(self):
-        return self.validator.getGraphAssembler()
+    def get_graph_assembler(self):
+        return self.validator.get_graph_assembler()

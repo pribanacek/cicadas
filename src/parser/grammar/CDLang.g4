@@ -4,13 +4,14 @@ grammar CDLang;
 start          : statement+ EOF;
 statement      : (size | arrow | composition | label | style | impose)? SEPARATOR; // TODO allow no new line at end of file
 size          : 'size' MEASUREMENT ',' MEASUREMENT;
-arrow          : ID ':' ID '->' ID;
+arrow          : labelledID ':' labelledID '->' labelledID STYLE_LIST?;
 composition    : path '=' (path | IDENTITY);
-label          : 'label' ID ':' text;
+label          : 'label' ID ':' labelText;
 style          : 'style' ID ':' STYLE_LIST;
 impose         : 'impose' ID ':' DIRECTION;
 path           : ID ('.' ID)*;
-text           : '[' TEXT ']' | '[]';
+labelledID     : ID labelText?;
+labelText      : '[' TEXT ']' | '[]';
 
 
 // Lexer Rules

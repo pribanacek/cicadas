@@ -15,6 +15,6 @@ def parse(filename):
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
 
-    assembler = listener.getGraphAssembler()
+    assembler = listener.get_graph_assembler()
     # plan graph layout properly
     return assembler

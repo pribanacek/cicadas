@@ -7,6 +7,7 @@ class ParseValidator:
     def __init__(self):
         self.nodes = {}
         self.edges = {}
+        self.set_labels = set()
         self.dimensions = None
         self.compositions = {}
         self.path_facts = PathFacts()
@@ -16,22 +17,27 @@ class ParseValidator:
         self.dimensions = dimensions
 
     def addEdge(self, edgeId, nodeAId, nodeBId):
-        nodeA = Vertex(nodeAId)
-        nodeB = Vertex(nodeBId)
-        edge = Edge(edgeId, nodeA, nodeB)
-        self.nodes[nodeAId] = nodeA
-        self.nodes[nodeBId] = nodeB
+        if nodeAId not in self.nodes:
+            self.nodes[nodeAId] = Vertex(nodeAId)
+        if nodeBId not in self.nodes:
+            self.nodes[nodeBId] = Vertex(nodeBId)
+        edge = Edge(edgeId, self.nodes[nodeAId], self.nodes[nodeBId])
         self.edges[edgeId] = edge
 
-    def setLabel(self, objectId, label):
-        if objectId in self.nodes:
-            self.nodes[objectId].label = label
-        if objectId in self.edges:
-            self.edges[objectId].label = label
+    def set_label(self, object_id, label):
+        if object_id in self.set_labels:
+            print('WARNING: ' + object_id + ' label has already been defined.')  # TODO generalise warnings
+        else:
+            self.set_labels.add(object_id)
+        if object_id in self.nodes:
+            self.nodes[object_id].label = label
+        if object_id in self.edges:
+            self.edges[object_id].label = label
     
-    def addStyles(self, edgeId, styleList):
-        styles = self.edges[edgeId].styles
-        self.edges[edgeId].styles = styles + styleList
+    def add_styles(self, edgeId, style_list):
+        # styles = self.edges[edgeId].styles
+        # self.edges[edgeId].styles = styles + style_list
+        self.edges[edgeId].styles = style_list
 
     def validate_path_continuity(self, path):
         for i in range(len(path) - 1):
@@ -75,7 +81,7 @@ class ParseValidator:
         self.validate_path_loop(path)
         self.path_loops.add_fact(path)
 
-    def getGraphAssembler(self):
+    def get_graph_assembler(self):
         if self.dimensions == None:
             raise Exception("Dimensions have not been declared") # TODO use some nice default
         return MergeAssembler(self.nodes, self.edges, self.path_facts, self.path_loops, self.dimensions)

@@ -89,12 +89,21 @@ class CDLangListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by CDLangParser#text.
-    def enterText(self, ctx:CDLangParser.TextContext):
+    # Enter a parse tree produced by CDLangParser#labelledID.
+    def enterLabelledID(self, ctx:CDLangParser.LabelledIDContext):
         pass
 
-    # Exit a parse tree produced by CDLangParser#text.
-    def exitText(self, ctx:CDLangParser.TextContext):
+    # Exit a parse tree produced by CDLangParser#labelledID.
+    def exitLabelledID(self, ctx:CDLangParser.LabelledIDContext):
+        pass
+
+
+    # Enter a parse tree produced by CDLangParser#labelText.
+    def enterLabelText(self, ctx:CDLangParser.LabelTextContext):
+        pass
+
+    # Exit a parse tree produced by CDLangParser#labelText.
+    def exitLabelText(self, ctx:CDLangParser.LabelTextContext):
         pass
 
 
