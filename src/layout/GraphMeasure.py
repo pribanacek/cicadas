@@ -18,7 +18,7 @@ HEIGHT = 'height'
 
 def get_node_code(node):
     node_name = node.node_name
-    label = node.label
+    label = node.label.text
     lines = [
         '\\begin{tikzpicture}',
         '\\node (' + node_name + ') at (0, 0) {' + label + '};',
@@ -42,6 +42,7 @@ def get_node_measurement_code(node):
 def get_measurement_latex(node_data):
     lines = [LATEX_PREFIX]
     for node in node_data.values():
+        if len(node.label.text) > 0:
         lines = lines + get_node_measurement_code(node)
     lines.append(LATEX_SUFFIX)
     return '\n'.join(lines)

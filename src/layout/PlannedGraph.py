@@ -8,15 +8,13 @@ def round_dp(x, dp):
 class Vertex:
     def __init__(self, node_name, label = None):
         self.node_name = node_name
-        self.label = label
-        self.dimensions = (0, 0)
+        self.label = Label(label) if label != None else Label(node_name, latex = True)
 
-        if label != None:
-            self.label = label
-        elif not node_name.startswith('_'):
-            self.label = '$' + self.node_name + '$'
-        else:
-            self.label = ''
+    def set_label(self, label_text):
+        self.label = Label(label_text)
+
+    def set_label_size(self, size):
+        self.label.label_size = np.array(size)
 
 
 class Edge:
@@ -25,13 +23,14 @@ class Edge:
         self.start = start
         self.end = end
         self.styles = [] if styles == None else styles
+        self.label = Label(label) if label != None else Label(edgeId, latex = True)
 
-        if label != None:
-        self.label = label
-        elif not edgeId.startswith('_'):
-            self.label = '$' + self.edgeId + '$'
-        else:
-            self.label = ''
+    def set_label(self, label_text):
+        self.label = Label(label_text)
+
+    def set_label_size(self, size):
+        self.label.label_size = np.array(size)
+
 
 def ccw(A, B, C):
     (Ax, Ay) = A
