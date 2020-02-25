@@ -101,7 +101,7 @@ class ParseListener(CDLangListener):
 
     def enterLabel(self, ctx):
         objectId = ctx.ID().getText()
-        label_text = self.get_label_text(ctx.text())
+        label_text = self.get_label_text(ctx.labelText())
 
         if objectId in self.types:
             self.validator.set_label(objectId, label_text)
