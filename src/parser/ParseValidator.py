@@ -1,4 +1,5 @@
 from src.plan.GraphAssembler import MergeAssembler
+from src.plan.Region import RegionLoop, RegionPair
 from src.layout.PlannedGraph import Vertex, Edge
 from .PathFacts import PathFacts
 
@@ -10,8 +11,7 @@ class ParseValidator:
         self.set_labels = set()
         self.dimensions = None
         self.compositions = {}
-        self.path_facts = PathFacts()
-        self.path_loops = PathFacts()
+        self.regions = []
     
     def set_dimensions(self, dimensions):
         self.dimensions = dimensions
@@ -30,9 +30,9 @@ class ParseValidator:
         else:
             self.set_labels.add(object_id)
         if object_id in self.nodes:
-            self.nodes[object_id].label = label
+            self.nodes[object_id].set_label(label)
         if object_id in self.edges:
-            self.edges[object_id].label = label
+            self.edges[object_id].set_label(label)
     
     def add_styles(self, edgeId, style_list):
         # styles = self.edges[edgeId].styles
@@ -75,13 +75,17 @@ class ParseValidator:
 
     def add_compositions(self, pathA, pathB):
         self.validate_paths(pathA, pathB)
-        self.path_facts.add_fact(pathA, pathB)
+        region_id = len(self.regions)
+        region = RegionPair(region_id, (pathA, pathB))
+        self.regions.append(region)
     
     def add_identity_path(self, path):
         self.validate_path_loop(path)
-        self.path_loops.add_fact(path)
+        region_id = len(self.regions)
+        region = RegionLoop(region_id, path)
+        self.regions.append(region)
 
     def get_graph_assembler(self):
         if self.dimensions == None:
             raise Exception("Dimensions have not been declared") # TODO use some nice default
-        return MergeAssembler(self.nodes, self.edges, self.path_facts, self.path_loops, self.dimensions)
+        return MergeAssembler(self.nodes, self.edges, self.regions, self.dimensions)

@@ -47,12 +47,10 @@ def nodesSortedByAngles(nodes, centre):
     return sorted(angles, key=lambda x : x[1])
 
 class PlannedGraph:
-    def __init__(self, graph, dimensions):
+    def __init__(self, graph, regions, dimensions):
         self.dimensions = dimensions
         self.graph = graph
-        self.nodeData = graph.nodes.data('data')
-        self.nodePositions = graph.nodes.data('pos')
-        self.edgeData = graph.edges(data = 'data', keys = True)
+        self.regions = regions
         self.angleValues = []
         self._energy = None
         
@@ -73,7 +71,7 @@ class PlannedGraph:
     
     def copy(self):
         graph = self.graph.copy()
-        return PlannedGraph(graph, self.dimensions)
+        return PlannedGraph(graph, self.regions, self.dimensions)
         
     def random_neighbour(self, radius):
         graph = self.graph.copy()

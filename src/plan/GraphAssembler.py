@@ -22,13 +22,12 @@ def get_node_id_mapping(sourceIds, targetIds, match):
 
 
 class GraphAssembler:
-    def __init__(self, nodes, edges, path_facts, path_loops, dimensions):
+    def __init__(self, nodes, edges, regions, dimensions):
         self.nodes = nodes
         self.nodeCounts = {node_name: 0 for node_name in self.nodes}
         self.edges = edges
         self.edgeCounts = {edgeId: 0 for edgeId in self.edges}
-        self.path_facts = path_facts
-        self.path_loops = path_loops
+        self.regions = regions
         self.dimensions = dimensions
         self.graphCycles = {}
         self.graph = nx.OrderedMultiDiGraph()
@@ -85,19 +84,21 @@ class GraphAssembler:
         return pathIds
         
     def getGraph(self):
-        return PlannedGraph(self.graph, self.dimensions)
+        return PlannedGraph(self.graph, self.regions, self.dimensions)
 
 class MergeAssembler(GraphAssembler):   
     def create_fact_subgraphs(self):
         subGraphs = []
-        for fact in self.path_loops.get_facts():
-            (loop, _) = fact.paths()
+        loop_regions = filter(lambda x : x.is_identity(), self.regions)
+        pair_regions = filter(lambda x : not x.is_identity(), self.regions)
+        for region in loop_regions:
+            (loop,) = region.paths()
             graph = nx.OrderedMultiDiGraph()
             path_ids = self.addPath(loop, graph = graph, loop = True)
             data = (graph, path_ids, ())
             subGraphs.append(data)
-        for fact in self.path_facts.get_facts():
-            (pathA, pathB) = fact.paths()
+        for region in pair_regions:
+            (pathA, pathB) = region.paths()
             graph = nx.OrderedMultiDiGraph()
             pathAIds = self.addPath(pathA, graph = graph)
             pathBIds = self.addPath(pathB, start = pathAIds[0], end = pathAIds[-1], graph = graph)
@@ -223,4 +224,4 @@ class MergeAssembler(GraphAssembler):
             self.graph = mainGraph
             self.mergeFactSubGraphs(self.graph, subGraphs)
         self.addUnusedEdges()
-        return PlannedGraph(self.graph, self.dimensions)
+        return PlannedGraph(self.graph, self.regions, self.dimensions)
