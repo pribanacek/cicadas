@@ -76,6 +76,10 @@ class ParseListener(CDLangListener):
         # TODO clean this up
         pathA = ctx.path(0)
         pathB = ctx.path(1)
+        label = ctx.labelText()
+        label_text = None
+        if label != None and label.TEXT() != None:
+            label_text = label.TEXT().getText()
         identity = pathB == None
         pathFactA = Path(pathA.getText())
         pathFactB = Path(None if identity else pathB.getText())
@@ -86,9 +90,9 @@ class ParseListener(CDLangListener):
             elif self.types[edgeId] == NODE:
                 raise Exception("Edge identifier expected, but got a node identifier " + edgeId)
         if identity:
-            self.validator.add_identity_path(pathFactA)
+            self.validator.add_identity_path(pathFactA, label_text)
         else:
-            self.validator.add_compositions(pathFactA, pathFactB)
+            self.validator.add_compositions(pathFactA, pathFactB, label_text)
 
     def get_label_text(self, text_ctx):
         text = text_ctx.TEXT()

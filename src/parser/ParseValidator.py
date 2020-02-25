@@ -73,16 +73,16 @@ class ParseValidator:
         if not self.validate_loop_ends(path):
             raise Exception("The declared path " + str(path) + " does not loop, so cannot be an ID")
 
-    def add_compositions(self, pathA, pathB):
+    def add_compositions(self, pathA, pathB, label):
         self.validate_paths(pathA, pathB)
         region_id = len(self.regions)
-        region = RegionPair(region_id, (pathA, pathB))
+        region = RegionPair(region_id, (pathA, pathB), label = label)
         self.regions.append(region)
     
-    def add_identity_path(self, path):
+    def add_identity_path(self, path, label):
         self.validate_path_loop(path)
         region_id = len(self.regions)
-        region = RegionLoop(region_id, path)
+        region = RegionLoop(region_id, path, label = label)
         self.regions.append(region)
 
     def get_graph_assembler(self):

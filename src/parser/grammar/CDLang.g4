@@ -5,7 +5,7 @@ start          : statement+ EOF;
 statement      : (size | arrow | composition | label | style | impose)? SEPARATOR; // TODO allow no new line at end of file
 size          : 'size' MEASUREMENT ',' MEASUREMENT;
 arrow          : labelledID ':' labelledID '->' labelledID STYLE_LIST?;
-composition    : path '=' (path | IDENTITY);
+composition    : path '=' (path | IDENTITY) labelText?;
 label          : 'label' ID ':' labelText;
 style          : 'style' ID ':' STYLE_LIST;
 impose         : 'impose' ID ':' DIRECTION;
