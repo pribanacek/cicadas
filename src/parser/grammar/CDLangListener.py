@@ -71,15 +71,6 @@ class CDLangListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by CDLangParser#impose.
-    def enterImpose(self, ctx:CDLangParser.ImposeContext):
-        pass
-
-    # Exit a parse tree produced by CDLangParser#impose.
-    def exitImpose(self, ctx:CDLangParser.ImposeContext):
-        pass
-
-
     # Enter a parse tree produced by CDLangParser#path.
     def enterPath(self, ctx:CDLangParser.PathContext):
         pass

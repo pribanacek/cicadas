@@ -55,9 +55,9 @@ class ParseListener(CDLangListener):
         nodeA = ctx.labelledID(1)
         nodeB = ctx.labelledID(2)
         styles = ctx.STYLE_LIST()
-        edgeId = edge.ID().getText()
-        nodeAId = nodeA.ID().getText()
-        nodeBId = nodeB.ID().getText()
+        edgeId = edge.IDENTIFIER().getText()
+        nodeAId = nodeA.IDENTIFIER().getText()
+        nodeBId = nodeB.IDENTIFIER().getText()
         self.addEdge(edgeId)
         self.addNode(nodeAId)
         self.addNode(nodeBId)
@@ -100,7 +100,7 @@ class ParseListener(CDLangListener):
         return label_text
 
     def enterLabel(self, ctx):
-        objectId = ctx.ID().getText()
+        objectId = ctx.IDENTIFIER().getText()
         label_text = self.get_label_text(ctx.labelText())
 
         if objectId in self.types:
@@ -113,7 +113,7 @@ class ParseListener(CDLangListener):
         self.validator.add_styles(object_id, styles)
 
     def enterStyle(self, ctx):
-        edgeId = ctx.ID().getText()
+        edgeId = ctx.IDENTIFIER().getText()
         if not edgeId in self.types:
             raise_unknown_identifier(edgeId)
         elif self.types[edgeId] == NODE:

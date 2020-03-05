@@ -7,37 +7,35 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\31")
-        buf.write("a\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
-        buf.write("\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\3\2\6\2\32\n\2")
-        buf.write("\r\2\16\2\33\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\5\3&\n\3")
-        buf.write("\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\5")
-        buf.write("\5\65\n\5\3\6\3\6\3\6\3\6\5\6;\n\6\3\6\5\6>\n\6\3\7\3")
-        buf.write("\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t")
-        buf.write("\3\n\3\n\3\n\7\nR\n\n\f\n\16\nU\13\n\3\13\3\13\5\13Y\n")
-        buf.write("\13\3\f\3\f\3\f\3\f\5\f_\n\f\3\f\2\2\r\2\4\6\b\n\f\16")
-        buf.write("\20\22\24\26\2\2\2b\2\31\3\2\2\2\4%\3\2\2\2\6)\3\2\2\2")
-        buf.write("\b.\3\2\2\2\n\66\3\2\2\2\f?\3\2\2\2\16D\3\2\2\2\20I\3")
-        buf.write("\2\2\2\22N\3\2\2\2\24V\3\2\2\2\26^\3\2\2\2\30\32\5\4\3")
-        buf.write("\2\31\30\3\2\2\2\32\33\3\2\2\2\33\31\3\2\2\2\33\34\3\2")
-        buf.write("\2\2\34\35\3\2\2\2\35\36\7\2\2\3\36\3\3\2\2\2\37&\5\6")
-        buf.write("\4\2 &\5\b\5\2!&\5\n\6\2\"&\5\f\7\2#&\5\16\b\2$&\5\20")
-        buf.write("\t\2%\37\3\2\2\2% \3\2\2\2%!\3\2\2\2%\"\3\2\2\2%#\3\2")
-        buf.write("\2\2%$\3\2\2\2%&\3\2\2\2&\'\3\2\2\2\'(\7\27\2\2(\5\3\2")
-        buf.write("\2\2)*\7\3\2\2*+\7\23\2\2+,\7\4\2\2,-\7\23\2\2-\7\3\2")
-        buf.write("\2\2./\5\24\13\2/\60\7\5\2\2\60\61\5\24\13\2\61\62\7\6")
-        buf.write("\2\2\62\64\5\24\13\2\63\65\7\26\2\2\64\63\3\2\2\2\64\65")
-        buf.write("\3\2\2\2\65\t\3\2\2\2\66\67\5\22\n\2\67:\7\7\2\28;\5\22")
-        buf.write("\n\29;\7\22\2\2:8\3\2\2\2:9\3\2\2\2;=\3\2\2\2<>\5\26\f")
-        buf.write("\2=<\3\2\2\2=>\3\2\2\2>\13\3\2\2\2?@\7\b\2\2@A\7\25\2")
-        buf.write("\2AB\7\5\2\2BC\5\26\f\2C\r\3\2\2\2DE\7\t\2\2EF\7\25\2")
-        buf.write("\2FG\7\5\2\2GH\7\26\2\2H\17\3\2\2\2IJ\7\n\2\2JK\7\25\2")
-        buf.write("\2KL\7\5\2\2LM\7\21\2\2M\21\3\2\2\2NS\7\25\2\2OP\7\13")
-        buf.write("\2\2PR\7\25\2\2QO\3\2\2\2RU\3\2\2\2SQ\3\2\2\2ST\3\2\2")
-        buf.write("\2T\23\3\2\2\2US\3\2\2\2VX\7\25\2\2WY\5\26\f\2XW\3\2\2")
-        buf.write("\2XY\3\2\2\2Y\25\3\2\2\2Z[\7\f\2\2[\\\7\17\2\2\\_\7\r")
-        buf.write("\2\2]_\7\16\2\2^Z\3\2\2\2^]\3\2\2\2_\27\3\2\2\2\n\33%")
-        buf.write("\64:=SX^")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\30")
+        buf.write("Z\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
+        buf.write("\t\b\4\t\t\t\4\n\t\n\4\13\t\13\3\2\5\2\30\n\2\3\2\6\2")
+        buf.write("\33\n\2\r\2\16\2\34\3\3\3\3\3\3\3\3\3\3\5\3$\n\3\3\3\3")
+        buf.write("\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\5\5\63")
+        buf.write("\n\5\3\6\3\6\3\6\3\6\5\69\n\6\3\6\5\6<\n\6\3\7\3\7\3\7")
+        buf.write("\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\7\tK\n\t\f\t")
+        buf.write("\16\tN\13\t\3\n\3\n\5\nR\n\n\3\13\3\13\3\13\3\13\5\13")
+        buf.write("X\n\13\3\13\2\2\f\2\4\6\b\n\f\16\20\22\24\2\3\3\3\25\25")
+        buf.write("\2[\2\27\3\2\2\2\4#\3\2\2\2\6\'\3\2\2\2\b,\3\2\2\2\n\64")
+        buf.write("\3\2\2\2\f=\3\2\2\2\16B\3\2\2\2\20G\3\2\2\2\22O\3\2\2")
+        buf.write("\2\24W\3\2\2\2\26\30\7\25\2\2\27\26\3\2\2\2\27\30\3\2")
+        buf.write("\2\2\30\32\3\2\2\2\31\33\5\4\3\2\32\31\3\2\2\2\33\34\3")
+        buf.write("\2\2\2\34\32\3\2\2\2\34\35\3\2\2\2\35\3\3\2\2\2\36$\5")
+        buf.write("\6\4\2\37$\5\b\5\2 $\5\n\6\2!$\5\f\7\2\"$\5\16\b\2#\36")
+        buf.write("\3\2\2\2#\37\3\2\2\2# \3\2\2\2#!\3\2\2\2#\"\3\2\2\2$%")
+        buf.write("\3\2\2\2%&\t\2\2\2&\5\3\2\2\2\'(\7\3\2\2()\7\21\2\2)*")
+        buf.write("\7\4\2\2*+\7\21\2\2+\7\3\2\2\2,-\5\22\n\2-.\7\5\2\2./")
+        buf.write("\5\22\n\2/\60\7\6\2\2\60\62\5\22\n\2\61\63\7\24\2\2\62")
+        buf.write("\61\3\2\2\2\62\63\3\2\2\2\63\t\3\2\2\2\64\65\5\20\t\2")
+        buf.write("\658\7\7\2\2\669\5\20\t\2\679\7\20\2\28\66\3\2\2\28\67")
+        buf.write("\3\2\2\29;\3\2\2\2:<\5\24\13\2;:\3\2\2\2;<\3\2\2\2<\13")
+        buf.write("\3\2\2\2=>\7\b\2\2>?\7\23\2\2?@\7\5\2\2@A\5\24\13\2A\r")
+        buf.write("\3\2\2\2BC\7\t\2\2CD\7\23\2\2DE\7\5\2\2EF\7\24\2\2F\17")
+        buf.write("\3\2\2\2GL\7\23\2\2HI\7\n\2\2IK\7\23\2\2JH\3\2\2\2KN\3")
+        buf.write("\2\2\2LJ\3\2\2\2LM\3\2\2\2M\21\3\2\2\2NL\3\2\2\2OQ\7\23")
+        buf.write("\2\2PR\5\24\13\2QP\3\2\2\2QR\3\2\2\2R\23\3\2\2\2ST\7\13")
+        buf.write("\2\2TU\7\16\2\2UX\7\f\2\2VX\7\r\2\2WS\3\2\2\2WV\3\2\2")
+        buf.write("\2X\25\3\2\2\2\13\27\34#\628;LQW")
         return buf.getvalue()
 
 
@@ -52,15 +50,15 @@ class CDLangParser ( Parser ):
     sharedContextCache = PredictionContextCache()
 
     literalNames = [ "<INVALID>", "'size'", "','", "':'", "'->'", "'='", 
-                     "'label'", "'style'", "'impose'", "'.'", "'['", "']'", 
-                     "'[]'", "<INVALID>", "<INVALID>", "<INVALID>", "'ID'" ]
+                     "'label '", "'style '", "'.'", "'['", "']'", "'[]'", 
+                     "<INVALID>", "<INVALID>", "'ID'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "TEXT", "COMMENT", "DIRECTION", "IDENTITY", 
-                      "MEASUREMENT", "NUMBER", "ID", "STYLE_LIST", "SEPARATOR", 
-                      "WHITESPACE", "NEWLINE" ]
+                      "TEXT", "COMMENT", "ID", "MEASUREMENT", "NUMBER", 
+                      "IDENTIFIER", "STYLE_LIST", "SEPARATOR", "WHITESPACE", 
+                      "NEWLINE", "ERROR_CHAR" ]
 
     RULE_start = 0
     RULE_statement = 1
@@ -69,13 +67,12 @@ class CDLangParser ( Parser ):
     RULE_composition = 4
     RULE_label = 5
     RULE_style = 6
-    RULE_impose = 7
-    RULE_path = 8
-    RULE_labelledID = 9
-    RULE_labelText = 10
+    RULE_path = 7
+    RULE_labelledID = 8
+    RULE_labelText = 9
 
     ruleNames =  [ "start", "statement", "size", "arrow", "composition", 
-                   "label", "style", "impose", "path", "labelledID", "labelText" ]
+                   "label", "style", "path", "labelledID", "labelText" ]
 
     EOF = Token.EOF
     T__0=1
@@ -89,18 +86,17 @@ class CDLangParser ( Parser ):
     T__8=9
     T__9=10
     T__10=11
-    T__11=12
-    TEXT=13
-    COMMENT=14
-    DIRECTION=15
-    IDENTITY=16
-    MEASUREMENT=17
-    NUMBER=18
-    ID=19
-    STYLE_LIST=20
-    SEPARATOR=21
-    WHITESPACE=22
-    NEWLINE=23
+    TEXT=12
+    COMMENT=13
+    ID=14
+    MEASUREMENT=15
+    NUMBER=16
+    IDENTIFIER=17
+    STYLE_LIST=18
+    SEPARATOR=19
+    WHITESPACE=20
+    NEWLINE=21
+    ERROR_CHAR=22
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -116,8 +112,8 @@ class CDLangParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def EOF(self):
-            return self.getToken(CDLangParser.EOF, 0)
+        def SEPARATOR(self):
+            return self.getToken(CDLangParser.SEPARATOR, 0)
 
         def statement(self, i:int=None):
             if i is None:
@@ -147,20 +143,26 @@ class CDLangParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 23 
+            self.state = 21
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            if _la==CDLangParser.SEPARATOR:
+                self.state = 20
+                self.match(CDLangParser.SEPARATOR)
+
+
+            self.state = 24 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
-                self.state = 22
+                self.state = 23
                 self.statement()
-                self.state = 25 
+                self.state = 26 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << CDLangParser.T__0) | (1 << CDLangParser.T__5) | (1 << CDLangParser.T__6) | (1 << CDLangParser.T__7) | (1 << CDLangParser.ID) | (1 << CDLangParser.SEPARATOR))) != 0)):
+                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << CDLangParser.T__0) | (1 << CDLangParser.T__5) | (1 << CDLangParser.T__6) | (1 << CDLangParser.IDENTIFIER))) != 0)):
                     break
 
-            self.state = 27
-            self.match(CDLangParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -177,6 +179,9 @@ class CDLangParser ( Parser ):
 
         def SEPARATOR(self):
             return self.getToken(CDLangParser.SEPARATOR, 0)
+
+        def EOF(self):
+            return self.getToken(CDLangParser.EOF, 0)
 
         def size(self):
             return self.getTypedRuleContext(CDLangParser.SizeContext,0)
@@ -198,10 +203,6 @@ class CDLangParser ( Parser ):
             return self.getTypedRuleContext(CDLangParser.StyleContext,0)
 
 
-        def impose(self):
-            return self.getTypedRuleContext(CDLangParser.ImposeContext,0)
-
-
         def getRuleIndex(self):
             return CDLangParser.RULE_statement
 
@@ -220,38 +221,45 @@ class CDLangParser ( Parser ):
 
         localctx = CDLangParser.StatementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_statement)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 35
+            self.state = 33
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,2,self._ctx)
             if la_ == 1:
-                self.state = 29
+                self.state = 28
                 self.size()
+                pass
 
             elif la_ == 2:
-                self.state = 30
+                self.state = 29
                 self.arrow()
+                pass
 
             elif la_ == 3:
-                self.state = 31
+                self.state = 30
                 self.composition()
+                pass
 
             elif la_ == 4:
-                self.state = 32
+                self.state = 31
                 self.label()
+                pass
 
             elif la_ == 5:
-                self.state = 33
+                self.state = 32
                 self.style()
-
-            elif la_ == 6:
-                self.state = 34
-                self.impose()
+                pass
 
 
-            self.state = 37
-            self.match(CDLangParser.SEPARATOR)
+            self.state = 35
+            _la = self._input.LA(1)
+            if not(_la==CDLangParser.EOF or _la==CDLangParser.SEPARATOR):
+                self._errHandler.recoverInline(self)
+            else:
+                self._errHandler.reportMatch(self)
+                self.consume()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -292,13 +300,13 @@ class CDLangParser ( Parser ):
         self.enterRule(localctx, 4, self.RULE_size)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 39
+            self.state = 37
             self.match(CDLangParser.T__0)
-            self.state = 40
+            self.state = 38
             self.match(CDLangParser.MEASUREMENT)
-            self.state = 41
+            self.state = 39
             self.match(CDLangParser.T__1)
-            self.state = 42
+            self.state = 40
             self.match(CDLangParser.MEASUREMENT)
         except RecognitionException as re:
             localctx.exception = re
@@ -345,21 +353,21 @@ class CDLangParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
+            self.state = 42
+            self.labelledID()
+            self.state = 43
+            self.match(CDLangParser.T__2)
             self.state = 44
             self.labelledID()
             self.state = 45
-            self.match(CDLangParser.T__2)
+            self.match(CDLangParser.T__3)
             self.state = 46
             self.labelledID()
-            self.state = 47
-            self.match(CDLangParser.T__3)
             self.state = 48
-            self.labelledID()
-            self.state = 50
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==CDLangParser.STYLE_LIST:
-                self.state = 49
+                self.state = 47
                 self.match(CDLangParser.STYLE_LIST)
 
 
@@ -384,8 +392,8 @@ class CDLangParser ( Parser ):
                 return self.getTypedRuleContext(CDLangParser.PathContext,i)
 
 
-        def IDENTITY(self):
-            return self.getToken(CDLangParser.IDENTITY, 0)
+        def ID(self):
+            return self.getToken(CDLangParser.ID, 0)
 
         def labelText(self):
             return self.getTypedRuleContext(CDLangParser.LabelTextContext,0)
@@ -412,29 +420,29 @@ class CDLangParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 52
+            self.state = 50
             self.path()
-            self.state = 53
+            self.state = 51
             self.match(CDLangParser.T__4)
-            self.state = 56
+            self.state = 54
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [CDLangParser.ID]:
-                self.state = 54
+            if token in [CDLangParser.IDENTIFIER]:
+                self.state = 52
                 self.path()
                 pass
-            elif token in [CDLangParser.IDENTITY]:
-                self.state = 55
-                self.match(CDLangParser.IDENTITY)
+            elif token in [CDLangParser.ID]:
+                self.state = 53
+                self.match(CDLangParser.ID)
                 pass
             else:
                 raise NoViableAltException(self)
 
-            self.state = 59
+            self.state = 57
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==CDLangParser.T__9 or _la==CDLangParser.T__11:
-                self.state = 58
+            if _la==CDLangParser.T__8 or _la==CDLangParser.T__10:
+                self.state = 56
                 self.labelText()
 
 
@@ -452,8 +460,8 @@ class CDLangParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ID(self):
-            return self.getToken(CDLangParser.ID, 0)
+        def IDENTIFIER(self):
+            return self.getToken(CDLangParser.IDENTIFIER, 0)
 
         def labelText(self):
             return self.getTypedRuleContext(CDLangParser.LabelTextContext,0)
@@ -479,13 +487,13 @@ class CDLangParser ( Parser ):
         self.enterRule(localctx, 10, self.RULE_label)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 61
+            self.state = 59
             self.match(CDLangParser.T__5)
-            self.state = 62
-            self.match(CDLangParser.ID)
-            self.state = 63
+            self.state = 60
+            self.match(CDLangParser.IDENTIFIER)
+            self.state = 61
             self.match(CDLangParser.T__2)
-            self.state = 64
+            self.state = 62
             self.labelText()
         except RecognitionException as re:
             localctx.exception = re
@@ -501,8 +509,8 @@ class CDLangParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ID(self):
-            return self.getToken(CDLangParser.ID, 0)
+        def IDENTIFIER(self):
+            return self.getToken(CDLangParser.IDENTIFIER, 0)
 
         def STYLE_LIST(self):
             return self.getToken(CDLangParser.STYLE_LIST, 0)
@@ -527,62 +535,14 @@ class CDLangParser ( Parser ):
         self.enterRule(localctx, 12, self.RULE_style)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 66
+            self.state = 64
             self.match(CDLangParser.T__6)
+            self.state = 65
+            self.match(CDLangParser.IDENTIFIER)
+            self.state = 66
+            self.match(CDLangParser.T__2)
             self.state = 67
-            self.match(CDLangParser.ID)
-            self.state = 68
-            self.match(CDLangParser.T__2)
-            self.state = 69
             self.match(CDLangParser.STYLE_LIST)
-        except RecognitionException as re:
-            localctx.exception = re
-            self._errHandler.reportError(self, re)
-            self._errHandler.recover(self, re)
-        finally:
-            self.exitRule()
-        return localctx
-
-    class ImposeContext(ParserRuleContext):
-
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
-            super().__init__(parent, invokingState)
-            self.parser = parser
-
-        def ID(self):
-            return self.getToken(CDLangParser.ID, 0)
-
-        def DIRECTION(self):
-            return self.getToken(CDLangParser.DIRECTION, 0)
-
-        def getRuleIndex(self):
-            return CDLangParser.RULE_impose
-
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterImpose" ):
-                listener.enterImpose(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitImpose" ):
-                listener.exitImpose(self)
-
-
-
-
-    def impose(self):
-
-        localctx = CDLangParser.ImposeContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 14, self.RULE_impose)
-        try:
-            self.enterOuterAlt(localctx, 1)
-            self.state = 71
-            self.match(CDLangParser.T__7)
-            self.state = 72
-            self.match(CDLangParser.ID)
-            self.state = 73
-            self.match(CDLangParser.T__2)
-            self.state = 74
-            self.match(CDLangParser.DIRECTION)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -597,11 +557,11 @@ class CDLangParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ID(self, i:int=None):
+        def IDENTIFIER(self, i:int=None):
             if i is None:
-                return self.getTokens(CDLangParser.ID)
+                return self.getTokens(CDLangParser.IDENTIFIER)
             else:
-                return self.getToken(CDLangParser.ID, i)
+                return self.getToken(CDLangParser.IDENTIFIER, i)
 
         def getRuleIndex(self):
             return CDLangParser.RULE_path
@@ -620,21 +580,21 @@ class CDLangParser ( Parser ):
     def path(self):
 
         localctx = CDLangParser.PathContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 16, self.RULE_path)
+        self.enterRule(localctx, 14, self.RULE_path)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 76
-            self.match(CDLangParser.ID)
-            self.state = 81
+            self.state = 69
+            self.match(CDLangParser.IDENTIFIER)
+            self.state = 74
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==CDLangParser.T__8:
-                self.state = 77
-                self.match(CDLangParser.T__8)
-                self.state = 78
-                self.match(CDLangParser.ID)
-                self.state = 83
+            while _la==CDLangParser.T__7:
+                self.state = 70
+                self.match(CDLangParser.T__7)
+                self.state = 71
+                self.match(CDLangParser.IDENTIFIER)
+                self.state = 76
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -652,8 +612,8 @@ class CDLangParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ID(self):
-            return self.getToken(CDLangParser.ID, 0)
+        def IDENTIFIER(self):
+            return self.getToken(CDLangParser.IDENTIFIER, 0)
 
         def labelText(self):
             return self.getTypedRuleContext(CDLangParser.LabelTextContext,0)
@@ -676,17 +636,17 @@ class CDLangParser ( Parser ):
     def labelledID(self):
 
         localctx = CDLangParser.LabelledIDContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 18, self.RULE_labelledID)
+        self.enterRule(localctx, 16, self.RULE_labelledID)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 84
-            self.match(CDLangParser.ID)
-            self.state = 86
+            self.state = 77
+            self.match(CDLangParser.IDENTIFIER)
+            self.state = 79
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==CDLangParser.T__9 or _la==CDLangParser.T__11:
-                self.state = 85
+            if _la==CDLangParser.T__8 or _la==CDLangParser.T__10:
+                self.state = 78
                 self.labelText()
 
 
@@ -724,24 +684,24 @@ class CDLangParser ( Parser ):
     def labelText(self):
 
         localctx = CDLangParser.LabelTextContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 20, self.RULE_labelText)
+        self.enterRule(localctx, 18, self.RULE_labelText)
         try:
-            self.state = 92
+            self.state = 85
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [CDLangParser.T__9]:
+            if token in [CDLangParser.T__8]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 88
-                self.match(CDLangParser.T__9)
-                self.state = 89
+                self.state = 81
+                self.match(CDLangParser.T__8)
+                self.state = 82
                 self.match(CDLangParser.TEXT)
-                self.state = 90
-                self.match(CDLangParser.T__10)
+                self.state = 83
+                self.match(CDLangParser.T__9)
                 pass
-            elif token in [CDLangParser.T__11]:
+            elif token in [CDLangParser.T__10]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 91
-                self.match(CDLangParser.T__11)
+                self.state = 84
+                self.match(CDLangParser.T__10)
                 pass
             else:
                 raise NoViableAltException(self)
