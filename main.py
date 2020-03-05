@@ -2,7 +2,7 @@ import os, sys, webbrowser
 
 import src.parser.Parser as Parser
 
-from src.output.TikzGen import generateTikz
+from src.output.TikzGen import generate_tikz
 from src.output.AutoRender import generatePDF
 from src.layout.LayoutOptimizer import optimize_layout
 import src.layout.GraphMeasure as GraphMeasure
@@ -42,20 +42,20 @@ import src.visualisation.animate as animate_graphs
 import cProfile
 
 def main(filename):
-    graphAssembler = Parser.parse(filename)
-    GraphMeasure.measure_nodes(graphAssembler.nodes)
-    graph = graphAssembler.getGraph()
+    graph_assembler = Parser.parse(filename)
+    GraphMeasure.measure(graph_assembler.nodes, graph_assembler.edges, graph_assembler.regions)
+    graph = graph_assembler.getGraph()
     (minGraph, graphs) = optimize_layout(graph)
 
     animate_graphs.start_animation_thread(graphs)
 
-    result = generateTikz(minGraph)
+    result = generate_tikz(minGraph)
 
     outputPath = './thing'
     generatePDF(result, outputPath)
     fullPath = os.path.abspath(outputPath)
     webbrowser.open_new('file://' + fullPath + '.pdf')
-
+    # os.remove(fullPath + '.pdf')
     print(result)
 
 

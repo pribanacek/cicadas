@@ -12,16 +12,16 @@ NODE_TEMPLATE = Template('\\node ($id) at ($x, $y) {$label};')
 EDGE_TEMPLATE = Template('($start) edge$styles node {$label} ($end)')
 
 
-def getNodeString(nodeId, node, position):
+def get_node_string(node_id, label, position):
     (x, y) = position
     return NODE_TEMPLATE.substitute(
-        id = nodeId,
+        id = node_id,
         x = x,
         y = y,
-        label = node.label
+        label = label
     )
 
-def getStylesString(styles):
+def get_styles_string(styles):
     if styles == None or len(styles) < 1:
         return ''
     styleString = '['
@@ -30,26 +30,31 @@ def getStylesString(styles):
     styleString = styleString[:-1] + ']'
     return styleString
 
-def getEdgeString(start, end, edge):
+def get_edge_string(start, end, edge):
     return EDGE_TEMPLATE.substitute(
         start = start,
         end = end,
         label = edge.label,
-        styles = getStylesString(edge.styles)
+        styles = get_styles_string(edge.styles)
     )
 
-def getTikzLines(graph):
+def get_tikz_code_lines(graph):
     lines = [BEGIN_TIKZ_PICTURE]
-    for nodeId, node in graph.node_data:
-        position = graph.node_positions[nodeId]
-        lines.append(getNodeString(nodeId, node, position))
+    for node_id, node in graph.node_data:
+        position = graph.node_positions[node_id]
+        lines.append(get_node_string(node_id, node.label, position))
+    for region in graph.regions:
+        if not region.label.empty():
+            position = region.compute_label_position(graph.graph)
+            node_id = 'region--' + str(region.region_id)
+            lines.append(get_node_string(node_id, region.label, position))
     lines.append(PATH_START)
     for start, end, _, edge in graph.edge_data:
-        lines.append(getEdgeString(start, end, edge))
+        lines.append(get_edge_string(start, end, edge))
     lines[-1] += ';'
     lines.append(END_TIKZ_PICTURE)
     return lines
 
-def generateTikz(graph):
-    lines = getTikzLines(graph)
+def generate_tikz(graph):
+    lines = get_tikz_code_lines(graph)
     return '\n'.join(lines) + '\n'

@@ -16,56 +16,70 @@ LATEX_SUFFIX = '''\\end{document}
 WIDTH = 'width'
 HEIGHT = 'height'
 
-def get_node_code(node):
-    node_name = node.node_name
-    label = node.label.text
-    lines = [
-        '\\begin{tikzpicture}',
-        '\\node (' + node_name + ') at (0, 0) {' + label + '};',
-        '\\end{tikzpicture}'
-    ]
-    return '\n'.join(lines)
+CHAR_OFFSET = 65
 
-def get_node_measurement_code(node):
-    node_name = node.node_name
-    nodeLatex = get_node_code(node)
+def encode_index(i):
+    chars = list(map(lambda x : chr(int(x) + CHAR_OFFSET), str(i)))
+    return ''.join(chars)
+
+def decode_index(a):
+    digits = list(map(lambda x : str(ord(x) - CHAR_OFFSET), a))
+    return int(''.join(digits))
+
+def get_label_code(label):
+    text = label.text
+    if label.font_size != None:
+        return '\\fontsize{' + label.font_size + '}{1pt}{' + text + '}'
+    if label.edge_label:
+        return '\\scriptsize{' + text + '}'
+    return '\\normalsize{' + text + '}'
+
+def get_measurement_code(label_id, label):
+    node_latex = get_label_code(label)
     lines = [
-        '\\newlength{\\height' + node_name + '}',
-        '\\newlength{\\width' + node_name + '}',
-        '\\settoheight{\\height' + node_name + '}{\\hbox{' + nodeLatex + '}}',
-        '\\settowidth{\\width' + node_name + '}{\\hbox{' + nodeLatex + '}}',
-        '\\wlog{' + WIDTH + ':' + node_name + '\\printlength{\\width' + node_name + '}}'
-        '\\wlog{' + HEIGHT + ':' + node_name + '\\printlength{\\height' + node_name + '}}'
+        '\\newlength{\\height' + label_id + '}',
+        '\\newlength{\\width' + label_id + '}',
+        '\\settoheight{\\height' + label_id + '}{\\hbox{' + node_latex + '}}',
+        '\\settowidth{\\width' + label_id + '}{\\hbox{' + node_latex + '}}',
+        '\\wlog{' + WIDTH + ':' + label_id + '\\printlength{\\width' + label_id + '}}'
+        '\\wlog{' + HEIGHT + ':' + label_id + '\\printlength{\\height' + label_id + '}}'
     ]
     return lines
 
-def get_measurement_latex(node_data):
+def get_measurement_latex(label_data):
     lines = [LATEX_PREFIX]
-    for node in node_data.values():
-        if len(node.label.text) > 0:
-        lines = lines + get_node_measurement_code(node)
+    for label_id, label in label_data.items():
+        if len(label.text) > 0:
+            lines = lines + get_measurement_code(label_id, label)
     lines.append(LATEX_SUFFIX)
     return '\n'.join(lines)
 
-def measure_nodes(node_data):
+def generate_label_dict(labels):
+    label_data = {}
+    for i in range(len(labels)):
+        x = encode_index(i)
+        label_data[x] = labels[i]
+    return label_data
+
+def measure_labels(labels):
     pt_to_cm = 1 / 28.45724
-    measurements = {}
-    latex = get_measurement_latex(node_data)
+    label_dict = generate_label_dict(labels)
+    latex = get_measurement_latex(label_dict)
     filepath = './temp'
     logs = generate_latex_log(latex, filepath)
     for line in logs:
-        (dim, node_name, value, _unit) = line
-        if not node_name in measurements:
-            measurements[node_name] = [0, 0]
+        (dim, label_id, value, _unit) = line
         if dim == WIDTH:
-            measurements[node_name][0] = float(value) * pt_to_cm
+            width = float(value) * pt_to_cm
+            label_dict[label_id].set_label_width(width)
         elif dim == HEIGHT:
-            measurements[node_name][1] = float(value) * pt_to_cm # TODO proper conversion from pt
+            height = float(value) * pt_to_cm
+            label_dict[label_id].set_label_height(height)
 
-    for node_name, dimensions in measurements.items():
-        node_data[node_name].set_label_size(dimensions)
-
-    return measurements
+def measure(nodes, edges, regions):
+    label_list = lambda l : list(map(lambda x : x.label, l))
+    labels = label_list(nodes.values()) + label_list(edges.values()) + label_list(regions)
+    measure_labels(labels)
 
 def generate_latex_log(latex, filepath):
     cur_dir = os.getcwd()
@@ -87,6 +101,7 @@ def generate_latex_log(latex, filepath):
     try:
         subprocess.check_output(command)
     except subprocess.CalledProcessError as e:
+        print('the annoying one')
         print('Process returned code', e.returncode) # TODO: generate a useful exception
         print(e)
 
