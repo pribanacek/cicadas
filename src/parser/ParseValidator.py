@@ -1,4 +1,4 @@
-from src.util.Warning import warn
+from src.util.Logging import warn
 from src.util.Exceptions import PathValidationException
 from src.plan.GraphAssembler import MergeAssembler
 from src.plan.Region import RegionLoop, RegionPair

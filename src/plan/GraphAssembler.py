@@ -1,3 +1,4 @@
+from src.util.Logging import info
 from src.layout.PlannedGraph import PlannedGraph
 import src.plan.GraphUtils as GraphUtils
 import networkx as nx
@@ -164,4 +165,9 @@ class MergeAssembler(GraphAssembler):
             sub_regions = list(sorted(pair_regions, **sort_options)) + list(sorted(loop_regions, **sort_options))
             self.merge_regions(self.graph, sub_regions)
         self.add_unused_edges()
+
+        N = len(self.graph.nodes)
+        E = len(self.graph.edges)
+        info('Constructed graph with ' + str(N) + ' nodes and ' + str(E) + ' edges')
+        
         return PlannedGraph(self.graph, self.regions, self.dimensions)
