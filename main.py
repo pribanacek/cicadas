@@ -1,5 +1,7 @@
 import os, sys, webbrowser
 
+from src.util.Exceptions import SyntaxException, ParsingException, LatexException
+
 import src.parser.Parser as Parser
 
 from src.output.TikzGen import generate_tikz
@@ -14,47 +16,23 @@ import src.tests.TikzGeneration
 
 import src.visualisation.animate as animate_graphs
 
-# def runTest(test):   
-#     testName = sys.argv[1]
-#     test = eval('Test' + testName) # this is unsafe
-#     if callable(test):
-#         result = test()
-#         print(result)
-#     else:
-#         print('Unknown test ' + test)
-
-# def layoutTest(test):
-#     if len(sys.argv) < 2:
-#         print('Please specify a test')
-    
-#     testName = sys.argv[1]
-#     test = eval('Test' + testName) # this is unsafe
-#     if callable(test):
-#        result = test()
-#        path = '/home/jacob/Cambridge/Part_II_Project/Part-II-Project/thing'
-#        generatePDF(result, path)
-#        webbrowser.open_new('file://' + path + '.pdf')
-#        print(result)
-#        os.system("echo '%s' | xclip -selection clipboard" % result.replace('\\', '\\\\'))
-#     else:
-#         print('Unknown test ' + test)
-
 import cProfile
+
 
 def main(filename):
     graph_assembler = Parser.parse(filename)
     GraphMeasure.measure(graph_assembler.nodes, graph_assembler.edges, graph_assembler.regions)
     graph = graph_assembler.getGraph()
-    (minGraph, graphs) = optimize_layout(graph)
+    (min_graph, graphs) = optimize_layout(graph)
 
     animate_graphs.start_animation_thread(graphs)
 
-    result = generate_tikz(minGraph)
+    result = generate_tikz(min_graph)
 
     outputPath = './thing'
     generatePDF(result, outputPath)
-    fullPath = os.path.abspath(outputPath)
-    webbrowser.open_new('file://' + fullPath + '.pdf')
+    full_path = os.path.abspath(outputPath)
+    webbrowser.open_new('file://' + full_path + '.pdf')
     # os.remove(fullPath + '.pdf')
     print(result)
 
@@ -62,4 +40,16 @@ def main(filename):
 if __name__ == "__main__":
     filename = sys.argv[1]
     # cProfile.run('main(filename)')
-    main(filename)
+
+    try:
+        main(filename)
+    except FileNotFoundError as e:
+        print(e)
+    except ParsingException as e:
+        message = 'Error occurred when parsing file'
+        if e.position != None:
+            message += ' at line ' + e.position
+        print(message, e, sep = '\n')
+    except LatexException as e:
+        message = 'Error occurred when compiling LaTeX'
+        print('LaTeX error:', e)

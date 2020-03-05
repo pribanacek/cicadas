@@ -1,7 +1,18 @@
+from src.util.Warning import warn
+from src.util.Exceptions import PathValidationException
 from src.plan.GraphAssembler import MergeAssembler
 from src.plan.Region import RegionLoop, RegionPair
 from src.layout.PlannedGraph import Vertex, Edge
 from .PathFacts import PathFacts
+
+def raise_path_not_continuous(path):
+    raise PathValidationException("The declared path '" + str(path) + "' is not a valid path, as it is not continuous")
+
+def raise_paths_endpoints(pathA, pathB):
+    raise PathValidationException("The declared paths '" + str(pathA) + "' and '" + str(pathB) + "' do not share a start/end node")
+
+def raise_path_not_a_loop(path):
+    raise PathValidationException("The declared path '" + str(path) + "' does not loop, so cannot be an identity")
 
 
 class ParseValidator:
@@ -26,7 +37,7 @@ class ParseValidator:
 
     def set_label(self, object_id, label):
         if object_id in self.set_labels:
-            print('WARNING: ' + object_id + ' label has already been defined.')  # TODO generalise warnings
+            warn(object_id + ' label has already been defined')
         else:
             self.set_labels.add(object_id)
         if object_id in self.nodes:
@@ -61,17 +72,17 @@ class ParseValidator:
     
     def validate_paths(self, pathA, pathB):
         if not self.validate_path_continuity(pathA.edge_ids):
-            raise Exception("The declared path " + str(pathA) + " is not a valid path, as it isn't continuous")
+            raise_path_not_continuous(pathA)
         if not self.validate_path_continuity(pathB.edge_ids):
-            raise Exception("The declared path " + str(pathB) + " is not a valid path, as it isn't continuous")
+            raise_path_not_continuous(pathB)
         if not self.validate_path_ends(pathA, pathB):
-            raise Exception("The declared paths " + str(pathA) + " and " + str(pathB) + " do not share a start/end node")
+            raise_paths_endpoints(pathA, pathB)
     
     def validate_path_loop(self, path):
         if not self.validate_path_continuity(path.edge_ids):
-            raise Exception("The declared path " + str(path) + " is not a valid path, as it isn't continuous")
+            raise_path_not_continuous(path)
         if not self.validate_loop_ends(path):
-            raise Exception("The declared path " + str(path) + " does not loop, so cannot be an ID")
+            raise_path_not_a_loop(path)
 
     def add_compositions(self, pathA, pathB, label):
         self.validate_paths(pathA, pathB)
@@ -87,5 +98,6 @@ class ParseValidator:
 
     def get_graph_assembler(self):
         if self.dimensions == None:
-            raise Exception("Dimensions have not been declared") # TODO use some nice default
+            warn("diagram size has not been declared, using default")
+            self.dimensions = (8.0, 8.0)
         return MergeAssembler(self.nodes, self.edges, self.regions, self.dimensions)

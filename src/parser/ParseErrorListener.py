@@ -1,14 +1,6 @@
-import sys
-from antlr4 import *
-from .grammar.CDLangListener import CDLangListener
-from .Path import Path
-from .ParseValidator import ParseValidator
-from antlr4.error.ErrorListener import *
-import io
+from src.util.Exceptions import SyntaxException
+from antlr4.error.ErrorListener import ErrorListener
 
 class ParseErrorListener(ErrorListener):
-  
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):        
-        position = str(line) + ':' + str(column)
-        print('Syntax error at position ' + position + ': ' + msg)
-        sys.exit()
+        raise SyntaxException(msg, pos = (line, column))
