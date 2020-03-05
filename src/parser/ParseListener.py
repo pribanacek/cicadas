@@ -84,7 +84,7 @@ class ParseListener(CDLangListener):
         pathFactA = Path(pathA.getText())
         pathFactB = Path(None if identity else pathB.getText())
 
-        for edgeId in pathFactA.edgeIds + pathFactB.edgeIds:
+        for edgeId in pathFactA.edge_ids + pathFactB.edge_ids:
             if not edgeId in self.types:
                 raise_unknown_identifier(edgeId)
             elif self.types[edgeId] == NODE:

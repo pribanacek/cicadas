@@ -2,7 +2,7 @@ import sys
 
 # from src.layout.PlannedGraph import PlannedGraph, PositionedVertex
 from src.layout.PlannedGraph import Edge
-from src.output.TikzGen import generateTikz
+from src.output.TikzGen import generate_tikz
 
 # def TestA():
 #     A = PositionedVertex('A', -1, 1)
@@ -13,7 +13,7 @@ from src.output.TikzGen import generateTikz
 #     h = Edge('h', A, C)
 #     graph = PlannedGraph([A, B, C], [f, g, h])
 #     print('energy:', graph.energy((4, 4)))
-#     return generateTikz(graph)
+#     return generate_tikz(graph)
 
 # def TestB():
 #     A = PositionedVertex('A', -1, 1)
@@ -26,7 +26,7 @@ from src.output.TikzGen import generateTikz
 #     k = Edge('k', D, C)
 #     graph = PlannedGraph([A, B, C, D], [f, g, h, k])
 #     print('energy:', graph.energy((4, 4)))
-#     return generateTikz(graph)
+#     return generate_tikz(graph)
 
 
 # def TestC():
@@ -44,4 +44,4 @@ from src.output.TikzGen import generateTikz
 #     n = Edge('n', C, E)
 #     graph = PlannedGraph([A, B, C, D, E], [f, g, h, k, l, m, n])
 #     print('energy:', graph.energy((8, 8)))
-#     return generateTikz(graph)
+#     return generate_tikz(graph)

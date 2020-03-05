@@ -1,7 +1,7 @@
 import sys, os, webbrowser
 
 # from src.plan.Graph import Graph, Edge, Vertex
-from src.output.TikzGen import generateTikz
+from src.output.TikzGen import generate_tikz
 from src.layout.LayoutOptimizer import optimize_layout
 from src.output.AutoRender import generatePDF
 
@@ -13,7 +13,7 @@ from src.output.AutoRender import generatePDF
 #     g = Edge('g', B, C)
 #     h = Edge('h', A, C)
 #     graph = Graph([A, B, C], [f, g, h])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestB():
 #     A1 = Vertex('A1', 'A')
@@ -23,7 +23,7 @@ from src.output.AutoRender import generatePDF
 #     g = Edge('g', B, A2)
 #     h = Edge('id_A', A1, A2)
 #     graph = Graph([A1, A2, B], [f, g, h])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestC():
 #     A = Vertex('A')
@@ -35,7 +35,7 @@ from src.output.AutoRender import generatePDF
 #     h = Edge('h', A, D)
 #     k = Edge('k', D, C)
 #     graph = Graph([A, B, C, D], [f, g, h, k])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestD():
 #     A = Vertex('A')
@@ -45,7 +45,7 @@ from src.output.AutoRender import generatePDF
 #     h = Edge('id_A', A, A)
 #     k = Edge('id_B', B, B)
 #     graph = Graph([A, B], [f, g, h, k])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestE():
 #     A = Vertex('A')
@@ -61,7 +61,7 @@ from src.output.AutoRender import generatePDF
 #     m = Edge('m', B, E)
 #     n = Edge('n', C, E)
 #     graph = Graph([A, B, C, D, E], [f, g, h, k, l, m, n])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestF():
 #     T = Vertex('T')
@@ -77,7 +77,7 @@ from src.output.AutoRender import generatePDF
 #     f = Edge('f', X, Z)
 #     g = Edge('g', Y, Z)
 #     graph = Graph([T, XY, X, Y, Z], [xy, x, y, p, q, f, g])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestG():
 #     A = Vertex('A', '\\cdots C_{i-1}')
@@ -94,7 +94,7 @@ from src.output.AutoRender import generatePDF
 #     f = Edge('\\alpha_i', B, E)
 #     g = Edge('\\alpha{i+1}', C, F)
 #     graph = Graph([A, B, C, D, E, F], [a, b, c, d, e, f, g])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestH():
 #     A = Vertex('A')
@@ -109,7 +109,7 @@ from src.output.AutoRender import generatePDF
 #     a3 = Edge('a', A, D, '(h \\circ g) \\circ f')
 #     b = Edge('b', B, D, 'h \\circ g')
 #     graph = Graph([A, B, C, D], [f, g, h, a1, a2, a3, b])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestI():
 #     A = Vertex('A', '((A \\otimes B) \\otimes C) \\otimes D')
@@ -123,7 +123,7 @@ from src.output.AutoRender import generatePDF
 #     i = Edge('i', A, E, '\\alpha_{A \\otimes B,C,D}')
 #     j = Edge('j', E, D, '\\alpha_{A,B,C \\otimes D}')
 #     graph = Graph([A, B, C, D, E], [f, g, h, i, j])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestJ():
 #     A = Vertex('A', 'X \\otimes (Y \\otimes (Z \\otimes T))')
@@ -137,7 +137,7 @@ from src.output.AutoRender import generatePDF
 #     i = Edge('i', A, E, '\\phi')
 #     j = Edge('j', E, D, '\\phi \\otimes 1')
 #     graph = Graph([A, B, C, D, E], [f, g, h, i, j])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))
 
 # def TestK():
 #     return None #subsets edges
@@ -157,4 +157,4 @@ from src.output.AutoRender import generatePDF
 #     i = Edge('i', A, E, '\\phi')
 #     j = Edge('j', E, D, '\\phi \\otimes 1')
 #     graph = Graph([A, B, C, D, E], [f, g, h, i, j])
-#     return generateTikz(optimize_layout(graph))
+#     return generate_tikz(optimize_layout(graph))

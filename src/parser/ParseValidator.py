@@ -48,27 +48,27 @@ class ParseValidator:
         return True
     
     def validate_path_ends(self, pathA, pathB):
-        startNodeA = self.edges[pathA.edgeIds[0]].start.node_name
-        endNodeA = self.edges[pathA.edgeIds[-1]].end.node_name
-        startNodeB = self.edges[pathB.edgeIds[0]].start.node_name
-        endNodeB = self.edges[pathB.edgeIds[-1]].end.node_name
+        startNodeA = self.edges[pathA.edge_ids[0]].start.node_name
+        endNodeA = self.edges[pathA.edge_ids[-1]].end.node_name
+        startNodeB = self.edges[pathB.edge_ids[0]].start.node_name
+        endNodeB = self.edges[pathB.edge_ids[-1]].end.node_name
         return startNodeA == startNodeB and endNodeA == endNodeB
     
     def validate_loop_ends(self, path):
-        start = self.edges[path.edgeIds[0]].start.node_name
-        end = self.edges[path.edgeIds[-1]].end.node_name
+        start = self.edges[path.edge_ids[0]].start.node_name
+        end = self.edges[path.edge_ids[-1]].end.node_name
         return start == end
     
     def validate_paths(self, pathA, pathB):
-        if not self.validate_path_continuity(pathA.edgeIds):
+        if not self.validate_path_continuity(pathA.edge_ids):
             raise Exception("The declared path " + str(pathA) + " is not a valid path, as it isn't continuous")
-        if not self.validate_path_continuity(pathB.edgeIds):
+        if not self.validate_path_continuity(pathB.edge_ids):
             raise Exception("The declared path " + str(pathB) + " is not a valid path, as it isn't continuous")
         if not self.validate_path_ends(pathA, pathB):
             raise Exception("The declared paths " + str(pathA) + " and " + str(pathB) + " do not share a start/end node")
     
     def validate_path_loop(self, path):
-        if not self.validate_path_continuity(path.edgeIds):
+        if not self.validate_path_continuity(path.edge_ids):
             raise Exception("The declared path " + str(path) + " is not a valid path, as it isn't continuous")
         if not self.validate_loop_ends(path):
             raise Exception("The declared path " + str(path) + " does not loop, so cannot be an ID")
