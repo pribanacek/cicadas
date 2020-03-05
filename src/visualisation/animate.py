@@ -1,4 +1,7 @@
 import threading
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
 import pygame as pg
 
 WHITE = (255, 255, 255)
