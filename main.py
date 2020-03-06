@@ -1,6 +1,8 @@
 import os, sys, webbrowser
 
 from src.util.Exceptions import SyntaxException, ParsingException, LatexException
+from src.ui.ArgParser import arg_parser
+import src.util.Logging as Logging
 
 import src.parser.Parser as Parser
 
@@ -38,11 +40,17 @@ def main(filename):
 
 
 if __name__ == "__main__":
-    filename = sys.argv[1]
+    args = arg_parser.parse_args(sys.argv[1:]) # TODO check this off-by-one
+    # print(vars(args))
+
     # cProfile.run('main(filename)')
+    if args.silent:
+        Logging.silent = True
+    if args.suppress_warnings:
+        Logging.suppress_warnings = True
 
     try:
-        main(filename)
+        main(args.filename)
     except FileNotFoundError as e:
         print(e)
     except ParsingException as e:
