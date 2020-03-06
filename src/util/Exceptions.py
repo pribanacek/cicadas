@@ -27,4 +27,6 @@ class PathValidationException(ParsingException):
     name = 'Path validation error'
 
 class LatexException(Exception):
-    pass
+    def __init__(self, msg, error):
+        self.msg = msg
+        self.error = error

@@ -1,4 +1,5 @@
 import os, subprocess, errno, re
+from src.util.Exceptions import LatexException
 
 LATEX_PREFIX = '''
 \\documentclass{article}
@@ -93,17 +94,18 @@ def generate_latex_log(latex, filepath):
         print('Couldn\'t change directory to ' + dest_dir)
         os.chdir(cur_dir)
 
-    fileTex = filepath + '.tex'
-    with open(fileTex, 'w+', encoding='utf-8') as f:
+    file_tex = filepath + '.tex'
+    with open(file_tex, 'w+', encoding='utf-8') as f:
         f.write(latex)
 
-    command = ['pdflatex', '-draftmode', '--interaction=nonstopmode', fileTex]
+    command = ['pdflatex', '-draftmode', '--interaction=nonstopmode', file_tex]
     try:
         subprocess.check_output(command)
     except subprocess.CalledProcessError as e:
-        print('the annoying one')
-        print('Process returned code', e.returncode) # TODO: generate a useful exception
-        print(e)
+        os.remove(filepath + '.tex')
+        os.remove(filepath + '.aux')
+        os.chdir(cur_dir)
+        raise LatexException('process failed when measuring subcomponents', e.output.decode('ascii'))
 
     output = None
     TYPE = '(' + WIDTH + '|' + HEIGHT + ')'
@@ -115,7 +117,7 @@ def generate_latex_log(latex, filepath):
         data = f.read()
         regex = re.compile(TYPE + ':' + ID + SEP + LENGTH + UNITS, re.MULTILINE)
         output = list(map(lambda x : (x[0], x[1], x[5], x[6]), regex.findall(data))) # TODO clean this up
-    os.remove(fileTex)
+    os.remove(file_tex)
     os.remove(filepath + '.aux')
     os.remove(filepath + '.log')
     os.chdir(cur_dir)

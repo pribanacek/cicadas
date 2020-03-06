@@ -1,5 +1,6 @@
 import os, subprocess, errno
 from subprocess import CalledProcessError
+from src.util.Exceptions import LatexException
 
 LATEX_PREFIX = '''\\documentclass{article}
 \\usepackage[utf8]{inputenc}
@@ -35,8 +36,10 @@ def generatePDF(tex, filepath, compiler_args = []):
     try:
         subprocess.check_output(command)
     except CalledProcessError as e:
-        print(e.output) # TODO throw a useful exception
-    os.remove(basename + '.tex')
+        os.remove(basename + '.aux')
+        os.chdir(cur_dir)
+        raise LatexException('process failed when compiling LaTeX output', e.output.decode('ascii'))
+
     os.remove(basename + '.aux')
     os.remove(basename + '.log')
     os.chdir(cur_dir)

@@ -16,24 +16,23 @@ import networkx as nx
 import src.tests.LayoutOptimisation
 import src.tests.TikzGeneration
 
-import src.visualisation.animate as animate_graphs
-
 import cProfile
 
 
-def main(filename):
+def main(filename, output_path = './output'):
     graph_assembler = Parser.parse(filename)
     GraphMeasure.measure(graph_assembler.nodes, graph_assembler.edges, graph_assembler.regions)
     graph = graph_assembler.getGraph()
     (min_graph, graphs) = optimize_layout(graph)
 
-    animate_graphs.start_animation_thread(graphs)
+    if os.environ['CICADAS_VIZ'] == 'True':
+        import src.visualisation.animate as animate
+        animate.start_animation_thread(graphs)
 
     result = generate_tikz(min_graph)
 
-    outputPath = './thing'
-    generatePDF(result, outputPath)
-    full_path = os.path.abspath(outputPath)
+    generatePDF(result, output_path)
+    full_path = os.path.abspath(output_path)
     webbrowser.open_new('file://' + full_path + '.pdf')
     # os.remove(fullPath + '.pdf')
     print(result)
@@ -59,5 +58,8 @@ if __name__ == "__main__":
             message += ' at line ' + e.position
         print(message, e, sep = '\n')
     except LatexException as e:
-        message = 'Error occurred when compiling LaTeX'
-        print('LaTeX error:', e)
+        print('Error occurred when compiling LaTeX:', e.msg)
+        print('pdflatex subprocess returned the following error:')
+        print(e.error)
+    except Exception as e:
+        print(e)
