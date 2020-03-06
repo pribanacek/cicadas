@@ -12,7 +12,8 @@ Install these with `pip3` or something beforehand
 for dev:
 - `pygame`
 
-## Running it
+## TODO: add proper documentation
+
 
 Run with something like `python3 main.py samples/sample_1.txt`
 There are no output options for now, this should parse the input file, print out the tikz code and automatically open a PDF with the generated diagram
