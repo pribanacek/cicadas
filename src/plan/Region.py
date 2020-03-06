@@ -3,6 +3,7 @@ from src.layout.Label import Label
 import src.plan.GraphUtils as GraphUtils
 import networkx as nx
 import numpy as np
+import math
 
 class Region(ABC):
     def __init__(self, region_id, label = ''):
@@ -42,8 +43,28 @@ class Region(ABC):
         pass
 
     @abstractmethod
+    def ordered_nodes(self):
+        pass
+
+    @abstractmethod
     def is_identity(self):
         pass
+    
+    def uniform_layout(self, radius, offset = (0, 0), permutation = 0):
+        offset_x, offset_y = offset
+        nodes = self.ordered_nodes()
+        if permutation > 0:
+            nodes = nodes[permutation:] + nodes[:permutation]
+        n = len(nodes)
+        angle = 0
+        angle_increment = 2 * math.pi / n
+        positions = {}
+        for node_id in nodes:
+            x = radius * math.cos(angle) + offset_x
+            y = radius * math.sin(angle) + offset_y
+            angle += angle_increment
+            positions[node_id] = np.array((x, y))
+        return positions
 
 class RegionLoop(Region):
     def __init__(self, region_id, path, label = ''):
@@ -61,12 +82,17 @@ class RegionLoop(Region):
 
     def ordered_edges(self):
         return list(self.path.edge_ids)
-    
+        
     def edge_set(self):
         return set(self.path.edge_ids)
     
     def is_identity(self):
         return True
+    
+    def ordered_nodes(self):
+        pathA, = self.mapped_path_ids
+        print(pathA)
+        return list(pathA)
 
 class RegionPair(Region):
     def __init__(self, region_id, path_pair, label = ''):
@@ -95,5 +121,9 @@ class RegionPair(Region):
 
     def is_identity(self):
         return False
+    
+    def ordered_nodes(self):
+        pathA, pathB = self.mapped_path_ids
+        return list(pathA) + list(reversed(pathB))[1:-1]
 
 
