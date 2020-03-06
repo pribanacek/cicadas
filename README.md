@@ -1,4 +1,4 @@
-# Part II Project (package name TBC)
+# CICADAS (self-ConstructIng CommutAtive DiAgramS)
 
 Using Python 3.7.8
 
@@ -9,6 +9,8 @@ Install these with `pip3` or something beforehand
 - `numpy`
 - `networkx`
 - `antlr4-python3-runtime`
+for dev:
+- `pygame`
 
 ## Running it
 
