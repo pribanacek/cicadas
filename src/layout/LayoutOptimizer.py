@@ -1,6 +1,6 @@
 import math, random, time
 import numpy as np
-from .LayoutStrategy import LayoutConvexPoly, LayoutGenetic
+from .LayoutStrategy import LayoutConvexPoly, LayoutGenetic, LayoutSimulatedAnnealing
 
 def optimize_layout(graph):
     strategy = None
@@ -9,5 +9,5 @@ def optimize_layout(graph):
     if len(graph.regions) == 1 and len(graph.regions[0].ordered_nodes()) == len(graph.graph):
         strategy = LayoutConvexPoly()
     else:
-        strategy = LayoutGenetic()
-    return strategy.optimize_layout(graph)
+        # strategy = LayoutGenetic()
+        strategy = LayoutSimulatedAnnealing()
