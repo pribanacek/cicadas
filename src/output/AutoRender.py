@@ -6,13 +6,10 @@ LATEX_PREFIX = '''\\documentclass{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage{tikz-cd, amsmath}
 \\usetikzlibrary{decorations.pathmorphing}
-\\begin{document}
-\\begin{equation*}
+\\begin{document}\n
 '''
 
-LATEX_SUFFIX = '''\\end{equation*}
-\\end{document}
-'''
+LATEX_SUFFIX = '\n\\end{document}\n'
 
 def generateTex(tex, filepath):
     with open(filepath + '.tex', 'w+', encoding='utf-8') as f:
@@ -23,15 +20,12 @@ def generatePDF(tex, filepath, compiler_args = []):
     dest_dir = os.path.dirname(filepath)
     basename = os.path.basename(filepath)
     if basename == '':
-        basename = 'default_basename'
-    try:
-        os.chdir(dest_dir)
-    except:
-        print('Couldn\'t change directory to ' + dest_dir)
-        os.chdir(cur_dir)
+        basename = 'output'
 
-    texFile = LATEX_PREFIX + tex + LATEX_SUFFIX
-    generateTex(texFile, filepath)
+    os.chdir(dest_dir)
+
+    tex_file = LATEX_PREFIX + tex + LATEX_SUFFIX
+    generateTex(tex_file, filepath)
     command = ['pdflatex', '--interaction=nonstopmode', basename + '.tex']
     try:
         subprocess.check_output(command)

@@ -3,8 +3,13 @@ from string import Template
 
 from src.layout.PlannedGraph import PlannedGraph
 
-BEGIN_TIKZ_PICTURE = '\\begin{tikzpicture}'
-END_TIKZ_PICTURE = '\\end{tikzpicture}'
+BEGIN_TIKZ_PICTURE = '''
+\\begin{equation*}
+\\begin{tikzpicture}'''
+
+END_TIKZ_PICTURE = '''\\end{tikzpicture}
+\\end{equation*}
+'''
 
 PATH_START = '\\path[commutative diagrams/.cd, every arrow, every label]'
 
@@ -55,6 +60,9 @@ def get_tikz_code_lines(graph):
     lines.append(END_TIKZ_PICTURE)
     return lines
 
-def generate_tikz(graph):
-    lines = get_tikz_code_lines(graph)
-    return '\n'.join(lines) + '\n'
+def generate_tikz(graphs):
+    latex_lines = []
+    for graph in graphs:
+        graph_tikz_code = get_tikz_code_lines(graph)
+        latex_lines = latex_lines + graph_tikz_code
+    return '\n'.join(latex_lines) + '\n'

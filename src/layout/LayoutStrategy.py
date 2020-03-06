@@ -1,7 +1,10 @@
 import math, random, time
 import numpy as np
 from abc import ABC, abstractmethod
+from src.util.Logging import warn
 from .Cooling import LinearCooling, ExpCooling
+
+GRAPH_ENERGY = lambda x : x.energy()
 
 class LayoutStrategy(ABC):
     def __init__(self):
@@ -24,7 +27,7 @@ class LayoutStrategy(ABC):
         return graphs
 
     @abstractmethod
-    def optimize_layout(self, graph):
+    def optimize_layout(self, graph, output_number):
         pass
 
 
@@ -46,10 +49,11 @@ class LayoutSimulatedAnnealing(LayoutStrategy):
             return True
         return False
     
-    def optimize_layout(self, graph):
+    def optimize_layout(self, graph, output_number):
         dimensions = graph.dimensions
         cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = 1000, resets = 0)
-        best_graphs = self.initialise_graph_set(graph, 1)
+        n = max(output_number, 3) + 1
+        best_graphs = self.initialise_graph_set(graph, n)
         best_graph = None
         graph_history = [graph]
 
@@ -67,32 +71,34 @@ class LayoutSimulatedAnnealing(LayoutStrategy):
                     best_graphs[i] = new_graphs[i]
             cooling.cool()
             self.print_progress(cooling.progress(), interval = 2)
+        
+        result_graphs = list(sorted(best_graphs, key = GRAPH_ENERGY))[0:output_number]
+        for g in result_graphs:
+            g.recentre_nodes()
 
-        print('FINAL ENERGY', best_graph.energy())
-        best_graph.recentre_nodes()
-        return (best_graph, graph_history)
+        return (result_graphs, graph_history)
 
 
 class LayoutGenetic(LayoutStrategy):
     INITIAL_TEMPERATURE = 1000
-    NUMBER_OF_GRAPHS = 5
 
     def get_radius(self, temp, dimensions):
         factor = max(*dimensions)
         radius = temp / self.INITIAL_TEMPERATURE * factor
         return radius
     
-    def optimize_layout(self, graph):
+    def optimize_layout(self, graph, output_number):
         dimensions = graph.dimensions
         cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = 1000, resets = 0)
-        best_graphs = self.initialise_graph_set(graph, self.NUMBER_OF_GRAPHS)
+        n = max(output_number, 4) + 1
+        best_graphs = self.initialise_graph_set(graph, n)
         best_graph = None
         graph_history = [graph]
         while not cooling.done():
             radius = self.get_radius(cooling.get_temp(), dimensions)
             new_graphs = [graph.random_neighbour(radius) for graph in best_graphs]
-            sorted_graphs = sorted(best_graphs + new_graphs, key = lambda x : x.energy())
-            best_graphs = sorted_graphs[:self.NUMBER_OF_GRAPHS]
+            sorted_graphs = sorted(best_graphs + new_graphs, key = GRAPH_ENERGY)
+            best_graphs = sorted_graphs[:n]
             if best_graph == None or best_graphs[0].energy() < best_graph.energy():
                 best_graph = best_graphs[0]
                 graph_history.append(best_graph)
@@ -100,13 +106,15 @@ class LayoutGenetic(LayoutStrategy):
             cooling.cool()
             self.print_progress(cooling.progress(), interval = 2)
 
-        print('FINAL ENERGY', best_graph.energy())
-        best_graph.recentre_nodes()
-        return (best_graph, graph_history)
+        result_graphs = best_graphs[0:output_number]
+        for g in result_graphs:
+            g.recentre_nodes()
+
+        return (result_graphs, graph_history)
 
 
 class LayoutConvexPoly(LayoutStrategy):
-    def optimize_layout(self, graph):
+    def optimize_layout(self, graph, output_number):
         region = graph.regions[0]
         radius = min(*graph.dimensions) * 0.4
         graph_set = self.initialise_graph_set(graph, len(graph.graph))
@@ -115,6 +123,9 @@ class LayoutConvexPoly(LayoutStrategy):
             positions = region.uniform_layout(radius, permutation = permutation)
             for node_id, pos in positions.items():
                 graph_set[i].set_node_position(node_id, pos)
-        best_graph = min(*graph_set, key = lambda x : x.energy())
-        # TODO return worse ones with a certain probability?
-        return (best_graph, [best_graph])
+        best_graphs = list(sorted(graph_set, key = lambda x : x.energy()))
+        if output_number > len(best_graphs):
+            warn('%s candidate diagrams were requested, but only %s are available' % (output_number, len(best_graphs)))
+        n = min(output_number, len(best_graphs))
+        result_graphs = best_graphs[0:n]
+        return (result_graphs, [best_graphs[0]])
