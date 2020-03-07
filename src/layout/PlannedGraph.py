@@ -355,14 +355,15 @@ class PlannedGraph:
             for j in range(i + 1, len(edges)):
                 (startA, endA, _, _) = edges[i]
                 (startB, endB, _, _) = edges[j]
-                startAPos = self.node_positions[startA]
-                startBPos = self.node_positions[startB]
-                endAPos = self.node_positions[endA]
-                endBPos = self.node_positions[endB]
-                if intersect(startAPos, endAPos, startBPos, endBPos):
-                    total += 1
-                    for node_id in [startA, endA, startB, endB]:
-                        self.increase_node_probability(node_id, 1.5)
+                if startA != startB and startA != endB and startB != endA and endB != endA:
+                    startAPos = self.node_positions[startA]
+                    startBPos = self.node_positions[startB]
+                    endAPos = self.node_positions[endA]
+                    endBPos = self.node_positions[endB]
+                    if intersect(startAPos, endAPos, startBPos, endBPos):
+                        total += 1
+                        for node_id in [startA, endA, startB, endB]:
+                            self.increase_node_probability(node_id, 1.5)
         return total
     
     def label_overlaps(self):
