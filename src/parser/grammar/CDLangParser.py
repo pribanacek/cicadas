@@ -7,7 +7,7 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\30")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\27")
         buf.write("Z\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
         buf.write("\t\b\4\t\t\t\4\n\t\n\4\13\t\13\3\2\5\2\30\n\2\3\2\6\2")
         buf.write("\33\n\2\r\2\16\2\34\3\3\3\3\3\3\3\3\3\3\5\3$\n\3\3\3\3")
@@ -15,24 +15,24 @@ def serializedATN():
         buf.write("\n\5\3\6\3\6\3\6\3\6\5\69\n\6\3\6\5\6<\n\6\3\7\3\7\3\7")
         buf.write("\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\7\tK\n\t\f\t")
         buf.write("\16\tN\13\t\3\n\3\n\5\nR\n\n\3\13\3\13\3\13\3\13\5\13")
-        buf.write("X\n\13\3\13\2\2\f\2\4\6\b\n\f\16\20\22\24\2\3\3\3\25\25")
+        buf.write("X\n\13\3\13\2\2\f\2\4\6\b\n\f\16\20\22\24\2\3\3\3\24\24")
         buf.write("\2[\2\27\3\2\2\2\4#\3\2\2\2\6\'\3\2\2\2\b,\3\2\2\2\n\64")
         buf.write("\3\2\2\2\f=\3\2\2\2\16B\3\2\2\2\20G\3\2\2\2\22O\3\2\2")
-        buf.write("\2\24W\3\2\2\2\26\30\7\25\2\2\27\26\3\2\2\2\27\30\3\2")
+        buf.write("\2\24W\3\2\2\2\26\30\7\24\2\2\27\26\3\2\2\2\27\30\3\2")
         buf.write("\2\2\30\32\3\2\2\2\31\33\5\4\3\2\32\31\3\2\2\2\33\34\3")
         buf.write("\2\2\2\34\32\3\2\2\2\34\35\3\2\2\2\35\3\3\2\2\2\36$\5")
         buf.write("\6\4\2\37$\5\b\5\2 $\5\n\6\2!$\5\f\7\2\"$\5\16\b\2#\36")
         buf.write("\3\2\2\2#\37\3\2\2\2# \3\2\2\2#!\3\2\2\2#\"\3\2\2\2$%")
         buf.write("\3\2\2\2%&\t\2\2\2&\5\3\2\2\2\'(\7\3\2\2()\7\21\2\2)*")
         buf.write("\7\4\2\2*+\7\21\2\2+\7\3\2\2\2,-\5\22\n\2-.\7\5\2\2./")
-        buf.write("\5\22\n\2/\60\7\6\2\2\60\62\5\22\n\2\61\63\7\24\2\2\62")
+        buf.write("\5\22\n\2/\60\7\6\2\2\60\62\5\22\n\2\61\63\7\23\2\2\62")
         buf.write("\61\3\2\2\2\62\63\3\2\2\2\63\t\3\2\2\2\64\65\5\20\t\2")
         buf.write("\658\7\7\2\2\669\5\20\t\2\679\7\20\2\28\66\3\2\2\28\67")
         buf.write("\3\2\2\29;\3\2\2\2:<\5\24\13\2;:\3\2\2\2;<\3\2\2\2<\13")
-        buf.write("\3\2\2\2=>\7\b\2\2>?\7\23\2\2?@\7\5\2\2@A\5\24\13\2A\r")
-        buf.write("\3\2\2\2BC\7\t\2\2CD\7\23\2\2DE\7\5\2\2EF\7\24\2\2F\17")
-        buf.write("\3\2\2\2GL\7\23\2\2HI\7\n\2\2IK\7\23\2\2JH\3\2\2\2KN\3")
-        buf.write("\2\2\2LJ\3\2\2\2LM\3\2\2\2M\21\3\2\2\2NL\3\2\2\2OQ\7\23")
+        buf.write("\3\2\2\2=>\7\b\2\2>?\7\22\2\2?@\7\5\2\2@A\5\24\13\2A\r")
+        buf.write("\3\2\2\2BC\7\t\2\2CD\7\22\2\2DE\7\5\2\2EF\7\23\2\2F\17")
+        buf.write("\3\2\2\2GL\7\22\2\2HI\7\n\2\2IK\7\22\2\2JH\3\2\2\2KN\3")
+        buf.write("\2\2\2LJ\3\2\2\2LM\3\2\2\2M\21\3\2\2\2NL\3\2\2\2OQ\7\22")
         buf.write("\2\2PR\5\24\13\2QP\3\2\2\2QR\3\2\2\2R\23\3\2\2\2ST\7\13")
         buf.write("\2\2TU\7\16\2\2UX\7\f\2\2VX\7\r\2\2WS\3\2\2\2WV\3\2\2")
         buf.write("\2X\25\3\2\2\2\13\27\34#\628;LQW")
@@ -56,9 +56,8 @@ class CDLangParser ( Parser ):
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "TEXT", "COMMENT", "ID", "MEASUREMENT", "NUMBER", 
-                      "IDENTIFIER", "STYLE_LIST", "SEPARATOR", "WHITESPACE", 
-                      "NEWLINE", "ERROR_CHAR" ]
+                      "TEXT", "COMMENT", "ID", "NUMBER", "IDENTIFIER", "STYLE_LIST", 
+                      "SEPARATOR", "WHITESPACE", "NEWLINE", "ERROR_CHAR" ]
 
     RULE_start = 0
     RULE_statement = 1
@@ -89,14 +88,13 @@ class CDLangParser ( Parser ):
     TEXT=12
     COMMENT=13
     ID=14
-    MEASUREMENT=15
-    NUMBER=16
-    IDENTIFIER=17
-    STYLE_LIST=18
-    SEPARATOR=19
-    WHITESPACE=20
-    NEWLINE=21
-    ERROR_CHAR=22
+    NUMBER=15
+    IDENTIFIER=16
+    STYLE_LIST=17
+    SEPARATOR=18
+    WHITESPACE=19
+    NEWLINE=20
+    ERROR_CHAR=21
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -274,11 +272,11 @@ class CDLangParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def MEASUREMENT(self, i:int=None):
+        def NUMBER(self, i:int=None):
             if i is None:
-                return self.getTokens(CDLangParser.MEASUREMENT)
+                return self.getTokens(CDLangParser.NUMBER)
             else:
-                return self.getToken(CDLangParser.MEASUREMENT, i)
+                return self.getToken(CDLangParser.NUMBER, i)
 
         def getRuleIndex(self):
             return CDLangParser.RULE_size
@@ -303,11 +301,11 @@ class CDLangParser ( Parser ):
             self.state = 37
             self.match(CDLangParser.T__0)
             self.state = 38
-            self.match(CDLangParser.MEASUREMENT)
+            self.match(CDLangParser.NUMBER)
             self.state = 39
             self.match(CDLangParser.T__1)
             self.state = 40
-            self.match(CDLangParser.MEASUREMENT)
+            self.match(CDLangParser.NUMBER)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)

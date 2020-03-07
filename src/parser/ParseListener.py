@@ -40,17 +40,17 @@ class ParseListener(CDLangListener):
     def enterSize(self, ctx):
         if self.size != None:
             raise_already_declared("size", pos = (ctx.start.line, ctx.start.column))
-        width_text = ctx.MEASUREMENT(0).getText()
-        height_text = ctx.MEASUREMENT(1).getText()
-        (width, width_unit) = self.separateUnits(width_text)
-        (height, height_unit) = self.separateUnits(height_text)
+        width_text = ctx.NUMBER(0).getText()
+        height_text = ctx.NUMBER(1).getText()
+        (width, _) = self.separateUnits(width_text)
+        (height, _) = self.separateUnits(height_text)
         # TODO deal with units
         self.size = (width, height)
         self.validator.set_dimensions(self.size)
         
     def addEdge(self, edge_id, pos = None):
         if edge_id in self.types:
-            raise_already_declared("edge '" + edge_id + "'", pos = pos)
+            raise_already_declared("edge '%s'" % edge_id, pos = pos)
         else:
             self.types[edge_id] = EDGE
     
