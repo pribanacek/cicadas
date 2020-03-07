@@ -1,5 +1,7 @@
 from src.layout.Label import Label
 import random, math, copy, numpy as np
+from numpy import arccos, dot, pi, cross
+from numpy.linalg import norm
 import sys
 import networkx as nx
 
@@ -14,6 +16,20 @@ def round_dp(x, dp):
 
 def round_precision(x, precision):
     return round(x / precision) * precision
+
+def clamp_dot(x, y):
+    return np.minimum(1, np.maximum(-1, dot(x, y)))
+
+def distance_segment_point(A, B, P):
+    if all(A == P) or all(B == P):
+        return 0
+    if all(A == B):
+        return norm(P - A)
+    if arccos(clamp_dot((P - A) / norm(P - A), (B - A) / norm(B - A))) > pi / 2:
+        return norm(P - A)
+    if arccos(clamp_dot((P - B) / norm(P - B), (A - B) / norm(A - B))) > pi / 2:
+        return norm(P - B)
+    return norm(cross(A-B, A-P))/norm(B-A)
 
 class Vertex:
     def __init__(self, node_name, label = None):
@@ -98,9 +114,9 @@ class PlannedGraph:
     def get_np_positions(self):
         return np.array([pos for _, pos in self.node_positions])
     
-    def set_node_position(self, nodeId, position, graph = None):
+    def set_node_position(self, node_id, position, graph = None):
         graph = graph if graph != None else self.graph
-        graph.nodes[nodeId]['pos'] = np.array(position)
+        graph.nodes[node_id]['pos'] = np.array(position)
         self.reset_cache()
     
     def reset_cache(self):
@@ -140,11 +156,11 @@ class PlannedGraph:
     
     def random_plan(self):
         (width, height) = self.dimensions
-        for nodeId, _ in self.node_data:
+        for node_id, _ in self.node_data:
             x = width * (random.random() - 0.5)
             y = height * (random.random() - 0.5)
             (x, y) = self.quantize_position(x, y)
-            self.set_node_position(nodeId, (x, y))
+            self.set_node_position(node_id, (x, y))
     
     def copy(self):
         graph = self.graph.copy()
@@ -200,14 +216,13 @@ class PlannedGraph:
         if self._energy_stats != None:
             return self._energy_stats
         self._energy_stats = {
-            'node-dist': 3000 * self.node_distances(),
+            'node-dist': 1500 * self.node_distances(),
             'border-dist': 10 * self.border_distance(),
-            'edge-lengths': 25 * self.edge_lengths(),
-            'sharp-angles': 500 * self.sharp_angles(),
+            'edge-lengths': 2 * self.edge_lengths(),
+            'sharp-angles': 5000 * self.sharp_angles(),
             'edge-diffs': 10 * self.edge_differences(),
-            'horizontalness': 100 * self.horizontalness(),
+            'horizontalness': 10000 * self.horizontalness(),
             'node-edge-dists': 25 * self.node_edge_distances(),
-            'angle-diffs': 0 * self.angle_differences(),
             'edge-crossings': 200000 * self.edge_intersections(),
             'arrow-dirs': 50 * self.overall_arrow_direction(),
             'label-overlaps': 500 * self.label_overlaps(),
@@ -282,25 +297,21 @@ class PlannedGraph:
                 (startB, endB, _, _) = edges[j]
                 length1 = self.node_distance_sq(startA, endA)
                 length2 = self.node_distance_sq(startB, endB)
-                total += abs(length1 - length2) # some adjustment factor for individual edges
+                total += abs(math.sqrt(length1) - math.sqrt(length2)) # some adjustment factor for individual edges
         return total
     
     def node_edge_distances(self):
-        # if len(self.edge_data) == 0:
-        #     return 0
         total = 0
-        for nodeId, _ in self.node_data:
+        for node_id, _ in self.node_data:
             for (start, end, _, _) in self.edge_data:
-                if nodeId != start and nodeId != end and start != end:
-                    (p1x, p1y) = self.node_positions[start]
-                    (p2x, p2y) = self.node_positions[end]
-                    (nodeX, nodeY) = self.node_positions[nodeId]
-                    edgeLengthSq = self.node_distance_sq(start, end)
-                    numerator = ((p2y - p1y) * nodeX - (p2x - p1x) * nodeY + p2x * p1y - p2y * p1x) ** 2
-                    if numerator == 0 or edgeLengthSq == 0:
+                if node_id != start and node_id != end and start != end:
+                    p1 = self.node_positions[start]
+                    p2 = self.node_positions[end]
+                    node_pos = self.node_positions[node_id]
+                    d2 = distance_segment_point(p1, p2, node_pos)
+                    if d2 == 0:
                         total += BIG_NUMBER
                     else:
-                        d2 = numerator / edgeLengthSq
                         total += 1 / d2
         return total
 
@@ -308,12 +319,12 @@ class PlannedGraph:
         total = 0
         sharpness_threshold = math.pi / 6
         k = math.pi / (2 * sharpness_threshold)
-        for node_id, node in self.node_data:
+        for node_id, _ in self.node_data:
             position = self.node_positions[node_id]
             in_edges = self.graph.in_edges(node_id)
             out_edges = self.graph.out_edges(node_id)
             edges = list(in_edges) + list(out_edges)
-            neighbour_nodes = map(lambda x : x[0] if x[0] != node else x[1], edges)
+            neighbour_nodes = map(lambda x : x[0] if x[0] != node_id else x[1], edges)
             neighbour_offsets = map(lambda x : self.node_positions[x] - position, neighbour_nodes)
             neighbour_angles = list(map(lambda x : math.atan2(x[1], x[0]), neighbour_offsets))
             for i in range(len(neighbour_angles)):
@@ -321,23 +332,13 @@ class PlannedGraph:
                     angle1 = neighbour_angles[i]
                     angle2 = neighbour_angles[j]
                     difference = abs(angle1 - angle2)
-                    difference = min(difference, math.pi - difference)
+                    difference = min(difference, 2 * math.pi - difference)
                     if difference < sharpness_threshold:
                         rating = math.cos(difference * k) ** 2
                         total += rating
                         self.increase_node_probability(node_id, 1 + rating)
         return total
     
-    def angle_differences(self):
-        n = len(self.angleValues)
-        total = 0
-        for i in range(n):
-            for j in range(i + 1, n):
-                a1 = self.angleValues[i] % 90
-                a2 = self.angleValues[j] % 90
-                total += abs(a1 - a2) # some adjustment factor for individual edges
-        return total
-
     def horizontalness(self):
         with np.errstate(all = 'ignore'):
             diff = abs(self.edge_endpoints[:, 1] - self.edge_endpoints[:, 0])
@@ -345,7 +346,8 @@ class PlannedGraph:
             gradients_y = 1 / gradients_x
             gradients = np.minimum(gradients_x, gradients_y) ** 2
             nan_check(gradients)
-            total = gradients.sum()
+            # total = gradients.sum()
+            total = gradients.min()
             return total
     
     def edge_intersections(self):
