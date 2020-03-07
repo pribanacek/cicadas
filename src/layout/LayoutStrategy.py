@@ -44,9 +44,10 @@ class LayoutSimulatedAnnealing(LayoutStrategy):
             return True
         boltzmann = 1.38e-2
         r = random.random()
-        p = np.exp((energy1 - energy2) / (temp * boltzmann))
-        if r < p:
-            return True
+        with np.errstate(invalid = 'ignore'):
+            p = np.exp((energy1 - energy2) / (temp * boltzmann))
+            if r < p:
+                return True
         return False
     
     def optimize_layout(self, graph, output_number):
