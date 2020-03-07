@@ -40,7 +40,7 @@ def get_edge_string(start, end, edge):
         start = start,
         end = end,
         label = edge.label,
-        styles = get_styles_string(edge.styles)
+        styles = get_styles_string(edge.get_styles())
     )
 
 def get_tikz_code_lines(graph):

@@ -3,6 +3,7 @@ from src.util.Exceptions import PathValidationException
 from src.plan.GraphAssembler import MergeAssembler
 from src.plan.Region import RegionLoop, RegionPair
 from src.layout.PlannedGraph import Vertex, Edge
+from src.layout.EdgeStyles import EdgeStyle, AUTO_BEND, AUTO_LOOP, LEFT_BEND, RIGHT_BEND
 from .PathFacts import PathFacts
 
 def raise_path_not_continuous(path):
@@ -45,9 +46,8 @@ class ParseValidator:
         if object_id in self.edges:
             self.edges[object_id].set_label(label)
     
-    def add_styles(self, edgeId, style_list):
-        # styles = self.edges[edgeId].styles
-        # self.edges[edgeId].styles = styles + style_list
+    def add_styles(self, edgeId, styles):
+        style_list = list(map(lambda s : EdgeStyle(s), styles))
         self.edges[edgeId].styles = style_list
 
     def validate_path_continuity(self, path):
@@ -86,12 +86,20 @@ class ParseValidator:
 
     def add_compositions(self, pathA, pathB, label):
         self.validate_paths(pathA, pathB)
+        if len(pathA) == 1 and len(pathB) == 1:
+            self.edges[pathA.edge_ids[0]].add_auto_style(LEFT_BEND)
+            self.edges[pathB.edge_ids[0]].add_auto_style(RIGHT_BEND)
         region_id = len(self.regions)
         region = RegionPair(region_id, (pathA, pathB), label = label)
         self.regions.append(region)
     
     def add_identity_path(self, path, label):
         self.validate_path_loop(path)
+        if len(path) == 1:
+            self.edges[path.edge_ids[0]].add_auto_style(AUTO_LOOP.copy())
+        elif len(path) == 2:
+            self.edges[path.edge_ids[0]].add_auto_style(LEFT_BEND)
+            self.edges[path.edge_ids[1]].add_auto_style(LEFT_BEND)
         region_id = len(self.regions)
         region = RegionLoop(region_id, path, label = label)
         self.regions.append(region)

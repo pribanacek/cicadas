@@ -2,9 +2,6 @@ from src.layout.Label import Label
 import random, math, copy, numpy as np
 import sys
 import networkx as nx
-# from scipy.spatial import ConvexHull
-
-# np.seterr(all = 'warn')
 
 def nan_check(array):
     # if DEBUG:
@@ -36,11 +33,23 @@ class Edge:
         self.start = start
         self.end = end
         self.styles = [] if styles == None else styles
+        self.auto_styles = []
         if label != None:
             self.set_label(label)
         else:
             self.label = Label(edge_id, latex = True, edge_label = True)
     
+    def add_auto_style(self, style):
+        if not style.conflicts(self.styles):
+            self.auto_styles.append(style)
+    
+    def has_alternatives(self):
+        return any(s.has_alternatives() for s in self.auto_styles)
+        
+    def get_styles(self):
+        styles = self.styles + self.auto_styles
+        return list(map(lambda x : x.style, styles))
+
     def set_label(self, label_text):
         self.label = Label(label_text, edge_label = True)
     
@@ -193,7 +202,7 @@ class PlannedGraph:
         H = 0 * self.angle_differences()
         I = 200000 * self.edge_intersections()
         J = 50 * self.overall_arrow_direction()
-        K = 1000 * self.convex_hull_rating()
+        K = 0
         L = 500 * self.label_overlaps()
         M = 500 * self.edge_label_overlaps()
         # print([A, B, C, D, E, F, G, H, I, J])
@@ -397,13 +406,3 @@ class PlannedGraph:
             rating = magnitude * math.sin(angle) ** 2
         return rating
     
-    def convex_hull_rating(self):
-        return 0
-        # points = self.get_np_positions()
-        # try:
-        #     hull = ConvexHull(points)
-        #     k = len(hull.vertices)
-        #     n = len(points)
-        #     return k / n
-        # except:
-        #     return 1
