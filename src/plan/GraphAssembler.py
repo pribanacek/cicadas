@@ -31,6 +31,7 @@ class GraphAssembler:
         self.dimensions = dimensions
         self.node_counts = {node_name: 0 for node_name in self.nodes}
         self.graph = nx.OrderedMultiDiGraph()
+        self.graph_contains_loops = False
         
 class MergeAssembler(GraphAssembler):   
     def create_fact_subgraphs(self):
@@ -126,7 +127,10 @@ class MergeAssembler(GraphAssembler):
     def merge_regions(self, graph, regions):
         for region in regions:
             subgraph = region.graph
-            cutoff = 0 if region.is_identity() else None # loops break facts, so only allow single node merges
+            # loops break facts if there are already loops present, so only allow single node merges
+            cutoff = 0 if region.is_identity() and self.graph_contains_loops else None
+            if region.is_identity():
+                self.graph_contains_loops = True
             mapping = self.get_max_subgraph_mapping(graph, region.graph, region.path_node_ids, cutoff = cutoff)
             region.apply_node_mapping(mapping) # TODO
             self.merge_fact_subgraph(graph, subgraph, mapping)
