@@ -9,8 +9,3 @@ id_B: B -> B
 id_A = ID
 id_B = ID
 g . f = ID
-
-style id_A : (loop left)
-style id_B : (loop right)
-style f : (bend left)
-style g : (bend left)
