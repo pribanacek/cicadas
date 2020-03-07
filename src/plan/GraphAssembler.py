@@ -55,10 +55,10 @@ class MergeAssembler(GraphAssembler):
             name_string.append(nodeB_data.node_name)
         return (id_string, name_string) ###
     
-    def get_max_subgraph_mapping(self, graph, subGraph, paths):
+    def get_max_subgraph_mapping(self, graph, subGraph, paths, cutoff = None):
         pathAIds = paths[0]
         pathBIds = [] if len(paths) < 2 else paths[1]
-        cutoff = max(len(pathAIds), len(pathBIds))
+        cutoff = max(len(pathAIds), len(pathBIds)) if cutoff == None else cutoff
         (stringAIds, stringANames) = self.node_ids_to_lcs_string(pathAIds, subGraph)
         (stringBIds, stringBNames) = self.node_ids_to_lcs_string(pathBIds, subGraph)
         mappings_A = []
@@ -126,7 +126,8 @@ class MergeAssembler(GraphAssembler):
     def merge_regions(self, graph, regions):
         for region in regions:
             subgraph = region.graph
-            mapping = self.get_max_subgraph_mapping(graph, region.graph, region.path_node_ids)
+            cutoff = 0 if region.is_identity() else None # loops break facts, so only allow single node merges
+            mapping = self.get_max_subgraph_mapping(graph, region.graph, region.path_node_ids, cutoff = cutoff)
             region.apply_node_mapping(mapping) # TODO
             self.merge_fact_subgraph(graph, subgraph, mapping)
     
