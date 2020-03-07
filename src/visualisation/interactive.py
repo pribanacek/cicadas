@@ -89,7 +89,7 @@ def mouse_down(pos):
         node_x, node_y = graph_to_screen_pos(node_pos)
         mouse_x, mouse_y = pos
         d2 = (node_x - mouse_x) ** 2 + (node_y - mouse_y) ** 2
-        if d2 < (NODE_RADIUS * 3) ** 2:
+        if d2 < (NODE_RADIUS * 5) ** 2:
             held_node = node_id
             break
 
@@ -124,5 +124,6 @@ def run():
 def start_animation_thread(g):
     global graph
     graph = g
+    reset_energy_stats(graph.energy_stats())
     x = threading.Thread(target = run)
     x.start()
