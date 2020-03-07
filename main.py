@@ -26,8 +26,10 @@ def main(input_file, output_path, n, preview, clipboard):
     (min_graphs, graphs) = optimize_layout(graph, n)
 
     if os.environ['CICADAS_VIZ'] == 'True':
-        import src.visualisation.animate as animate
-        animate.start_animation_thread(graphs)
+        # import src.visualisation.animate as animate
+        # animate.start_animation_thread(graphs)
+        import src.visualisation.interactive as interactive
+        interactive.start_animation_thread(min_graphs[0])
 
     result = generate_tikz(min_graphs)
     generatePDF(result, output_path)
@@ -67,5 +69,5 @@ if __name__ == "__main__":
         print('Make sure you have permission to read the source, and to read and write to the destination')
     except NotSupportedException as e:
         print('Unsupported feature:', e)
-    except Exception as e:
-        print(e)
+    # except Exception as e:
+    #     print(e)

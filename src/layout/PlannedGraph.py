@@ -105,6 +105,7 @@ class PlannedGraph:
     
     def reset_cache(self):
         self._energy = None
+        self._energy_stats = None
         self.recompute_node_distances()
         self.recompute_edge_endpoints()
         self.recompute_region_label_positions()
@@ -192,22 +193,27 @@ class PlannedGraph:
         if self._energy != None:
             return self._energy
         self.reset_node_probabilities()
-        A = 3000 * self.node_distances()
-        B = 10 * self.border_distance()
-        C = 25 * self.edge_lengths()
-        D = 500 * self.sharp_angles()
-        E = 10 * self.edge_differences() # need something cleverer here - detect convex shapes
-        F = 100 * self.horizontalness()
-        G = 25 * self.node_edge_distances()
-        H = 0 * self.angle_differences()
-        I = 200000 * self.edge_intersections()
-        J = 50 * self.overall_arrow_direction()
-        K = 0
-        L = 500 * self.label_overlaps()
-        M = 500 * self.edge_label_overlaps()
-        # print([A, B, C, D, E, F, G, H, I, J])
-        self._energy = A + B + C + D + E + F + G + H + I + J + K + L + M
+        self._energy = sum(self.energy_stats().values())
         return self._energy
+    
+    def energy_stats(self):
+        if self._energy_stats != None:
+            return self._energy_stats
+        self._energy_stats = {
+            'node-dist': 3000 * self.node_distances(),
+            'border-dist': 10 * self.border_distance(),
+            'edge-lengths': 25 * self.edge_lengths(),
+            'sharp-angles': 500 * self.sharp_angles(),
+            'edge-diffs': 10 * self.edge_differences(),
+            'horizontalness': 100 * self.horizontalness(),
+            'node-edge-dists': 25 * self.node_edge_distances(),
+            'angle-diffs': 0 * self.angle_differences(),
+            'edge-crossings': 200000 * self.edge_intersections(),
+            'arrow-dirs': 50 * self.overall_arrow_direction(),
+            'label-overlaps': 500 * self.label_overlaps(),
+            'edge-label-overlaps': 500 * self.edge_label_overlaps()
+        }
+        return self._energy_stats
         
     def node_distance_sq(self, start_id, end_id):
         i = self.node_indices[start_id]

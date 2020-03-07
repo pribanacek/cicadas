@@ -6,7 +6,7 @@ import pygame as pg
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-
+FPS = 30
 graphs = []
 i = 0
 screen_size = (640, 640)
@@ -18,8 +18,8 @@ def scale_position(pos):
     x, y = pos
     dim_x, dim_y = graph_dimensions
     size_x, size_y = screen_size
-    x = (x / dim_x) * size_x + size_x / 2
-    y = -(y / dim_y) * size_y + size_y / 2
+    x = (x / dim_x + 0.5) * size_x
+    y = (0.5 - y / dim_y) * size_y
     return (int(round(x)), int(round(y)))
 
 def draw_node(screen, position):
@@ -55,7 +55,7 @@ def run():
     screen.fill(WHITE)
 
     while True:
-        clock.tick(30)
+        clock.tick(FPS)
         for event in pg.event.get():
             if event.type in (pg.QUIT, pg.KEYDOWN):
                 return
