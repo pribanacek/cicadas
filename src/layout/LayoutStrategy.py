@@ -53,7 +53,7 @@ class LayoutSimulatedAnnealing(LayoutStrategy):
     def optimize_layout(self, graph, output_number):
         dimensions = graph.dimensions
         cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = 1000, resets = 0)
-        n = max(output_number, 3) + 1
+        n = output_number + 1
         best_graphs = self.initialise_graph_set(graph, n)
         best_graph = None
         graph_history = [graph]
