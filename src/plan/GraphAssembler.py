@@ -137,24 +137,22 @@ class MergeAssembler(GraphAssembler):
     
     def get_random_node_instance(self, graph, node_name):
         nodes = [x for x, y in graph.nodes(data = 'data') if y.node_name == node_name]
+        if len(nodes) == 0:
+            return None
         return random.choice(nodes)
 
     def add_unused_edges(self):
         # TODO improve nonregion edges
         self.nonregion_edges = [eid for eid in self.edges if not any(eid in r.edge_set() for r in self.regions)]
-        uid = len(self.regions)
         for edge_id in self.nonregion_edges:
             edge = self.edges[edge_id]
             start_node_name = edge.start.node_name
             end_node_name = edge.end.node_name
-            start_node_id = None
+            start_node_id = self.get_random_node_instance(self.graph, start_node_name)
             end_node_id = None
-            if start_node_name in self.graph:
-                start_node_id = self.get_random_node_instance(self.graph, start_node_name)
-            elif end_node_name in self.graph:
+            if start_node_id == None:
                 end_node_id = self.get_random_node_instance(self.graph, end_node_name)
-            GraphUtils.add_edge(self.graph, edge_id, uid, start = start_node_id, end = end_node_id)
-            uid += 1
+            GraphUtils.add_edge(self.graph, edge, self.node_counts, start = start_node_id, end = end_node_id)
 
     def getGraph(self):
         if len(self.regions) > 0:
@@ -162,12 +160,14 @@ class MergeAssembler(GraphAssembler):
             loop_regions = filter(lambda x : x.is_identity(), self.regions)
             pair_regions = filter(lambda x : not x.is_identity(), self.regions)
             sort_options = {'key': lambda x : len(x.graph), 'reverse': True}
-            sub_regions = list(sorted(pair_regions, **sort_options)) + list(sorted(loop_regions, **sort_options))
-            self.merge_regions(self.graph, sub_regions)
-        self.add_unused_edges()
+            self.merge_regions(self.graph, list(sorted(pair_regions, **sort_options)))
+            self.add_unused_edges()
+            self.merge_regions(self.graph, list(sorted(loop_regions, **sort_options)))
+        else:
+            self.add_unused_edges()
 
         N = len(self.graph.nodes)
         E = len(self.graph.edges)
-        info('Constructed graph with ' + str(N) + ' nodes and ' + str(E) + ' edges')
+        info('Constructed graph with %s nodes and %s edges' % (N, E))
         
         return PlannedGraph(self.graph, self.regions, self.dimensions)
