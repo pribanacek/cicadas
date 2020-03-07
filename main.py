@@ -1,6 +1,6 @@
 import os, sys, webbrowser
 
-from src.util.Exceptions import SyntaxException, ParsingException, LatexException
+from src.util.Exceptions import SyntaxException, ParsingException, LatexException, NotSupportedException
 from src.ui.ArgParser import arg_parser
 import src.util.Logging as Logging
 
@@ -65,5 +65,7 @@ if __name__ == "__main__":
     except PermissionError as e:
         print('Permission error occurred')
         print('Make sure you have permission to read the source, and to read and write to the destination')
+    except NotSupportedException as e:
+        print('Unsupported feature:', e)
     except Exception as e:
         print(e)

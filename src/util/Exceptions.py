@@ -30,3 +30,6 @@ class LatexException(Exception):
     def __init__(self, msg, error):
         self.msg = msg
         self.error = error
+
+class NotSupportedException(Exception):
+    pass

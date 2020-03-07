@@ -1,5 +1,5 @@
 from src.util.Logging import warn
-from src.util.Exceptions import PathValidationException
+from src.util.Exceptions import PathValidationException, NotSupportedException
 from src.plan.GraphAssembler import MergeAssembler
 from src.plan.Region import RegionLoop, RegionPair
 from src.layout.PlannedGraph import Vertex, Edge
@@ -97,6 +97,8 @@ class ParseValidator:
         self.validate_path_loop(path)
         if len(path) == 1:
             self.edges[path.edge_ids[0]].add_auto_style(AUTO_LOOP.copy())
+            if label != None:
+                raise NotSupportedException('region label for identity of length 1')
         elif len(path) == 2:
             self.edges[path.edge_ids[0]].add_auto_style(LEFT_BEND)
             self.edges[path.edge_ids[1]].add_auto_style(LEFT_BEND)
