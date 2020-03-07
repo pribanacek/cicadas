@@ -11,7 +11,7 @@ class Cooling(ABC):
         self.runs = 0
 
     def done(self):
-        return self.get_temp() <= self.end_temp
+        return self.step >= self.total_steps
 
     def cool(self):
         self.step += 1
@@ -20,7 +20,9 @@ class Cooling(ABC):
             self.step = 0
     
     def progress(self):
-        return self.step / self.total_steps
+        steps_taken = self.runs * self.total_steps + self.step
+        total_steps = self.total_steps * (self.resets + 1)
+        return steps_taken / total_steps
 
     @abstractmethod
     def get_temp(self):
@@ -28,13 +30,13 @@ class Cooling(ABC):
 
 class LinearCooling(Cooling):
     def get_temp(self):
-        x = self.progress()
+        x = self.step / self.total_steps
         t = (1 - x) * self.start_temp + x * self.end_temp
         return t
 
 class ExpCooling(Cooling):
     def get_temp(self):
-        x = self.progress()
+        x = self.step / self.total_steps
         k = math.log(self.start_temp / self.end_temp)
         t = self.start_temp * math.exp(-k * x)
         return t
