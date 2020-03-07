@@ -65,8 +65,9 @@ class MergeAssembler(GraphAssembler):
         mappings_B = []
         for node in graph:
             targets = [x for x in graph if x != node]
-            allPaths = nx.all_simple_paths(graph, source = node, target = targets, cutoff = cutoff)
-            for path in allPaths:
+            nx_paths = nx.all_simple_paths(graph, source = node, target = targets, cutoff = cutoff)
+            all_paths = list(nx_paths) + [[node]]
+            for path in all_paths:
                 (pathStringIds, pathStringNames) = self.node_ids_to_lcs_string(path, graph)
                 matchA = LCS(stringANames, pathStringNames)
                 matchB = LCS(stringBNames, pathStringNames)
@@ -78,16 +79,13 @@ class MergeAssembler(GraphAssembler):
                     mappings_B.append(mapping)
 
         maximum_mapping = {}
-        # print('mappings', mappings_A, mappings_B)
         if len(mappings_A) + len(mappings_B) > 0:
-            maximum_mapping = max(*mappings_A, *mappings_B, key = len)
-        # print(dict(maximum_mapping))
+            maximum_mapping = max({}, *mappings_A, *mappings_B, key = len)
         for mapA in mappings_A:
             for mapB in mappings_B:
                 if self.is_mapping_compatible(mapA, mapB, pathAIds):
                     new_max = OrderedDict(list(mapA.items()) + list(mapB.items()))
                     if len(new_max) > len(maximum_mapping):
-                        # print('merged', dict(mapA), dict(mapB))
                         maximum_mapping = new_max
         return maximum_mapping
     
@@ -110,8 +108,6 @@ class MergeAssembler(GraphAssembler):
     
     def merge_fact_subgraph(self, graph, subGraph, mapping):
         # TODO fix merging - doesn't always respect facts in reverse ordered regions
-        # print(len(graph))
-        # print('mapping', dict(mapping))
         for node_id in subGraph:
             mapped_id = node_id if not node_id in mapping else mapping[node_id]
             if mapped_id not in graph:
@@ -133,7 +129,6 @@ class MergeAssembler(GraphAssembler):
             mapping = self.get_max_subgraph_mapping(graph, region.graph, region.path_node_ids)
             region.apply_node_mapping(mapping) # TODO
             self.merge_fact_subgraph(graph, subgraph, mapping)
-        # print('finally merged to length', len(self.graph))
     
     def get_random_node_instance(self, graph, node_name):
         nodes = [x for x, y in graph.nodes(data = 'data') if y.node_name == node_name]
