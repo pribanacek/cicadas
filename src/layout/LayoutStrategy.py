@@ -14,9 +14,9 @@ class LayoutStrategy(ABC):
         percent = round(100 * progress)
         if self.last_progress // interval != percent // interval:
             self.last_progress = percent
-            print('\r optimizing layout... %s%%' % percent, end = '')
-            if progress >= 1:
-                print('\n')
+            print('\rOptimizing layout... %s%%' % percent, end = '')
+            if percent >= 100:
+                print()
     
     def initialise_graph_set(self, graph, n):
         graphs = []
@@ -117,15 +117,19 @@ class LayoutConvexPoly(LayoutStrategy):
     def optimize_layout(self, graph, output_number):
         region = graph.regions[0]
         radius = min(*graph.dimensions) * 0.4
-        graph_set = self.initialise_graph_set(graph, len(graph.graph))
-        for i in range(len(graph_set)):
-            permutation = i
-            positions = region.uniform_layout(radius, permutation = permutation)
-            for node_id, pos in positions.items():
-                graph_set[i].set_node_position(node_id, pos)
+        n = len(graph.graph)
+        graph_set = self.initialise_graph_set(graph, n ** 2)
+        for i in range(n):
+            for j in range(n):
+                g = graph_set[i * n + j]
+                angle_offset = math.pi * j / (2 * n)
+                positions = region.uniform_layout(radius, permutation = i, angle_offset = angle_offset)
+                for node_id, pos in positions.items():
+                    g.set_node_position(node_id, pos)
+                g.recentre_nodes()
         best_graphs = list(sorted(graph_set, key = lambda x : x.energy()))
         if output_number > len(best_graphs):
             warn('%s candidate diagrams were requested, but only %s are available' % (output_number, len(best_graphs)))
-        n = min(output_number, len(best_graphs))
-        result_graphs = best_graphs[0:n]
+        k = min(output_number, len(best_graphs))
+        result_graphs = best_graphs[0:k]
         return (result_graphs, [best_graphs[0]])

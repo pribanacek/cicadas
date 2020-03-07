@@ -50,7 +50,7 @@ class Region(ABC):
     def is_identity(self):
         pass
     
-    def uniform_layout(self, radius, offset = (0, 0), permutation = 0):
+    def uniform_layout(self, radius, offset = (0, 0), permutation = 0, angle_offset = 0):
         offset_x, offset_y = offset
         nodes = self.ordered_nodes()
         if permutation > 0:
@@ -60,8 +60,8 @@ class Region(ABC):
         angle_increment = 2 * math.pi / n
         positions = {}
         for node_id in nodes:
-            x = radius * math.cos(angle) + offset_x
-            y = radius * math.sin(angle) + offset_y
+            x = radius * math.cos(angle + angle_offset) + offset_x
+            y = radius * math.sin(angle + angle_offset) + offset_y
             angle += angle_increment
             positions[node_id] = np.array((x, y))
         return positions
