@@ -2,7 +2,7 @@ import math, random, time
 import numpy as np
 from abc import ABC, abstractmethod
 from src.util.Logging import warn
-from .Cooling import LinearCooling, ExpCooling
+from .Cooling import LinearCooling, ExpCooling, SigmoidCooling
 
 GRAPH_ENERGY = lambda x : x.energy()
 
@@ -27,7 +27,7 @@ class LayoutStrategy(ABC):
         return graphs
 
     @abstractmethod
-    def optimize_layout(self, graph, output_number):
+    def optimize_layout(self, graph, output_number, quality):
         pass
 
 
@@ -50,10 +50,14 @@ class LayoutSimulatedAnnealing(LayoutStrategy):
                 return True
         return False
     
-    def optimize_layout(self, graph, output_number):
+    def optimize_layout(self, graph, output_number, quality):
+        # x = quality / 4
+        # steps = 250 * (x % 1) + 250
+        # resets = math.floor(x)
+        # print(steps, resets)
         dimensions = graph.dimensions
-        cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = 1000, resets = 0)
-        n = output_number + 1
+        cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = 350, resets = 1)
+        n = output_number + 2
         best_graphs = self.initialise_graph_set(graph, n)
         best_graph = None
         graph_history = [graph]
@@ -67,9 +71,11 @@ class LayoutSimulatedAnnealing(LayoutStrategy):
                 E2 = new_graphs[i].energy()
                 if best_graph == None or E2 < best_graph.energy():
                     best_graph = new_graphs[i]
-                    graph_history.append(best_graph)
+                    graph_history.append(graph)
                 if self.should_transition(E1, E2, cooling.get_temp()):
                     best_graphs[i] = new_graphs[i]
+                    if i == 0:
+                        graph_history.append(graph)
             cooling.cool()
             self.print_progress(cooling.progress(), interval = 2)
         
@@ -88,7 +94,7 @@ class LayoutGenetic(LayoutStrategy):
         radius = temp / self.INITIAL_TEMPERATURE * factor
         return radius
     
-    def optimize_layout(self, graph, output_number):
+    def optimize_layout(self, graph, output_number, quality):
         dimensions = graph.dimensions
         cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = 1000, resets = 0)
         n = max(output_number, 4) + 1
@@ -115,7 +121,7 @@ class LayoutGenetic(LayoutStrategy):
 
 
 class LayoutConvexPoly(LayoutStrategy):
-    def optimize_layout(self, graph, output_number):
+    def optimize_layout(self, graph, output_number, quality):
         region = graph.regions[0]
         radius = min(*graph.dimensions) * 0.4
         n = len(graph.graph)

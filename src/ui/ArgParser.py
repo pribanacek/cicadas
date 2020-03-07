@@ -23,6 +23,14 @@ arg_parser.add_argument('-n',
     default = 1
 )
 
+arg_parser.add_argument('-q', '--quality',
+    help = 'adjust running time to affect quality. acceptable are integers > 0. default = 5',
+    action = 'store',
+    type = int,
+    required = False,
+    default = 5
+)
+
 # arg_parser.add_argument('-s', '--strategy',
 #     help = 'layout strategy to use',
 #     action = 'store',

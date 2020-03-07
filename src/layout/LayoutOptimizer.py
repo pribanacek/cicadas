@@ -2,7 +2,7 @@ import math, random, time
 import numpy as np
 from .LayoutStrategy import LayoutConvexPoly, LayoutGenetic, LayoutSimulatedAnnealing
 
-def optimize_layout(graph, output_number):
+def optimize_layout(graph, output_number, quality):
     strategy = None
     # if len(graph.regions) == 0:
     #     pass
@@ -11,4 +11,4 @@ def optimize_layout(graph, output_number):
     else:
         # strategy = LayoutGenetic()
         strategy = LayoutSimulatedAnnealing()
-    return strategy.optimize_layout(graph, output_number)
+    return strategy.optimize_layout(graph, output_number, quality)
