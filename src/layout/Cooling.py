@@ -40,3 +40,10 @@ class ExpCooling(Cooling):
         k = math.log(self.start_temp / self.end_temp)
         t = self.start_temp * math.exp(-k * x)
         return t
+
+class SigmoidCooling(Cooling):
+    def get_temp(self):
+        x = self.step / self.total_steps
+        k = 10
+        t = self.start_temp * (1 + math.exp(k * x - k / 2))
+        return t
