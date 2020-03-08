@@ -2,7 +2,7 @@ size 6, 6
 
 f_1:  Y  -> X_1
 f_2:  Y  -> X_2
-f:    Y  -> XX
+f:    Y  -> XX  (dashed)
 pi_1: XX -> X_1
 pi_2: XX -> X_2
 
@@ -12,5 +12,3 @@ pi_2 . f = f_2
 label pi_1 : [$\pi_1$]
 label pi_2 : [$\pi_2$]
 label XX   : [$X_1 \times X_2$]
-
-style f : (dashed)
