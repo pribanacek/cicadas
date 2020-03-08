@@ -1,4 +1,4 @@
-size 16, 16
+size 12, 12
 
 a[str]                              : A -> B
 b[$Tf^\dagger$]                     : B -> C
