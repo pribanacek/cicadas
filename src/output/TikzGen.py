@@ -31,7 +31,7 @@ def get_styles_string(styles):
         return ''
     styleString = '['
     for style in styles:
-        styleString += 'commutative diagrams/' + style + ','
+        styleString += 'commutative diagrams/%s,' % style.strip()
     styleString = styleString[:-1] + ']'
     return styleString
 
