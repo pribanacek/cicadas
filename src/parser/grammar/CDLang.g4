@@ -1,13 +1,13 @@
 grammar CDLang;
 
 // Parser Rules
-start          : SEPARATOR? statement+;
-statement      : (size | arrow | composition | label | style) (SEPARATOR | EOF);
+start          : SEPARATOR* statement+;
+statement      : (size | arrow | composition | label | style) (SEPARATOR+ | EOF);
 size           : 'size' NUMBER ',' NUMBER;
 arrow          : labelledID ':' labelledID '->' labelledID STYLE_LIST?;
 composition    : path '=' (path | ID) labelText?;
-label          : 'label ' IDENTIFIER ':' labelText;
-style          : 'style ' IDENTIFIER ':' STYLE_LIST;
+label          : 'label' IDENTIFIER ':' labelText;
+style          : 'style' IDENTIFIER ':' STYLE_LIST;
 // impose         : 'impose ' IDENTIFIER ':' DIRECTION;
 path           : IDENTIFIER ('.' IDENTIFIER)*;
 labelledID     : IDENTIFIER labelText?;
