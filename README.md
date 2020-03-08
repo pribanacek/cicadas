@@ -104,6 +104,12 @@ The dimensions specifying the width and height of the output diagram can be decl
 
 Here the first number is the width in centimetres, and the second is the height in centimetres. Other units of measurement are currently unsupported.
 
+### Comments
+
+A comment in this language begins with `//` and ends with the end of the line.
+
+`f: A -> B // this is a comment`
+
 ## Example
 
 ![Monad diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Coherence_law_for_the_unit_of_a_monad.svg/150px-Coherence_law_for_the_unit_of_a_monad.svg.png)
