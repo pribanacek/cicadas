@@ -16,7 +16,7 @@ or possibly (depending on installation)
 
 ### Options
 
-```shell
+```
 usage: main.py [-h] [-o O] [-n N] [-p] [--suppress-warnings] file
 
 positional arguments:
