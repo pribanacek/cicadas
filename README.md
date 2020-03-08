@@ -1,5 +1,9 @@
 # CICADAS (self-ConstructIng CommutAtive DiAgramS)
 
+Tired of laboriously inputting every coordinate for every node for your commutative diagram? Tired of having to change the whole layout when you decide you want to add something? CICADAS is a command-line tool designed to solve all your commutative diagram typesetting needs!
+
+It offers a unique language designed for describing commutative diagrams at a higher level, automatically plans the diagram and generates a sensible layout for it using simulated annealing. It then outputs the LaTeX representation (using tikz-cd) of that diagram, which you can paste into your existing document.
+
 ## Installation
 
 Run `pip install cicadas`
@@ -8,13 +12,13 @@ Run `pip install cicadas`
 
 Run with:
 
-`cicadas [options] <filename>`
+`cicadas [options] <filename>` (still TODO)
 
 or possibly (depending on installation)
 
 `python main.py [options] <filename>`
 
-### Options
+The layout generation stage uses a random process, so you can expect each run to produce slightly different results (or use the `-n` option to generate a few and pick your favourite one).
 
 ```
 usage: main.py [-h] [-o O] [-n N] [-p] [--suppress-warnings] file
