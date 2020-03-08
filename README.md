@@ -17,25 +17,19 @@ or possibly (depending on installation)
 ### Options
 
 ```shell
-usage: main.py [-h] [-o O] [-n N] [-q QUALITY] [-p] [-c] [--suppress-warnings]
-               filename
-
-CICADAS description
+usage: main.py [-h] [-o O] [-n N] [-p] [--suppress-warnings] file
 
 positional arguments:
-  filename              the input file to be parsed
+  file                 the input file to be parsed
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -o O                  output destination (will generate a .pdf and a .tex
-                        file of that name). Default: './output'
-  -n N                  number of candidate diagrams to generate
-  -q QUALITY, --quality QUALITY
-                        adjust running time to affect quality. acceptable are
-                        integers > 0. default = 5
-  -p, --preview         automatically open generated pdf when finished
-  -c, --auto-clipboard  automatically copy tikz output to clipboard
-  --suppress-warnings   suppresses warnings
+  -h, --help           show this help message and exit
+  -o O                 output destination (will generate a .pdf and a .tex
+                       file of that name). Default = './output'
+  -n N                 output the best N candidate diagrams. Default = 1
+  -p, --preview        automatically open generated pdf in the web browser
+                       when finished
+  --suppress-warnings  suppresses warnings
 ```
 
 ## Language
