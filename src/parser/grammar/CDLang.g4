@@ -21,7 +21,7 @@ COMMENT        : '//' ~('\n' | '\r')* NEWLINE? -> skip;
 ID             : 'ID';
 // MEASUREMENT    : NUMBER ('pt' | 'mm' | 'cm' | 'in' | 'ex' | 'em' | 'mu')?;
 NUMBER         : [0-9]*'.'?[0-9]+;
-IDENTIFIER     : [_a-zA-Z0-9]+;
+IDENTIFIER     : [_a-zA-Z][_a-zA-Z0-9]*;
 STYLE_LIST     : '(' [-='_ a-zA-Z0-9]+ (',' [-='_ a-zA-Z0-9]+)* ')';
 SEPARATOR      : (NEWLINE | ';')+;
 WHITESPACE     : (' ' | '\t') -> skip;
