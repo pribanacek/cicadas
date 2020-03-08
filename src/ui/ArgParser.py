@@ -2,34 +2,34 @@ import argparse
 
 DESCRIPTION = 'CICADAS description.'
 
-arg_parser = argparse.ArgumentParser(description = 'CICADAS description')
+arg_parser = argparse.ArgumentParser(description = None)
 
-arg_parser.add_argument('filename',
+arg_parser.add_argument('file',
     help = 'the input file to be parsed',
 )
 
 arg_parser.add_argument('-o',
-    help = 'output destination (will generate a .pdf and a .tex file of that name). Default: \'./output\'',
+    help = 'output destination (will generate a .pdf and a .tex file of that name). Default = \'./output\'',
     action = 'store',
     required = False,
     default = './output'
 )
 
 arg_parser.add_argument('-n',
-    help = 'number of candidate diagrams to generate',
+    help = 'output the best N candidate diagrams. Default = 1',
     action = 'store',
     type = int,
     required = False,
     default = 1
 )
 
-arg_parser.add_argument('-q', '--quality',
-    help = 'adjust running time to affect quality. acceptable are integers > 0. default = 5',
-    action = 'store',
-    type = int,
-    required = False,
-    default = 5
-)
+# arg_parser.add_argument('-q', '--quality',
+#     help = 'adjust running time to affect quality. acceptable are integers > 0. default = 5',
+#     action = 'store',
+#     type = int,
+#     required = False,
+#     default = 5
+# )
 
 # arg_parser.add_argument('-s', '--strategy',
 #     help = 'layout strategy to use',
@@ -40,14 +40,14 @@ arg_parser.add_argument('-q', '--quality',
 # )
 
 arg_parser.add_argument('-p', '--preview',
-    help = 'automatically open generated pdf when finished',
+    help = 'automatically open generated pdf in the web browser when finished',
     action = 'store_true', required = False
 )
 
-arg_parser.add_argument('-c', '--auto-clipboard',
-    help = 'automatically copy tikz output to clipboard',
-    action = 'store_true', required = False
-)
+# arg_parser.add_argument('-c', '--auto-clipboard',
+#     help = 'automatically copy tikz output to clipboard',
+#     action = 'store_true', required = False
+# )
 
 # arg_parser.add_argument('--silent',
 #     help = 'suppress all messages',

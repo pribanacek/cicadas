@@ -19,17 +19,17 @@ import src.tests.TikzGeneration
 import cProfile
 
 
-def main(input_file, output_path, n, preview, clipboard, quality):
+def main(input_file, output_path, n, preview, clipboard = False, quality = 5):
     graph_assembler = Parser.parse(input_file)
     GraphMeasure.measure(graph_assembler.nodes, graph_assembler.edges, graph_assembler.regions)
     graph = graph_assembler.getGraph()
     (min_graphs, graphs) = optimize_layout(graph, n, quality)
 
-    if os.environ['CICADAS_VIZ'] == 'True':
-        import src.visualisation.animate as animate
-        animate.start_animation_thread(graphs)
-        # import src.visualisation.interactive as interactive
-        # interactive.start_animation_thread(min_graphs[0])
+    # if os.environ['CICADAS_VIZ'] == 'True':
+    #     # import src.visualisation.animate as animate
+    #     # animate.start_animation_thread(graphs)
+    #     import src.visualisation.interactive as interactive
+    #     interactive.start_animation_thread(min_graphs[0])
 
     result = generate_tikz(min_graphs)
     generatePDF(result, output_path)
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         Logging.suppress_warnings = True
 
     try:
-        main(args.filename, args.o, args.n, args.preview, args.auto_clipboard, args.quality)
+        main(args.file, args.o, args.n, args.preview)
     except FileNotFoundError as e:
         print(e)
     except ParsingException as e:
