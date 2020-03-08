@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="cicadas",
-    version="1.0.0a1",
+    version="1.0.0a2",
     author="Jakub Priban",
     author_email="jp775@cam.ac.uk",
     description="Self-constructing commutative diagrams",
