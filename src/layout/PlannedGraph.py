@@ -221,10 +221,10 @@ class PlannedGraph:
             'edge-lengths': 2 * self.edge_lengths(),
             'sharp-angles': 5000 * self.sharp_angles(),
             'edge-diffs': 10 * self.edge_differences(),
-            'horizontalness': 10000 * self.horizontalness(),
+            'horizontalness': 200 * self.horizontalness(),
             'node-edge-dists': 25 * self.node_edge_distances(),
             'edge-crossings': 200000 * self.edge_intersections(),
-            'arrow-dirs': 50 * self.overall_arrow_direction(),
+            'arrow-dirs': 10 * self.overall_arrow_direction(),
             'label-overlaps': 500 * self.label_overlaps(),
             'edge-label-overlaps': 500 * self.edge_label_overlaps()
         }
@@ -338,16 +338,17 @@ class PlannedGraph:
                         total += rating
                         self.increase_node_probability(node_id, 1 + rating)
         return total
-    
+
     def horizontalness(self):
         with np.errstate(all = 'ignore'):
             diff = abs(self.edge_endpoints[:, 1] - self.edge_endpoints[:, 0])
+            lengths = diff[:, 1] ** 2 + diff[:, 0] ** 2
             gradients_x = np.nan_to_num(diff[:, 1] / diff[:, 0], nan = 0)
             gradients_y = 1 / gradients_x
-            gradients = np.minimum(gradients_x, gradients_y) ** 2
+            a = np.minimum(gradients_x, gradients_y) * lengths
+            gradients = np.nan_to_num(2 * np.sqrt(a * (1 - a)), nan = 0)
             nan_check(gradients)
-            # total = gradients.sum()
-            total = gradients.min()
+            total = gradients.sum()
             return total
     
     def edge_intersections(self):
