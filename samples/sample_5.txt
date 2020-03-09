@@ -11,7 +11,3 @@ n: C -> E
 g . f = k . h 
 l = m . f
 m = n . g
-
-
-// a = a . b
-// hard cap on fact length
