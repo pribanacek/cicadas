@@ -83,12 +83,21 @@ class MergeAssembler(GraphAssembler):
         maximum_mapping = {}
         if len(mappings_A) + len(mappings_B) > 0:
             maximum_mapping = max({}, *mappings_A, *mappings_B, key = len)
+        ties = [maximum_mapping]
         for mapA in mappings_A:
             for mapB in mappings_B:
                 if self.is_mapping_compatible(mapA, mapB, pathAIds, stringAIds, stringBIds):
                     new_max = OrderedDict(list(mapA.items()) + list(mapB.items()))
                     if len(new_max) > len(maximum_mapping):
                         maximum_mapping = new_max
+                        ties = [maximum_mapping]
+                    elif len(new_max) == len(maximum_mapping):
+                        ties.append(new_max)
+        # prefer merge if it's the entirety of either path
+        for m in ties:
+            x = list(m.keys())[::2]
+            if x == pathAIds or x == pathBIds:
+                return m
         return maximum_mapping
     
     def is_mapping_compatible(self, mapA, mapB, pathAIds, stringA, stringB):
