@@ -18,8 +18,6 @@ or possibly (depending on installation)
 
 `python main.py [options] <filename>`
 
-The layout generation stage uses a random process, so you can expect each run to produce slightly different results (or use the `-n` option to generate a few and pick your favourite one).
-
 ```
 usage: main.py [-h] [-o O] [-n N] [-p] [--suppress-warnings] file
 
@@ -36,31 +34,35 @@ optional arguments:
   --suppress-warnings  suppresses warnings
 ```
 
+The layout generation stage uses a random process, so you can expect each run to produce slightly different results (or use the `-n` option to generate a few and pick your favourite one).
+
+The output LaTeX relies on the `tikz-cd` and `amsmath` packages, so be sure to include them in any document you wish to use the output in. Some arrow styles also require the tikz library `decorations.pathmorphing`.
+
 ## Language
 
 A CICADAS lanaguage file consists of a sequence of declarations, separated by line breaks and/or semicolons.
 
-### Arrows
+### Morphisms
 
-Arrow declarations define which nodes and arrows appear in your diagram. They are declared with the following syntax:
+Morphism declarations define which objects and morphisms appear in your diagram. They are declared with the following syntax:
 
 `f: A -> B`
 
-Here `f` is the arrow identifier, while `A` and `B` are node identifiers (higher order morphisms are currently unsupported). These identifiers may be referred to later in further arrow, fact, label or style declarations. Arrow declarations instantiate nodes and edges, so an arrow defining them must come before any other declaration that uses them.
+Here `f` is the morphism identifier, while `A` and `B` are object identifiers (higher order morphisms are currently unsupported). These identifiers may be referred to later in further morphism, fact, label or style declarations. Morphism declarations instantiate objects and morphisms, so a morphism defining them must come before any other declaration that uses them.
 
 An identifier may consist of any combination of uppercase letters, lowercase letters and underscores. They may also contain digits, as long as the first character of the identifier is not a digit. Reserved keywords which may not be used as identifiers are `size`, `label`, `style` and `ID`.
 
-If your diagram contains multiple instances of particular nodes or arrows, these only need to be declared once. The number of instances of each will be inferred from the declared facts that the diagram should represent.
+If your diagram contains multiple nodes representing the same object (or multiple arrows representing the same morphism), these only need to be declared once. The number of instances of each will be inferred from the declared facts that the diagram should represent.
 
 ### Facts
 
 Fact declarations allow you to define how the commutative diagram will be structured, namely which paths in the diagram should be equal.
 
-Paths are dot-separated lists of arrow identifiers (which must already be instantiated) and a fact declaration is a pair of paths, separated by the equals symbol. A possible fact declaration may look like the following:
+Paths are dot-separated lists of morphism identifiers (which must already be instantiated) and a fact declaration is a pair of paths, separated by the equals symbol. A possible fact declaration may look like the following:
 
 `g . f = h`
 
-You may also declare that a certain composition of arrows is the identity (so should yield a loop in the diagram) by using the `ID` keyword, instead of the second path:
+You may also declare that a certain composition of morphisms is the identity (so should yield a loop in the diagram) by using the `ID` keyword, instead of the second path:
 
 `h . g . f = ID`
 
@@ -70,15 +72,15 @@ Please note that these declarations are used as heuristics to plan the structure
 
 ### Labels
 
-Nodes and arrows without explicitly defined labels will by default be labelled with their identifier text in inline math mode. If the identifier begins with an underscore, there is no default label.
+Objects and morphisms without explicitly defined labels will by default be labelled with their identifier text in LaTeX inline math mode. If the identifier begins with an underscore, there is no default label.
 
 Labels may be defined with label declarations, such as:
 
 `label T2 : [$T^2$]`
 
-Here T2 is a node or arrow identifier and the text inside the square brackets is the label. This text is passed directly into the LaTeX output, so normal LaTeX restrictions on this apply.
+Here T2 is an object or morphism identifier and the text inside the square brackets is the label. This text is passed directly into the LaTeX output, so normal LaTeX restrictions on this apply.
 
-Labels may also be defined inline within arrow declarations:
+Labels may also be defined inline within morphism declarations:
 
 `f[$f^n$]: X[$X^n$] -> Y[$Y^n$]`
 
@@ -94,9 +96,9 @@ A style declaration has the following form:
 
 `style f : (dotted, harpoon)`
 
-Here `f` is an arrow identifier and inside the round brackets is a comma-separated list of all the styles that should be applied to `f`.
+Here `f` is a morphism identifier and inside the round brackets is a comma-separated list of all the styles that should be applied to `f`.
 
-Styles may also be defined inline in arrow declarations, which may be combined with inline label definitions:
+Styles may also be defined inline in morphism declarations, which may be combined with inline label definitions:
 
 `f: A -> B (dashed)`
 
@@ -118,7 +120,7 @@ A comment in this language begins with `//` and ends with the end of the line.
 
 ![Monad diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Coherence_law_for_the_unit_of_a_monad.svg/150px-Coherence_law_for_the_unit_of_a_monad.svg.png)
 
-The commutative diagram representing the monad category above may be expressed in the CICADAS language with the following:
+The commutative diagram representing the identity laws of monads above may be expressed in the CICADAS language with the following:
 
 ```
 size 4.0, 4.0
