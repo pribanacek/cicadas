@@ -1,0 +1,7 @@
+size 5, 5
+
+f: A -> B
+g: B -> A
+h: A -> A
+
+g . f . g . f . g . f = h

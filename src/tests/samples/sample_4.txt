@@ -1,0 +1,11 @@
+size 4, 4
+
+f: A -> B
+g: B -> A
+
+id_A: A -> A
+id_B: B -> B
+
+id_A = ID
+id_B = ID
+g . f = ID
