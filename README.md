@@ -13,10 +13,10 @@ Please note that the tool only works with Python 3 and also requires pdflatex to
 ## Usage
 
 Run with:
-
+<!-- 
 `cicadas [options] <filename>` (still TODO)
 
-or possibly (depending on installation)
+or possibly (depending on installation) -->
 
 `python main.py [options] <filename>`
 
