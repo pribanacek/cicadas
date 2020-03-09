@@ -19,7 +19,7 @@ or possibly (depending on installation)
 `python main.py [options] <filename>`
 
 ```
-usage: main.py [-h] [-o O] [-n N] [-p] [--suppress-warnings] file
+usage: python main.py [-h] [-o O] [-n N] [-p] [--suppress-warnings] file
 
 positional arguments:
   file                 the input file to be parsed
