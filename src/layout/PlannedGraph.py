@@ -246,8 +246,17 @@ class PlannedGraph:
         L = 2
         total = 0
         m = 0
-        region_positions = [region.label_position for region in self.regions if not region.label.empty()]
-        nodeValues = list(self.get_positions().values()) + region_positions
+        # region_positions = np.zeros((4 * len(self.regions), 2))
+        # for i in range(len(self.regions)):
+        #     region = self.regions[i]
+        #     pos = region.label_position
+        #     dims = region.label.label_size
+        #     region_positions[4 * i] = pos + dims / 2
+        #     region_positions[4 * i + 1] = pos - dims / 2
+        #     region_positions[4 * i + 2] = pos + (dims / 2 * np.array((1, -1)))
+        #     region_positions[4 * i + 3] = pos - (dims / 2 * np.array((1, -1)))
+            
+        nodeValues = list(self.get_positions().values())
         for i in range(len(nodeValues)):
             for j in range(i + 1, len(nodeValues)):
                 (x1, y1) = nodeValues[i]
@@ -258,7 +267,17 @@ class PlannedGraph:
                     total += 1 / d2
                 else:
                     total += ceiling
-        # print(m)
+    
+        # for node in nodeValues:
+        #     for pos in region_positions:
+        #         (x1, y1) = node
+        #         (x2, y2) = pos
+        #         d2 = abs(x2 - x1) ** L + abs(y2 - y1) ** L
+        #         if d2 > 0:
+        #             m = max(m, 1 / d2)
+        #             total += 1 / d2
+        #         else:
+        #             total += ceiling
         return total
     
     def border_distance(self):
@@ -313,6 +332,26 @@ class PlannedGraph:
                         total += BIG_NUMBER
                     else:
                         total += 1 / d2
+        # region_positions = np.zeros((4 * len(self.regions), 2))
+        # for i in range(len(self.regions)):
+        #     region = self.regions[i]
+        #     pos = region.label_position
+        #     dims = region.label.label_size
+        #     region_positions[4 * i] = pos + dims / 2
+        #     region_positions[4 * i + 1] = pos - dims / 2
+        #     region_positions[4 * i + 2] = pos + (dims / 2 * np.array((1, -1)))
+        #     region_positions[4 * i + 3] = pos - (dims / 2 * np.array((1, -1)))
+
+        # for (start, end, _, _) in self.edge_data:
+        #     for rpos in region_positions:
+        #         p1 = self.node_positions[start]
+        #         p2 = self.node_positions[end]
+        #         node_pos = self.node_positions[node_id]
+        #         d2 = distance_segment_point(p1, p2, node_pos)
+        #         if d2 == 0:
+        #             total += BIG_NUMBER
+        #         else:
+        #             total += 1 / d2
         return total
 
     def sharp_angles(self):
