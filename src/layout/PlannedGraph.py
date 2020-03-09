@@ -346,7 +346,12 @@ class PlannedGraph:
             gradients_x = np.nan_to_num(diff[:, 1] / diff[:, 0], nan = 0)
             gradients_y = 1 / gradients_x
             a = np.minimum(gradients_x, gradients_y) * lengths
-            gradients = np.nan_to_num(2 * np.sqrt(a * (1 - a)), nan = 0)
+            allow_diagonal = len(self.graph) >= 3
+            gradients = None
+            if allow_diagonal:
+                gradients = np.nan_to_num(2 * np.sqrt(a * (1 - a)), nan = 0)
+            else:
+                gradients = np.nan_to_num(np.sqrt(a), nan = 0)
             nan_check(gradients)
             total = gradients.sum()
             return total
