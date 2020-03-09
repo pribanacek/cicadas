@@ -15,6 +15,8 @@ def LCS(str1, str2):
     return None
 
 def get_node_id_mapping(sourceIds, targetIds, match):
+    if match == None:
+        return None
     mapping = OrderedDict()
     for i in range(match.size):
         a = sourceIds[match.a + i]
@@ -72,27 +74,44 @@ class MergeAssembler(GraphAssembler):
                 (pathStringIds, pathStringNames) = self.node_ids_to_lcs_string(path, graph)
                 matchA = LCS(stringANames, pathStringNames)
                 matchB = LCS(stringBNames, pathStringNames)
-                if matchA != None:
-                    mapping = get_node_id_mapping(stringAIds, pathStringIds, matchA)
-                    mappings_A.append(mapping)
-                if matchB != None:
-                    mapping = get_node_id_mapping(stringBIds, pathStringIds, matchB)
-                    mappings_B.append(mapping)
-
+                mapping_A = get_node_id_mapping(stringAIds, pathStringIds, matchA)
+                mapping_B = get_node_id_mapping(stringBIds, pathStringIds, matchB)
+                if mapping_A != None:
+                    mappings_A.append(mapping_A)
+                if mapping_B != None:
+                    mappings_B.append(mapping_B)
         maximum_mapping = {}
         if len(mappings_A) + len(mappings_B) > 0:
             maximum_mapping = max({}, *mappings_A, *mappings_B, key = len)
         for mapA in mappings_A:
             for mapB in mappings_B:
-                if self.is_mapping_compatible(mapA, mapB, pathAIds):
+                if self.is_mapping_compatible(mapA, mapB, pathAIds, stringAIds, stringBIds):
                     new_max = OrderedDict(list(mapA.items()) + list(mapB.items()))
                     if len(new_max) > len(maximum_mapping):
                         maximum_mapping = new_max
         return maximum_mapping
     
-    def is_mapping_compatible(self, mapA, mapB, pathAIds):
+    def is_mapping_compatible(self, mapA, mapB, pathAIds, stringA, stringB):
+        maps_adjacent = False
+        for ka in mapA.keys():
+            for kb in mapB.keys():
+                nameA = ka.split('-')[0]
+                nameB = kb.split('-')[0]
+                if nameA == nameB:
+                    maps_adjacent = True
+                    break
+        
+        if not maps_adjacent:
+            return False
+
         caiusA = set(mapA.keys())
         caiusB = set(mapB.keys())
+        keys_union = caiusA.union(caiusB)
+        if len(stringA) > 2:
+            for i in range(len(stringA) - 2):
+                if stringA[i] in keys_union and stringA[i + 2] in keys_union and not stringA[i + 1] in keys_union:
+                    return False
+
         for k in caiusA.intersection(caiusB):
             if mapA[k] != mapB[k]:
                 return False
@@ -103,6 +122,10 @@ class MergeAssembler(GraphAssembler):
             if len(listA) > 1 and len(listB) > 1 and listA[1] == listB[1]:
                 # must take different routes initially
                 return False
+        # if listA[-1] == pathAIds[-1]:
+        #     if len(listA) > 1 and len(listB) > 1 and listA[-2] == listB[-2]:
+        #         # must take different routes initially
+        #         return False
         elif listA[0] == listB[0]: # if it's not the path start node, that can't share a start node
             return False
         return True
