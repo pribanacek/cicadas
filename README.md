@@ -6,7 +6,9 @@ It offers a unique language designed for describing commutative diagrams at a hi
 
 ## Installation
 
-Run `pip install cicadas`
+Run `pip install cicadas` to install the tool.
+
+Please note that the tool only works with Python 3 and also requires pdflatex to be installed.
 
 ## Usage
 
