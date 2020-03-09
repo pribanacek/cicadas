@@ -130,7 +130,6 @@ nT[$\eta T$] : T -> T2[$T^2$]
 Tn[$T\eta$]  : T -> T2
 mu[$\mu$]    : T2 -> T
 
-mu . Tn = mu . nT
 mu . Tn = _eq
 mu . nT = _eq
 ```
