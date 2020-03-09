@@ -14,7 +14,7 @@ class LayoutStrategy(ABC):
         percent = round(100 * progress)
         if self.last_progress // interval != percent // interval:
             self.last_progress = percent
-            print('\rOptimizing layout... %s%%' % percent, end = '')
+            print('\rGenerating layout... %s%%' % percent, end = '')
             if percent >= 100:
                 print()
     
@@ -139,4 +139,5 @@ class LayoutConvexPoly(LayoutStrategy):
             warn('%s candidate diagrams were requested, but only %s are available' % (output_number, len(best_graphs)))
         k = min(output_number, len(best_graphs))
         result_graphs = best_graphs[0:k]
+        self.print_progress(1, 1)
         return (result_graphs, [best_graphs[0]])
