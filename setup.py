@@ -19,4 +19,9 @@ setup(
         'Bug Reports': 'https://github.com/pribanacek/cicadas/issues',
         'Source': 'https://github.com/pribanacek/cicadas',
     },
+    install_requires=[
+        'numpy>=1.17.4',
+        'antlr4-python3-runtime==4.7.2',
+        'networkx>=2.4'
+    ]
 )
