@@ -21,6 +21,8 @@ def generatePDF(tex, filepath, compiler_args = []):
     basename = os.path.basename(filepath)
     if basename == '':
         basename = 'output'
+    if dest_dir == '':
+        dest_dir = '.'
 
     os.chdir(dest_dir)
 
