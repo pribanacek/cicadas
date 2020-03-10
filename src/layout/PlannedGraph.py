@@ -73,15 +73,67 @@ class Edge:
         self.label.label_size = np.array(size)
 
 
-def ccw(A, B, C):
-    (Ax, Ay) = A
-    (Bx, By) = B
-    (Cx, Cy) = C
-    return (Cy - Ay) * (Bx - Ax) > (By - Ay) * (Cx - Ax)
-
-def intersect(A, B, C, D):
-    return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
-
+def onSegment(p, q, r):
+    px, py = p
+    qx, qy = q
+    rx, ry = r
+    if ((qx <= max(px, rx)) and (qx >= min(px, rx)) and 
+           (qy <= max(py, ry)) and (qy >= min(py, ry))): 
+        return True
+    return False
+  
+def orientation(p, q, r): 
+    px, py = p
+    qx, qy = q
+    rx, ry = r
+    # to find the orientation of an ordered triplet (p,q,r) 
+    # function returns the following values: 
+    # 0 : Colinear points 
+    # 1 : Clockwise points 
+    # 2 : Counterclockwise 
+      
+    # See https://www.geeksforgeeks.org/orientation-3-ordered-points/amp/  
+    # for details of below formula.  
+      
+    val = (float(qy - py) * (rx - qx)) - (float(qx - px) * (ry - qy)) 
+    if (val > 0): 
+        # Clockwise orientation 
+        return 1
+    elif (val < 0): 
+        # Counterclockwise orientation 
+        return 2
+    else: 
+        # Colinear orientation 
+        return 0
+  
+# The main function that returns true if  
+# the line segment 'p1q1' and 'p2q2' intersect. 
+def intersect(p1,q1,p2,q2):
+    # Find the 4 orientations required for  
+    # the general and special cases 
+    o1 = orientation(p1, q1, p2) 
+    o2 = orientation(p1, q1, q2) 
+    o3 = orientation(p2, q2, p1) 
+    o4 = orientation(p2, q2, q1) 
+  
+    # General case 
+    if ((o1 != o2) and (o3 != o4)): 
+        return True
+    # Special Cases 
+    # p1 , q1 and p2 are colinear and p2 lies on segment p1q1 
+    if ((o1 == 0) and onSegment(p1, p2, q1)): 
+        return True
+    # p1 , q1 and q2 are colinear and q2 lies on segment p1q1 
+    if ((o2 == 0) and onSegment(p1, q2, q1)): 
+        return True
+    # p2 , q2 and p1 are colinear and p1 lies on segment p2q2 
+    if ((o3 == 0) and onSegment(p2, p1, q2)): 
+        return True
+    # p2 , q2 and q1 are colinear and q1 lies on segment p2q2 
+    if ((o4 == 0) and onSegment(p2, q1, q2)): 
+        return True
+    # If none of the cases 
+    return False
 
 def nodesSortedByAngles(nodes, centre):
     angles = list(map(lambda x : (x, math.degrees(math.atan2(x.y - centre.y, x.x - centre.x))), nodes))
@@ -101,7 +153,11 @@ class PlannedGraph:
         self.angleValues = []
 
         dimX, dimY = self.dimensions
-        n = len(self.graph)
+        n = math.ceil(math.sqrt(len(self.graph))) + 1
+        if len(self.graph) > 5:
+            n += 1
+        if len(self.graph) > 8:
+            n += 20
         self.quantization = (dimX / n, dimY / n)
 
         node_list = [node_id for node_id, _ in self.node_data]
@@ -180,8 +236,9 @@ class PlannedGraph:
         dx = radius * (random.random() * 2 - 1)
         dy = radius * (random.random() * 2 - 1)
         dxQ, dyQ = planned_graph.quantize_position(dx, dy)
-        if dxQ > 0 and dyQ > 0:
-            dx, dy = dxQ, dyQ
+        # if dxQ > 0 and dyQ > 0:
+        #     dx, dy = dxQ, dyQ
+        dx, dy = dxQ, dyQ
         newX = x + dx
         newY = y + dy
         planned_graph.set_node_position(node_id, (newX, newY))
@@ -225,8 +282,8 @@ class PlannedGraph:
             'node-edge-dists': 25 * self.node_edge_distances(),
             'edge-crossings': 200000 * self.edge_intersections(),
             'arrow-dirs': 10 * self.overall_arrow_direction(),
-            'label-overlaps': 500 * self.label_overlaps(),
-            'edge-label-overlaps': 500 * self.edge_label_overlaps()
+            'label-overlaps': 200000 * self.label_overlaps(),
+            'edge-label-overlaps': 200000 * self.edge_label_overlaps()
         }
         return self._energy_stats
         
