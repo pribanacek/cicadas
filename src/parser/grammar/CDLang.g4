@@ -8,7 +8,6 @@ arrow          : labelledID ':' labelledID '->' labelledID STYLE_LIST?;
 composition    : path '=' (path | ID) labelText?;
 label          : 'label' IDENTIFIER ':' labelText;
 style          : 'style' IDENTIFIER ':' STYLE_LIST;
-// impose         : 'impose ' IDENTIFIER ':' DIRECTION;
 path           : IDENTIFIER ('.' IDENTIFIER)*;
 labelledID     : IDENTIFIER labelText?;
 labelText      : '[' TEXT ']' | '[]';
@@ -17,9 +16,7 @@ labelText      : '[' TEXT ']' | '[]';
 // Lexer Rules
 TEXT           : {self._input.LA(-1) == ord('[')}? (~']' | '\\]')+;
 COMMENT        : '//' ~('\n' | '\r')* NEWLINE? -> skip;
-// DIRECTION      : ('vertical' | 'horizontal');
 ID             : 'ID';
-// MEASUREMENT    : NUMBER ('pt' | 'mm' | 'cm' | 'in' | 'ex' | 'em' | 'mu')?;
 NUMBER         : [0-9]*'.'?[0-9]+;
 IDENTIFIER     : [_a-zA-Z][_a-zA-Z0-9]*;
 STYLE_LIST     : '(' [-='_ a-zA-Z0-9]+ (',' [-='_ a-zA-Z0-9]+)* ')';
