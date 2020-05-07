@@ -8,7 +8,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 FPS = 30
 graph = None
-screen_size = (640, 640)
+screen_size = (720, 320)
 graph_dimensions = (1, 1)
 
 NODE_RADIUS = 5
