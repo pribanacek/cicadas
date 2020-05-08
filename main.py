@@ -13,14 +13,11 @@ import src.layout.GraphMeasure as GraphMeasure
 
 import networkx as nx
 
-import src.tests.LayoutOptimisation
-import src.tests.TikzGeneration
-
 import cProfile
 
 
 def main(input_file, output_path, n, preview, clipboard = False, quality = 5):
-    graph_assembler = Parser.parse(input_file)
+    graph_assembler = Parser.parse_file(input_file)
     GraphMeasure.measure(graph_assembler.nodes, graph_assembler.edges, graph_assembler.regions)
     graph = graph_assembler.getGraph()
     (min_graphs, graphs) = optimize_layout(graph, n, quality)
