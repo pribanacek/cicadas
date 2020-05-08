@@ -101,42 +101,31 @@ class MergeAssembler(GraphAssembler):
         return maximum_mapping
     
     def is_mapping_compatible(self, mapA, mapB, pathAIds, stringA, stringB):
+        listA = list(mapA)
+        listB = list(mapB)
+        start = pathAIds[0]
+        end = pathAIds[-1]
         maps_adjacent = False
-        for ka in mapA.keys():
-            for kb in mapB.keys():
-                nameA = ka.split('-')[0]
-                nameB = kb.split('-')[0]
-                if nameA == nameB:
-                    maps_adjacent = True
-                    break
+        if listA[0] == start and listB[0] == start:
+            maps_adjacent = True
+        if listA[-1] == end and listB[-1] == end:
+            maps_adjacent = True
         
         if not maps_adjacent:
             return False
 
         caiusA = set(mapA.keys())
         caiusB = set(mapB.keys())
-        keys_union = caiusA.union(caiusB)
-        if len(stringA) > 2:
-            for i in range(len(stringA) - 2):
-                if stringA[i] in keys_union and stringA[i + 2] in keys_union and not stringA[i + 1] in keys_union:
-                    return False
-
-        for k in caiusA.intersection(caiusB):
-            if mapA[k] != mapB[k]:
-                return False
-
-        listA = list(mapA)
-        listB = list(mapB)
-        if listA[0] == pathAIds[0]:
-            if len(listA) > 1 and len(listB) > 1 and listA[1] == listB[1]:
-                # must take different routes initially
-                return False
-        # if listA[-1] == pathAIds[-1]:
-        #     if len(listA) > 1 and len(listB) > 1 and listA[-2] == listB[-2]:
-        #         # must take different routes initially
-        #         return False
-        elif listA[0] == listB[0]: # if it's not the path start node, that can't share a start node
+        if len(caiusA) == len(stringA) or len(caiusB) == len(stringB):
+            # this is an issue - not having this breaks monads, but having this introduces the bug with sampleB
             return False
+
+        for ka, va in mapA.items():
+            for kb, vb in mapB.items():
+                if va == vb and ka != kb:
+                    return False
+                elif ka == kb and va != vb:
+                    return False       
         return True
     
     def merge_fact_subgraph(self, graph, subGraph, mapping):
@@ -160,10 +149,10 @@ class MergeAssembler(GraphAssembler):
         for region in regions:
             subgraph = region.graph
             # loops break facts if there are already loops present, so only allow single node merges
-            cutoff = 0 if region.is_identity() and self.graph_contains_loops else None
+            # cutoff = 0 if region.is_identity() and self.graph_contains_loops else None
             if region.is_identity():
                 self.graph_contains_loops = True
-            mapping = self.get_max_subgraph_mapping(graph, region.graph, region.path_node_ids, cutoff = cutoff)
+            mapping = self.get_max_subgraph_mapping(graph, region.graph, region.path_node_ids)
             region.apply_node_mapping(mapping) # TODO
             self.merge_fact_subgraph(graph, subgraph, mapping)
     
