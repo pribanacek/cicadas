@@ -1,7 +1,7 @@
 from src.util.Logging import warn
 from src.util.Exceptions import PathValidationException, NotSupportedException
-from src.plan.GraphAssembler import MergeAssembler
-from src.plan.Region import RegionLoop, RegionPair
+from src.topology.GraphAssembler import MergeAssembler
+from src.topology.Region import RegionLoop, RegionPair
 from src.layout.PlannedGraph import Vertex, Edge
 from src.layout.EdgeStyles import EdgeStyle, AUTO_BEND, AUTO_LOOP, LEFT_BEND, RIGHT_BEND
 from .PathFacts import PathFacts

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from src.layout.Label import Label
-import src.plan.GraphUtils as GraphUtils
+import src.topology.GraphUtils as GraphUtils
 import networkx as nx
 import numpy as np
 import math

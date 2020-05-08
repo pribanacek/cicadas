@@ -1,7 +1,7 @@
 import os, sys, webbrowser
 
 from src.util.Exceptions import SyntaxException, ParsingException, LatexException, NotSupportedException
-from src.ui.ArgParser import arg_parser
+from src.cli.ArgParser import arg_parser
 import src.util.Logging as Logging
 
 import src.parser.Parser as Parser

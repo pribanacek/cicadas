@@ -1,6 +1,6 @@
 from src.util.Logging import info
 from src.layout.PlannedGraph import PlannedGraph
-import src.plan.GraphUtils as GraphUtils
+import src.topology.GraphUtils as GraphUtils
 import networkx as nx
 
 from difflib import SequenceMatcher
