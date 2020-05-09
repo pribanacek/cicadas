@@ -91,8 +91,7 @@ class RegionLoop(Region):
     
     def ordered_nodes(self):
         pathA, = self.mapped_path_ids
-        print(pathA)
-        return list(pathA)
+        return list(pathA)[:-1]
 
 class RegionPair(Region):
     def __init__(self, region_id, path_pair, label = ''):
