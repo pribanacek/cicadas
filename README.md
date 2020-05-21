@@ -4,19 +4,9 @@ Tired of laboriously inputting every coordinate for every node for your commutat
 
 It offers a unique language designed for describing commutative diagrams at a higher level, automatically plans the diagram and generates a sensible layout for it using simulated annealing. It then outputs the LaTeX representation (using tikz-cd) of that diagram, which you can paste into your existing document.
 
-<!-- ## Installation
-
-Run `pip install cicadas` to install the tool.
-
-Please note that the tool only works with Python 3 and also requires pdflatex to be installed. -->
-
 ## Usage
 
 Run with:
-<!-- 
-`cicadas [options] <filename>` (still TODO)
-
-or possibly (depending on installation) -->
 
 `python main.py [options] <filename>`
 

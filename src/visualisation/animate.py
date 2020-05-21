@@ -37,7 +37,7 @@ def draw(screen):
     if len(graphs) == 0:
         return
     graph = graphs[i]
-    graph.recentre_nodes() # this is bad
+    graph.recentre_nodes()
     graph_dimensions = graph.dimensions
     positions = graph.get_positions()
     for _, pos in positions.items():

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import math
 
+# Abstract class for a simulated annealing cooling schedule
 class Cooling(ABC):
     def __init__(self, start, end = 0.1, steps = 100, resets = 0):
         self.start_temp = start

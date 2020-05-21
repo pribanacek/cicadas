@@ -9,7 +9,6 @@ LATEX_PREFIX = '''
 \\begin{document}
 stuff
 '''
-# TODO add configurations to prefix here
 
 LATEX_SUFFIX = '''\\end{document}
 '''
@@ -112,11 +111,11 @@ def generate_latex_log(latex, filepath):
     ID = '([_a-zA-Z][_a-zA-Z0-9]*)'
     LENGTH = '([0-9]*\\.[0-9]+|[0-9]+)'
     UNITS = '([a-z]+)'
-    SEP = '(\\\\def ' + UNITS + '{' + UNITS + '})' # TODO take care of this mess
+    SEP = '(\\\\def ' + UNITS + '{' + UNITS + '})'
     with open(filepath + '.log', 'r', encoding='utf-8') as f:
         data = f.read()
         regex = re.compile(TYPE + ':' + ID + SEP + LENGTH + UNITS, re.MULTILINE)
-        output = list(map(lambda x : (x[0], x[1], x[5], x[6]), regex.findall(data))) # TODO clean this up
+        output = list(map(lambda x : (x[0], x[1], x[5], x[6]), regex.findall(data)))
     os.remove(file_tex)
     os.remove(filepath + '.aux')
     os.remove(filepath + '.log')

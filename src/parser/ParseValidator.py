@@ -2,9 +2,8 @@ from src.util.Logging import warn
 from src.util.Exceptions import PathValidationException, NotSupportedException
 from src.topology.GraphAssembler import MergeAssembler
 from src.topology.Region import RegionLoop, RegionPair
-from src.layout.PlannedGraph import Vertex, Edge
-from src.layout.EdgeStyles import EdgeStyle, AUTO_BEND, AUTO_LOOP, LEFT_BEND, RIGHT_BEND
-from .PathFacts import PathFacts
+from .EdgeStyles import EdgeStyle, AUTO_BEND, AUTO_LOOP, LEFT_BEND, RIGHT_BEND
+from .DiagramObjects import Object, Morphism
 
 def raise_path_not_continuous(path):
     raise PathValidationException("The declared path '" + str(path) + "' is not a valid path, as it is not continuous")
@@ -30,10 +29,10 @@ class ParseValidator:
 
     def addEdge(self, edgeId, nodeAId, nodeBId):
         if nodeAId not in self.nodes:
-            self.nodes[nodeAId] = Vertex(nodeAId)
+            self.nodes[nodeAId] = Object(nodeAId)
         if nodeBId not in self.nodes:
-            self.nodes[nodeBId] = Vertex(nodeBId)
-        edge = Edge(edgeId, self.nodes[nodeAId], self.nodes[nodeBId])
+            self.nodes[nodeBId] = Object(nodeBId)
+        edge = Morphism(edgeId, self.nodes[nodeAId], self.nodes[nodeBId])
         self.edges[edgeId] = edge
 
     def set_label(self, object_id, label):

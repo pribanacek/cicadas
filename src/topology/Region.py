@@ -8,8 +8,6 @@ import math
 class Region(ABC):
     def __init__(self, region_id, label = ''):
         self.region_id = region_id
-        # self.node_data = node_data
-        # self.edge_data = edge_data
         self.label = Label(label)
         self.graph = nx.OrderedMultiDiGraph()
         self.path_node_ids = None

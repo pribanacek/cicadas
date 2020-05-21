@@ -3,6 +3,7 @@ import numpy as np
 LEFT = 'left'
 RIGHT = 'right'
 
+# Wrapper for node and edge labels
 class Label:
     def __init__(self, text, latex = False, edge_label = False, font_size = None):
         self.label_size = np.array((0, 0), dtype = float)

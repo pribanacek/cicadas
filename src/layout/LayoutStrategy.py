@@ -6,6 +6,7 @@ from .Cooling import LinearCooling, ExpCooling, SigmoidCooling
 
 GRAPH_ENERGY = lambda x : x.energy()
 
+# Abstract class for layout strategies
 class LayoutStrategy(ABC):
     def __init__(self):
         self.last_progress = 0
@@ -27,7 +28,7 @@ class LayoutStrategy(ABC):
         return graphs
 
     @abstractmethod
-    def optimize_layout(self, graph, output_number, quality):
+    def optimize_layout(self, graph, output_number, iterations):
         pass
 
 
@@ -50,13 +51,9 @@ class LayoutSimulatedAnnealing(LayoutStrategy):
                 return True
         return False
     
-    def optimize_layout(self, graph, output_number, quality):
-        # x = quality / 4
-        # steps = 250 * (x % 1) + 250
-        # resets = math.floor(x)
-        # print(steps, resets)
+    def optimize_layout(self, graph, output_number, iterations = 350):
         dimensions = graph.dimensions
-        cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = 350, resets = 1)
+        cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = iterations, resets = 1)
         n = output_number + 2
         best_graphs = self.initialise_graph_set(graph, n)
         best_graph = None
@@ -86,42 +83,8 @@ class LayoutSimulatedAnnealing(LayoutStrategy):
         return (result_graphs, graph_history)
 
 
-class LayoutGenetic(LayoutStrategy):
-    INITIAL_TEMPERATURE = 1000
-
-    def get_radius(self, temp, dimensions):
-        factor = max(*dimensions)
-        radius = temp / self.INITIAL_TEMPERATURE * factor
-        return radius
-    
-    def optimize_layout(self, graph, output_number, quality):
-        dimensions = graph.dimensions
-        cooling = ExpCooling(self.INITIAL_TEMPERATURE, steps = 1000, resets = 0)
-        n = max(output_number, 4) + 1
-        best_graphs = self.initialise_graph_set(graph, n)
-        best_graph = None
-        graph_history = [graph]
-        while not cooling.done():
-            radius = self.get_radius(cooling.get_temp(), dimensions)
-            new_graphs = [graph.random_neighbour(radius) for graph in best_graphs]
-            sorted_graphs = sorted(best_graphs + new_graphs, key = GRAPH_ENERGY)
-            best_graphs = sorted_graphs[:n]
-            if best_graph == None or best_graphs[0].energy() < best_graph.energy():
-                best_graph = best_graphs[0]
-                graph_history.append(best_graph)
-
-            cooling.cool()
-            self.print_progress(cooling.progress(), interval = 2)
-
-        result_graphs = best_graphs[0:output_number]
-        for g in result_graphs:
-            g.recentre_nodes()
-
-        return (result_graphs, graph_history)
-
-
 class LayoutConvexPoly(LayoutStrategy):
-    def optimize_layout(self, graph, output_number, quality):
+    def optimize_layout(self, graph, output_number, iterations):
         region = graph.regions[0]
         radius = min(*graph.dimensions) * 0.4
         n = len(graph.graph)

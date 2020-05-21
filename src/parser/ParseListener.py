@@ -26,10 +26,8 @@ class ParseListener(CDLangListener):
         self.validator = ParseValidator()
 
     def separateUnits(self, text):
-        '''
-        Separates a measurement string into the number and unit components. Eg. 1.2pt -> (1.2, 'pt') 
-        Assumes that units are exactly 2 characters long.
-        '''
+        # Separates a measurement string into the number and unit components. Eg. 1.2pt -> (1.2, 'pt') 
+        # Assumes that units are exactly 2 characters long.
         if len(text) > 1:
             prefix = text[:-2]
             suffix = text[-2:]
@@ -44,7 +42,6 @@ class ParseListener(CDLangListener):
         height_text = ctx.NUMBER(1).getText()
         (width, _) = self.separateUnits(width_text)
         (height, _) = self.separateUnits(height_text)
-        # TODO deal with units
         self.size = (width, height)
         self.validator.set_dimensions(self.size)
         
@@ -85,7 +82,6 @@ class ParseListener(CDLangListener):
             self.set_styles(edge_id, styles.getText())
 
     def enterComposition(self, ctx):
-        # TODO clean this up
         line = ctx.start.line
         pathA = ctx.path(0)
         pathB = ctx.path(1)

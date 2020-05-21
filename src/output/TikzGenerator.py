@@ -1,8 +1,6 @@
 import math
 from string import Template
 
-from src.layout.PlannedGraph import PlannedGraph
-
 BEGIN_TIKZ_PICTURE = '''
 \\begin{equation*}
 \\begin{tikzpicture}'''
@@ -17,6 +15,7 @@ NODE_TEMPLATE = Template('\\node ($id) at ($x, $y) {$label};')
 EDGE_TEMPLATE = Template('($start) edge$styles node {$label} ($end)')
 
 
+# get TikZ code representing a node command
 def get_node_string(node_id, label, position):
     (x, y) = position
     return NODE_TEMPLATE.substitute(
@@ -26,6 +25,7 @@ def get_node_string(node_id, label, position):
         label = label
     )
 
+# get textual representation of TikZ edge styles
 def get_styles_string(styles):
     if styles == None or len(styles) < 1:
         return ''
@@ -35,6 +35,7 @@ def get_styles_string(styles):
     styleString = styleString[:-1] + ']'
     return styleString
 
+# get TikZ code representing an edge command
 def get_edge_string(start, end, edge):
     return EDGE_TEMPLATE.substitute(
         start = start,
@@ -43,7 +44,8 @@ def get_edge_string(start, end, edge):
         styles = get_styles_string(edge.get_styles())
     )
 
-def get_tikz_code_lines(graph):
+# get the TikZ code representation of a single graph
+def get_tikz_code(graph):
     lines = [BEGIN_TIKZ_PICTURE]
     for node_id, node in graph.node_data:
         position = graph.node_positions[node_id]
@@ -60,9 +62,10 @@ def get_tikz_code_lines(graph):
     lines.append(END_TIKZ_PICTURE)
     return lines
 
+# generates the TikZ representation of the input graphs
 def generate_tikz(graphs):
     latex_lines = []
     for graph in graphs:
-        graph_tikz_code = get_tikz_code_lines(graph)
+        graph_tikz_code = get_tikz_code(graph)
         latex_lines = latex_lines + graph_tikz_code
     return '\n'.join(latex_lines) + '\n'

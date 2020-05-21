@@ -6,10 +6,12 @@ import src.util.Logging as Logging
 
 import src.parser.Parser as Parser
 
-from src.output.TikzGen import generate_tikz
+from src.output.TikzGenerator import generate_tikz
 from src.output.AutoRender import generatePDF
 from src.layout.LayoutOptimizer import optimize_layout
 import src.layout.GraphMeasure as GraphMeasure
+
+import src.visualisation.interactive as interactive_debug
 
 import networkx as nx
 
@@ -19,14 +21,8 @@ import cProfile
 def main(input_file, output_path, n, preview, clipboard = False, quality = 5):
     graph_assembler = Parser.parse_file(input_file)
     GraphMeasure.measure(graph_assembler.nodes, graph_assembler.edges, graph_assembler.regions)
-    graph = graph_assembler.getGraph()
-    (min_graphs, graphs) = optimize_layout(graph, n, quality)
-
-    # if os.environ['CICADAS_VIZ'] == 'True':
-    #     # import src.visualisation.animate as animate
-    #     # animate.start_animation_thread(graphs)
-    #     import src.visualisation.interactive as interactive
-    #     interactive.start_animation_thread(min_graphs[0])
+    graph = graph_assembler.get_graph()
+    (min_graphs, _) = optimize_layout(graph, n, quality)
 
     result = generate_tikz(min_graphs)
     generatePDF(result, output_path)
@@ -40,11 +36,8 @@ def main(input_file, output_path, n, preview, clipboard = False, quality = 5):
 
 
 if __name__ == "__main__":
-    args = arg_parser.parse_args(sys.argv[1:]) # TODO check this off-by-one
+    args = arg_parser.parse_args(sys.argv[1:])
 
-    # cProfile.run('main(filename)')
-    # if args.silent:
-    #     Logging.silent = True
     if args.suppress_warnings:
         Logging.suppress_warnings = True
 
@@ -66,5 +59,5 @@ if __name__ == "__main__":
         print('Make sure you have permission to read the source, and to read and write to the destination')
     except NotSupportedException as e:
         print('Unsupported feature:', e)
-    # except Exception as e:
-    #     print(e)
+    except Exception as e:
+        print(e)

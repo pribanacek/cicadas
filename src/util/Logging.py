@@ -1,5 +1,6 @@
 suppress_warnings = False
 silent = False
+debug = False
 
 def warn(x):
     if not suppress_warnings and not silent:

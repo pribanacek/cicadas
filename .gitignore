@@ -1,3 +1,5 @@
+tests/samples_old
+
 *.pdf
 *.tex
 *.aux
@@ -10,7 +12,7 @@
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
-__pycache__/
+*/__pycache__/
 *.py[cod]
 *$py.class
 
