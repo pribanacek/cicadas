@@ -10,7 +10,7 @@ import time
 import numpy as np
 
 
-def measure_times(number, iterations):
+def measure_times(candidates, iterations):
     start = time.time()
     graph_assembler = Parser.parse_file('samples/sample5')
     parse_time = time.time()
@@ -21,7 +21,7 @@ def measure_times(number, iterations):
     graph = graph_assembler.get_graph()
     topology_time = time.time()
 
-    (min_graphs, _) = optimize_layout(graph, number, iterations)
+    (min_graphs, _) = optimize_layout(graph, candidates, iterations)
     layout_time = time.time()
 
     generate_tikz(min_graphs)
@@ -51,12 +51,12 @@ fdp = lambda x: "{0:0.3f}".format(x)
 
 np.set_printoptions(formatter={'float': fdp})
 
-def main(number, iterations):
+def main(candidates, iterations):
     samples = 5
     durations = []
     for i in range(samples):
         print('running diagram', i + 1, 'out of', samples)
-        _, lst = measure_times(number, iterations)
+        _, lst = measure_times(candidates, iterations)
         durations.append(lst)
     data = np.array(durations)
     mean = np.mean(data, axis = 0)
@@ -68,8 +68,8 @@ if __name__ == "__main__":
     output = ''
     for i in range(20):
         print('running sample', i + 1)
-        n = 1
-        it = 100 * (i + 1)
-        line = main(n, it)
+        candidates = 1
+        iterations = 100 * (i + 1)
+        line = main(candidates, iterations)
         output += line
     print(output)

@@ -55,7 +55,6 @@ fdp = lambda x: "{0:0.3f}".format(x)
 np.set_printoptions(formatter={'float': fdp})
 
 def main(sample):
-    # sample = 'sampleC'
     samples = 25
     durations = []
     for i in range(samples):
@@ -66,12 +65,8 @@ def main(sample):
     mean = np.mean(data, axis = 0)
     stdev = np.std(data, axis = 0)
     print('TIMING FOR', sample)
-    # print('mean:', mean[-1])
-    # print('stdev:', stdev[-1])
     total = '$' + fdp(mean[5]) + ' \\pm ' + fdp(stdev[5]) + '$'
     layout = '$' + fdp(mean[3]) + ' \\pm ' + fdp(stdev[3]) + '$'
-    # print('total time:\t', total)
-    # print('layout time:\t', layout)
     return (total, layout)
 
 if __name__ == "__main__":
