@@ -30,3 +30,7 @@ arg_parser.add_argument('--suppress-warnings',
     help='suppresses warnings',
     action = 'store_true', required = False
 )
+
+
+def parse_arguments(args):
+    return arg_parser.parse_args(args[1:])

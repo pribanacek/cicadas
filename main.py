@@ -1,7 +1,7 @@
 import os, sys, webbrowser
 
 from src.util.Exceptions import SyntaxException, ParsingException, LatexException, NotSupportedException
-from src.cli.ArgParser import arg_parser
+from src.cli.ArgParser import parse_arguments
 import src.util.Logging as Logging
 
 import src.parser.Parser as Parser
@@ -36,7 +36,7 @@ def main(input_file, output_path, n, preview, clipboard = False, quality = 5):
 
 
 if __name__ == "__main__":
-    args = arg_parser.parse_args(sys.argv[1:])
+    args = parse_arguments(sys.argv)
 
     if args.suppress_warnings:
         Logging.suppress_warnings = True
